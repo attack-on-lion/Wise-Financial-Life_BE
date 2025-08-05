@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class PaymentResponseDto {
     @NoArgsConstructor
     public static class Item {
         private Long id;
-        private OffsetDateTime transactionAt; // format: "2025-07-09T15:12:00+09:00"
+        private LocalDateTime transactionAt; // format: "2025-07-09T15:12:00+09:00"
         private String storeName;
         private long amount;
         private PaymentDirection direction;
