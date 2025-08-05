@@ -1,12 +1,5 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.entity;
-
-/*
- * PaymentResponseDto
- *
- * @author holychann
- * @since 2025-08-05
- */
-
+import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentDirection;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMethod;
 import jakarta.persistence.*;
@@ -33,4 +26,9 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod method;
+
+    // 단방향 연관관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }

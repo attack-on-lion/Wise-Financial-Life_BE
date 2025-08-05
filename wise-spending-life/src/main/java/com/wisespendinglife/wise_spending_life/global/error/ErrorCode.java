@@ -16,6 +16,13 @@ public enum ErrorCode {
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "4051", "허용되지 않은 HTTP Method입니다."),
     DUPLICATE_RESOURCE(HttpStatus.BAD_REQUEST, "4002", "이미 존재하는 리소스입니다."),
     INVALID_RESOURCE_STATE(HttpStatus.BAD_REQUEST, "4003", "유효하지 않은 리소스 상태입니다."),
+    INVALID_DATE_REQUEST(HttpStatus.BAD_REQUEST, "4004", "유효하지 않은 날짜 요청입니다."),
+    INVALID_PAGE_REQUEST(HttpStatus.BAD_REQUEST, "4005", "유효하지 않은 페이지 요청입니다."),
+    INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "4006", "유효하지 않은 금액입니다."),
+    INVALID_CATEGORY_REQUEST(HttpStatus.BAD_REQUEST, "4007", "유효하지 않은 카테고리 요청입니다."),
+    INVALID_PAYMENT_TYPE_REQUEST(HttpStatus.BAD_REQUEST, "4008", "유효하지 않은 결제 타입 요청입니다."),
+
+
 
     /* 404 NOT_FOUND */
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "4040", "리소스를 찾을 수 없습니다."),

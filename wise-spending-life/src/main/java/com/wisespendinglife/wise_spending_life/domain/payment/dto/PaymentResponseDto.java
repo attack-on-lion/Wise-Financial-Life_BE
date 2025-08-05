@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -15,16 +16,25 @@ import java.util.List;
  * @author holychann
  * @since 2025-08-05
  */
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class PaymentResponseDto {
 
-    private Summary summary;
-    private PageInfo pageInfo;
-    private List<Item> items;
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    public static class PaymentCreateResponseDto {
+        private Long id;
+    }
 
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    public static class Payments {
+        private Summary summary;
+        private PageInfo pageInfo;
+        private List<Item> items;
+    }
 
     /**
      * summary
@@ -77,7 +87,7 @@ public class PaymentResponseDto {
     @NoArgsConstructor
     public static class Item {
         private Long id;
-        private OffsetDateTime transactionAt; // format: "2025-07-09T15:12:00+09:00"
+        private LocalDateTime transactionAt; // format: "2025-07-09T15:12:00+09:00"
         private String storeName;
         private long amount;
         private PaymentDirection direction;
