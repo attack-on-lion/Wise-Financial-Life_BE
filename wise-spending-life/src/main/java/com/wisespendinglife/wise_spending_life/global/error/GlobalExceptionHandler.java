@@ -1,8 +1,12 @@
 package com.wisespendinglife.wise_spending_life.global.error;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,6 +22,54 @@ public class GlobalExceptionHandler {
     /**
      * TODO: 검증 에러 처리 (Validation)
      */
+    /* ── DTO 바인딩 검증 실패 ─────────────────────── */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleInvalid(MethodArgumentNotValidException ex) {
+
+        ErrorCode code = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(this::toErrorCode)          // ⬅️ 핵심
+                .findFirst()
+                .orElse(ErrorCode.INVALID_INPUT_VALUE);
+
+        return ResponseEntity.status(code.getHttpStatus())
+                .body(ErrorResponse.of(code));
+    }
+
+    /* ── 메서드 파라미터/PathVariable 검증 실패 ── */
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ErrorResponse> handleViolation(ConstraintViolationException ex) {
+
+        ErrorCode code = ex.getConstraintViolations()
+                .stream()
+                .map(this::toErrorCode)
+                .findFirst()
+                .orElse(ErrorCode.INVALID_INPUT_VALUE);
+
+        return ResponseEntity.status(code.getHttpStatus())
+                .body(ErrorResponse.of(code));
+    }
+
+    /* ---------- 공통 매핑 메서드 ---------- */
+    private ErrorCode toErrorCode(FieldError fe) {
+        return resolve(fe.getDefaultMessage());
+    }
+
+    private ErrorCode toErrorCode(ConstraintViolation<?> v) {
+        return resolve(v.getMessageTemplate());
+    }
+
+    /** "{INVALID_AMOUNT}" 형태 → enum 상수 변환, 실패 시 기본코드 */
+    private ErrorCode resolve(String template) {
+        String key = template.replaceAll("[{}]", "");   // INVALID_AMOUNT
+        try {
+            return ErrorCode.valueOf(key);
+        } catch (IllegalArgumentException e) {
+            log.debug("알 수 없는 ErrorCode 템플릿: {}", key);
+            return ErrorCode.INVALID_INPUT_VALUE;
+        }
+    }
 
     /** 1️⃣ 도메인 계층에서 발생한 커스텀 예외 */
     @ExceptionHandler(BusinessException.class)

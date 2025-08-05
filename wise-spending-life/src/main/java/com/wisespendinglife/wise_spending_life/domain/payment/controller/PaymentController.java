@@ -3,7 +3,6 @@ package com.wisespendinglife.wise_spending_life.domain.payment.controller;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
-            @Valid @RequestBody PaymentRequestDto.CreateDto dto) {
+            @Validated @RequestBody PaymentRequestDto.CreateDto dto) {
 
         PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto);
         return ResponseEntity.ok(result);

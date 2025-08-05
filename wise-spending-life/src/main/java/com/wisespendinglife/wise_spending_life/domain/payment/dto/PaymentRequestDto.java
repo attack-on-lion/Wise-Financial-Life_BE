@@ -1,8 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,22 +16,24 @@ public class PaymentRequestDto {
     @AllArgsConstructor
     public static class CreateDto {
 
-        @NotNull
+        @NotNull(message = "{INVALID_DATE_REQUEST}")
+        @PastOrPresent(message = "{INVALID_DATE_REQUEST}")
         private LocalDateTime transactionAt;
 
-        @NotBlank
+        @NotBlank(message = "{INVALID_INPUT_VALUE}")
+        @Size(max = 100, message = "{INVALID_INPUT_VALUE}")
         private String storeName;
 
-        @Positive
+        @Positive(message = "{INVALID_AMOUNT}")
         private long amount;
 
-        @NotNull
+        @NotNull(message = "{INVALID_RESOURCE_STATE}")
         private PaymentDirection direction;
 
-        @NotNull
+        @NotNull(message = "{INVALID_PAYMENT_TYPE_REQUEST}")
         private PaymentMethod method;
 
-        @NotNull
+        @NotBlank(message = "{INVALID_CATEGORY_REQUEST}")
         private String category;
     }
 
