@@ -32,8 +32,9 @@ public class PaymentController {
 
         return ResponseEntity.ok(dto);
     }
-    
 
+
+    
     @PostMapping
     public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
             @Validated @RequestBody PaymentRequestDto.CreateDto dto) {
