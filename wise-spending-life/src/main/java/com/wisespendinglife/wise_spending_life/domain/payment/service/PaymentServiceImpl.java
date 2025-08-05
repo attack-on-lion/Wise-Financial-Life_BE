@@ -8,6 +8,8 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequest
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
 import com.wisespendinglife.wise_spending_life.domain.payment.repository.PaymentRepository;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentResponseAssembler responseAssembler;
 
     public PaymentResponseDto.Payments getMonthly(LocalDate from, LocalDate to, int currentPage, int size) {
+
+        if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
 
         // Pageable 설정
         Pageable pageable = PageRequest.of(currentPage, size, Sort.by("transactionAt").descending());
