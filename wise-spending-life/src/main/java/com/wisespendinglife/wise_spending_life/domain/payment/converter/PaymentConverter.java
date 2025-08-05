@@ -1,5 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.converter;
 
+import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +44,23 @@ public class PaymentConverter {
                 .map(this::toItemDto)
                 .toList();
     }
+
+    public Payment toEntity(PaymentRequestDto.CreateDto dto, Category category) {
+        return Payment.builder()
+                .transactionAt(dto.getTransactionAt())
+                .storeName(dto.getStoreName())
+                .amount(dto.getAmount())
+                .direction(dto.getDirection())
+                .method(dto.getMethod())
+                .category(category)
+                .build();
+    }
+
+    public PaymentResponseDto.PaymentCreateResponseDto toCreateResponseDto(Long id) {
+        return PaymentResponseDto.PaymentCreateResponseDto.builder()
+                .id(id)
+                .build();
+    }
+
 
 }

@@ -17,7 +17,7 @@ public class PaymentResponseAssembler {
 
     private final PaymentConverter converter;
 
-    public PaymentResponseDto assemble(LocalDate from,
+    public PaymentResponseDto.Payments assemble(LocalDate from,
                                        LocalDate to,
                                        Page<Payment> page) {
 
@@ -54,7 +54,7 @@ public class PaymentResponseAssembler {
                 converter.toItemDtos(page.getContent());
 
         // 4) 최종 DTO 반환
-        return PaymentResponseDto.builder()
+        return PaymentResponseDto.Payments.builder()
                 .summary(summary)
                 .pageInfo(pageInfo)
                 .items(items)

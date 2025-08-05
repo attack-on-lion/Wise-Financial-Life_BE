@@ -1,16 +1,16 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.controller;
 
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 
 @RestController
@@ -22,15 +22,24 @@ public class PaymentController {
     private final PaymentServiceImpl paymentService;
 
     @GetMapping
-    public ResponseEntity<PaymentResponseDto> findPaymentsByPeriod(
+    public ResponseEntity<PaymentResponseDto.Payments> findPaymentsByPeriod(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "15") int size
             ) {
 
-        PaymentResponseDto dto = paymentService.getMonthly(from, to, page, size);
+        PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size);
 
         return ResponseEntity.ok(dto);
     }
+
+    @PostMapping
+    public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
+            @Valid @RequestBody PaymentRequestDto.CreateDto dto) {
+
+        PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto);
+        return ResponseEntity.ok(result);
+    }
+
 }

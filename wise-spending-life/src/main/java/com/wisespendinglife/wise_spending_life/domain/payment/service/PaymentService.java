@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.service;
 
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 
 import java.time.LocalDate;
@@ -9,7 +10,8 @@ import java.time.LocalDate;
  */
 public interface PaymentService {
 
-    PaymentResponseDto getMonthly(LocalDate from, LocalDate to, int currentPage, int size);
+    PaymentResponseDto.Payments getMonthly(LocalDate from, LocalDate to, int currentPage, int size);
 
+    public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto);
 
 }

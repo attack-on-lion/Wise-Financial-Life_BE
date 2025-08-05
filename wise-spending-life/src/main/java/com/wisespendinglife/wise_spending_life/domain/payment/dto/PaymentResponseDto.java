@@ -16,16 +16,25 @@ import java.util.List;
  * @author holychann
  * @since 2025-08-05
  */
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class PaymentResponseDto {
 
-    private Summary summary;
-    private PageInfo pageInfo;
-    private List<Item> items;
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    public static class PaymentCreateResponseDto {
+        private Long id;
+    }
 
+    @Builder
+    @AllArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    public static class Payments {
+        private Summary summary;
+        private PageInfo pageInfo;
+        private List<Item> items;
+    }
 
     /**
      * summary
