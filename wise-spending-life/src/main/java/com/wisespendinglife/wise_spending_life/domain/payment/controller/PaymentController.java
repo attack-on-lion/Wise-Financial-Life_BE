@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -25,10 +26,11 @@ public class PaymentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "15") int size
+            @RequestParam(required = false, defaultValue = "15") int size,
+            @RequestParam(required = false) String category
             ) {
 
-        PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size);
+        PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size, Optional.ofNullable(category));
 
         return ResponseEntity.ok(dto);
     }
