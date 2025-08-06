@@ -37,7 +37,8 @@ public class PaymentServiceImpl implements PaymentService {
         if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
 
         // Pageable 설정
-        Pageable pageable = PageRequest.of(currentPage, size, Sort.by("transactionAt").descending());
+        Pageable pageable = PageRequest.of(currentPage, size, Sort.by(Sort.Order.desc("transactionAt"),
+                Sort.Order.desc("id")).descending());
 
         // Page 조회
         Page<Payment> page = paymentRepository.findByTransactionAtBetween(from, to, pageable);
