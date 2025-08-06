@@ -20,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,16 +34,35 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentConverter converter;
     private final PaymentResponseAssembler responseAssembler;
 
-    public PaymentResponseDto.Payments getMonthly(LocalDate from, LocalDate to, int currentPage, int size) {
+    public PaymentResponseDto.Payments getMonthly(LocalDate from,
+                                                  LocalDate to,
+                                                  int currentPage,
+                                                  int size,
+                                                  Optional<String> categoryOpt) {
 
         if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
+
+        LocalDateTime start = from.atStartOfDay();          // 2025-07-01 00:00
+        LocalDateTime end   = to.plusDays(1).atStartOfDay();
 
         // Pageable 설정
         Pageable pageable = PageRequest.of(currentPage, size, Sort.by(Sort.Order.desc("transactionAt"),
                 Sort.Order.desc("id")).descending());
 
         // Page 조회
-        Page<Payment> page = paymentRepository.findByTransactionAtBetween(from, to, pageable);
+        Page<Payment> page = categoryOpt
+                .map(cat -> {
+                    // ❶ 존재 여부 검증
+                    if (!categoryRepository.existsByNameIgnoreCase(cat))
+                        throw new BusinessException(ErrorCode.CATEGORY_NOT_FOUND);
+
+                    // ❷ 정상이라면 조회
+                    return paymentRepository
+                            .findByCategory_NameIgnoreCaseAndTransactionAtBetween(
+                                    cat, start, end, pageable);
+                })
+                .orElseGet(() -> paymentRepository
+                        .findByTransactionAtBetween(start, end, pageable));
 
         // Response 생성
         return responseAssembler.assemble(from, to, page);
