@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     //유저 정보 조회
-    @GetMapping("/{user_id}") //API에 pathvariable이 없는데 막 써도 됨?
+    @GetMapping("/{user_id}")
     public UserResponseDTO getUserInfo(@PathVariable("user_id") Long userId) {
         return userService.getUserInfo(userId);
     }

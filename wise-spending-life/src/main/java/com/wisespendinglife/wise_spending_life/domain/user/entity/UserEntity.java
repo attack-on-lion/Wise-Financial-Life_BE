@@ -24,14 +24,20 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String name; //이름
+
     private String profileImgUrl; //프로필이미지 url
+
     private String gender; //성별
+
     private String location; //거주지
+
     private String email; //이메일
+
     private String phoneNumber; //전화번호
 
     @Column(nullable = false)
     private Long age; //나이
+
     private Long baseAmount; //기준금액
 
     @CreatedDate

@@ -16,6 +16,7 @@ public class UserResponseDTO {
     private Long age;
     private String profileImgUrl;
     private String location;
+    private String gender;
     private String email;
     private String phoneNumber;
     private Long baseAmount;

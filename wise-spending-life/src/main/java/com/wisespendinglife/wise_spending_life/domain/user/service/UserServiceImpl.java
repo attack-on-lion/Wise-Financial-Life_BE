@@ -33,12 +33,18 @@ public class UserServiceImpl implements UserService {
     //유저 정보 수정
     @Override
     @Transactional
-    public void updateUserInfo(Long userId, UserRequestDTO userRequestDTO){
+    public void updateUserInfo(Long userId, UserRequestDTO dto){
         UserEntity user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        UserConverter.updateEntity(user, userRequestDTO);
-        userRepository.save(user);
+        if (dto.getName() != null) user.updateName(dto.getName());
+        if (dto.getProfileImgUrl() != null) user.updateProfileImgUrl(dto.getProfileImgUrl());
+        if (dto.getGender() != null) user.updateGender(dto.getGender());
+        if (dto.getLocation() != null) user.updateLocation(dto.getLocation());
+        if (dto.getEmail() != null) user.updateEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) user.updatePhoneNumber(dto.getPhoneNumber());
+        if (dto.getAge() != null) user.updateAge(dto.getAge());
+        if (dto.getBaseAmount() != null) user.updateBaseAmount(dto.getBaseAmount());
     }
 
 }

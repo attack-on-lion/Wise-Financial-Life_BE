@@ -26,6 +26,13 @@ public enum ErrorCode {
     INVALID_LOCATION(HttpStatus.BAD_REQUEST, "4011", "거주지 정보가 유효하지 않습니다."),
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "4012", "이메일 형식이 유효하지 않습니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "4013", "전화번호 형식이 유효하지 않습니다."),
+    INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "4014", "이메일 형식이 유효하지 않습니다."),
+    INVALID_NAME(HttpStatus.BAD_REQUEST, "4015", "이름은 필수 입력 항목입니다."),
+    INVALID_GENDER(HttpStatus.BAD_REQUEST, "4016", "성별은 필수 입력 항목입니다."),
+    INVALID_AGE(HttpStatus.BAD_REQUEST, "4017", "나이는 필수 입력 항목입니다."),
+    INVALID_BASE_AMOUNT(HttpStatus.BAD_REQUEST, "4018", "기준 금액은 필수 입력 항목입니다."),
+
+
 
 
 

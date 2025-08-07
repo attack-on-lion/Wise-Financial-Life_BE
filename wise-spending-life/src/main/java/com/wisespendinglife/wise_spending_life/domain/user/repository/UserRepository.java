@@ -9,9 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    //유저 정보 조회
+    //유저 정보 조회 및 수정
     Optional<UserEntity> findByIdAndIsDeletedFalse(Long id);
-
-    //유저 정보 수정
-    Optional<UserEntity> findById(Long id);
 }

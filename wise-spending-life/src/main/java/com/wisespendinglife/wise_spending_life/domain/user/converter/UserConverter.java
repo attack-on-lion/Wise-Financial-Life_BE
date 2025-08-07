@@ -14,17 +14,10 @@ public class UserConverter {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .baseAmount(user.getBaseAmount())
+                .gender(user.getGender())
                 .location(user.getLocation())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
-    }
-
-    //RequestDTO -> Entity 이미 존재하는 엔티티를 조회해서 일부 수정
-    public static void updateEntity(UserEntity user, UserRequestDTO dto) {
-        user.updateProfileImgUrl(dto.getProfileImgUrl());
-        user.updateLocation(dto.getLocation());
-        user.updateEmail(dto.getEmail());
-        user.updatePhoneNumber(dto.getPhoneNumber());
     }
 }
