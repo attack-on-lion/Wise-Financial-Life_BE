@@ -69,7 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Transactional
-    public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto) {
+    public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto, Long userId) {
 
         // 1) 카테고리 찾기 (대소문자 무시)
         Category category = categoryRepository.findByNameIgnoreCase(dto.getCategory())

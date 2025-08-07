@@ -37,11 +37,12 @@ public class PaymentController {
 
 
     
-    @PostMapping
+    @PostMapping("/{user_id}")
     public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
+            @PathVariable("user_id") Long userId,
             @Validated @RequestBody PaymentRequestDto.CreateDto dto) {
 
-        PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto);
+        PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto, userId);
         return ResponseEntity.ok(result);
     }
 

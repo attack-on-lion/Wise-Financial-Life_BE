@@ -17,6 +17,6 @@ public interface PaymentService {
                                            int size,
                                            Optional<String> categoryOpt);
 
-    public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto);
+    public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto, Long userId);
 
 }
