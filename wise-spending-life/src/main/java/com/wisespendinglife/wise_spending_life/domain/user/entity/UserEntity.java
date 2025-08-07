@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "Users")
 @NoArgsConstructor
 @Getter
+@Builder
+@AllArgsConstructor
 
 public class UserEntity {
     @Id
@@ -79,16 +82,4 @@ public class UserEntity {
         this.isDeleted = isDeleted;
     }
 
-    @Builder
-    public UserEntity(String name, String profileImgUrl, String gender, String location, String email, String phoneNumber, Long age, Long baseAmount, Boolean isDeleted){
-        this.name = name;
-        this.profileImgUrl = profileImgUrl;
-        this.gender = gender;
-        this.location = location;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.age = age;
-        this.baseAmount = baseAmount;
-        this.isDeleted = isDeleted;
-    }
 }
