@@ -21,6 +21,14 @@ public enum ErrorCode {
     INVALID_AMOUNT(HttpStatus.BAD_REQUEST, "4006", "유효하지 않은 금액입니다."),
     INVALID_CATEGORY_REQUEST(HttpStatus.BAD_REQUEST, "4007", "유효하지 않은 카테고리 요청입니다."),
     INVALID_PAYMENT_TYPE_REQUEST(HttpStatus.BAD_REQUEST, "4008", "유효하지 않은 결제 타입 요청입니다."),
+    INVALID_USER_REQUEST(HttpStatus.BAD_REQUEST, "4009", "요청한 회원 정보 형식이 올바르지 않습니다."),
+    INVALID_PROFILE_IMAGE(HttpStatus.BAD_REQUEST, "4010", "프로필 이미지 URL이 유효하지 않습니다."),
+    INVALID_LOCATION(HttpStatus.BAD_REQUEST, "4011", "거주지 정보가 유효하지 않습니다."),
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "4012", "이메일 형식이 유효하지 않습니다."),
+    INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "4013", "전화번호 형식이 유효하지 않습니다."),
+
+
+
 
 
 
@@ -30,6 +38,7 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "4042", "카테고리를 찾을 수 없습니다."),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "4043", "결제 내역을 찾을 수 없습니다."), // 단건 조회용
     PAYMENT_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "4044", "결제 타입을 찾을 수 없습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "4045", "유저 정보를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
