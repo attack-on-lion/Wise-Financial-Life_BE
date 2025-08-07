@@ -35,33 +35,45 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             Pageable pageable);
 
 
-    /* 1) 전월 총수입 · 총지출 집계 --------------------------------------- */
+    /**
+     * 총 수입 및 총 지출 금액
+     * @param start
+     * @param end
+     * @return
+     */
     @Query("""
-        SELECT new com.example.stats.MonthlyStats(
-            SUM(CASE WHEN p.direction = 'INFLOW'  THEN p.amount ELSE 0 END),
-            SUM(CASE WHEN p.direction = 'OUTFLOW' THEN p.amount ELSE 0 END),
-            CAST(NULL AS java.util.List)
-        )
-        FROM Payment p
-        WHERE p.user.id = 1
-          AND p.transactionAt BETWEEN :start AND :end
-    """)
-    ScoreStates.MonthlyStats findIncomeAndOutflow(LocalDateTime start, LocalDateTime end);
+    SELECT new
+           com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreStates.MonthlyState(
+               SUM(CASE WHEN p.direction = 'INFLOW'  THEN p.amount ELSE 0 END),
+               SUM(CASE WHEN p.direction = 'OUTFLOW' THEN p.amount ELSE 0 END),
+               CAST(NULL AS java.util.List)
+           )
+    FROM Payment p
+    WHERE p.transactionAt BETWEEN :start AND :end
+""")
+    ScoreStates.MonthlyState findIncomeAndOutflow(LocalDate start,
+                                                  LocalDate end);
 
 
-    /* 2) 카테고리별 지출 금액 · 건수 집계 ------------------------------ */
+    /**
+     * 카테고리별 총 수입 및 총 지출 금액
+     *
+     * @param start
+     * @param end
+     * @return
+     */
     @Query("""
-        SELECT new com.example.stats.CategoryStat(
+        SELECT new com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreStates.CategoryState(
             c.name,
             SUM(p.amount),
             COUNT(p)
         )
         FROM Payment p
         JOIN p.category c
-        WHERE p.user.id = 1
-          AND p.direction = 'OUTFLOW'
+        WHERE p.direction = 'OUTFLOW'
           AND p.transactionAt BETWEEN :start AND :end
         GROUP BY c.name
     """)
-    List<ScoreStates.CategoryState> findCategoryStats(LocalDateTime start, LocalDateTime end);
+    List<ScoreStates.CategoryState> findCategoryStats(LocalDate start,
+                                                      LocalDate end);
 }

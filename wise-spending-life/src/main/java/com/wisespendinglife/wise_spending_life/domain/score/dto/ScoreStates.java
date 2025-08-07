@@ -18,7 +18,7 @@ public class ScoreStates {
     @Getter
     @AllArgsConstructor
     @Builder
-    public class CategoryState {
+    public static class CategoryState {
         private String categoryName;
         private Long totalAmount;
         private Long totalCount;
@@ -34,9 +34,9 @@ public class ScoreStates {
     @Getter
     @AllArgsConstructor
     @Builder
-    public class MonthlyStats {
+    public static class MonthlyState {
         private Long totalIncome;
         private Long totalOutflow;
-        private List<CategoryState> categoryStats;
+        private List<CategoryState> categoryStates;
     }
 }
