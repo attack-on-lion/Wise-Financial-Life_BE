@@ -68,6 +68,14 @@ public class PaymentServiceImpl implements PaymentService {
         return responseAssembler.assemble(from, to, page);
     }
 
+    /**
+     * Payment 생성
+     *
+     * TODO: userId 도 함께 저장해야함.
+     * @param dto - 생성 요청 DTO
+     * @param userId - 사용자 ID
+     * @return - 생성 결과 DTO
+     */
     @Transactional
     public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto, Long userId) {
 
