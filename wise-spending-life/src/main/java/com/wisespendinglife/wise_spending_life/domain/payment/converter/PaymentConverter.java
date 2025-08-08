@@ -4,6 +4,7 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -45,13 +46,14 @@ public class PaymentConverter {
                 .toList();
     }
 
-    public Payment toEntity(PaymentRequestDto.CreateDto dto, Category category) {
+    public Payment toEntity(PaymentRequestDto.CreateDto dto, Category category, UserEntity user) {
         return Payment.builder()
                 .transactionAt(dto.getTransactionAt())
                 .storeName(dto.getStoreName())
                 .amount(dto.getAmount())
                 .direction(dto.getDirection())
                 .method(dto.getMethod())
+                .user(user)
                 .category(category)
                 .build();
     }

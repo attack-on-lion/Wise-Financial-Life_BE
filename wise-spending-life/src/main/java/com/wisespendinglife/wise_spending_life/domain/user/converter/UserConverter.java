@@ -20,4 +20,19 @@ public class UserConverter {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+
+    // toEntity
+    public static UserEntity toEntity(UserRequestDTO dto) {
+        return UserEntity.builder()
+                .name(dto.getName())
+                .age(dto.getAge())
+                .profileImgUrl(dto.getProfileImgUrl())
+                .email(dto.getEmail())
+                .phoneNumber(dto.getPhoneNumber())
+                .baseAmount(dto.getBaseAmount())
+                .gender(dto.getGender())
+                .location(dto.getLocation())
+                .isDeleted(false)
+                .build();
+    }
 }

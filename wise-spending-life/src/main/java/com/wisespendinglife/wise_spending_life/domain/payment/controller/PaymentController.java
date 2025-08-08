@@ -21,27 +21,29 @@ public class PaymentController {
 
     private final PaymentServiceImpl paymentService;
 
-    @GetMapping
+    @GetMapping("/{userId}")
     public ResponseEntity<PaymentResponseDto.Payments> findPaymentsByPeriod(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "15") int size,
+            @PathVariable Long userId,
             @RequestParam(required = false) String category
             ) {
 
-        PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size, Optional.ofNullable(category));
+        PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size, userId,Optional.ofNullable(category));
 
         return ResponseEntity.ok(dto);
     }
 
 
     
-    @PostMapping
+    @PostMapping("/{user_id}")
     public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
+            @PathVariable("user_id") Long userId,
             @Validated @RequestBody PaymentRequestDto.CreateDto dto) {
 
-        PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto);
+        PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto, userId);
         return ResponseEntity.ok(result);
     }
 

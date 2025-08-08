@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.global.error;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +97,13 @@ public class GlobalExceptionHandler {
 
     /** 3️⃣ 알 수 없는 예외—최종 안전망 */
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleUnhandledException(Exception e) {
+    protected ResponseEntity<ErrorResponse> handleUnhandledException(Exception e, HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        // Swagger 관련 요청은 그냥 예외를 다시 던져서 springdoc이 처리하도록 함
+        if (uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui")) {
+            throw new RuntimeException(e);
+        }
+
 
         log.error("Unhandled exception at {}: {}", LocalDateTime.now(), e.getMessage(), e);
 

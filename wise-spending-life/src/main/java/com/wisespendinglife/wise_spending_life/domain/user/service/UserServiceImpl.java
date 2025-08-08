@@ -47,4 +47,12 @@ public class UserServiceImpl implements UserService {
         if (dto.getBaseAmount() != null) user.updateBaseAmount(dto.getBaseAmount());
     }
 
+    // 유저 정보 저장
+    @Override
+    @Transactional
+    public void createUser(UserRequestDTO dto){
+        UserEntity user = UserConverter.toEntity(dto);
+        userRepository.save(user);
+    }
+
 }
