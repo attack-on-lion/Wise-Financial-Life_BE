@@ -23,7 +23,13 @@ public class ChatGptScoringClient {
     public int askScore(MonthlyState stats) {
 
         /* ① 파라미터 빌드 (README 패턴) */
-        String system = "너는 금융 전문가야. 0~100 사이 점수만 JSON으로 반환해.";
+        String system = """
+        너는 금융 전문가다. 다음 규칙을 지켜서만 답한다.
+        - 반드시 JSON 객체 하나만 출력한다.
+        - 키 이름은 정확히 "score" 하나만 허용한다.
+        - 값은 0 이상 100 이하의 정수.
+        - JSON 외 텍스트/설명/코드블록/추가 키 금지.
+        """;
         String userJson;
         try {
             userJson = mapper.writeValueAsString(stats);
