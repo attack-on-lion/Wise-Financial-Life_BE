@@ -8,6 +8,12 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequest
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
 import com.wisespendinglife.wise_spending_life.domain.payment.repository.PaymentRepository;
+import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
+import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
+import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto;
+import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
+import com.wisespendinglife.wise_spending_life.domain.score.repository.ScoreRepository;
+import com.wisespendinglife.wise_spending_life.domain.score.service.ChatGptScoringClient;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -19,9 +25,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +39,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final CategoryRepository categoryRepository;
     private final PaymentConverter converter;
     private final PaymentResponseAssembler responseAssembler;
+    private final ChatGptScoringClient scoringClient;
+    private final ScoreRepository scoreRepository;
 
     public PaymentResponseDto.Payments getMonthly(LocalDate from,
                                                   LocalDate to,
@@ -96,4 +104,48 @@ public class PaymentServiceImpl implements PaymentService {
         return converter.toCreateResponseDto(saved.getId());
     }
 
+    /**
+     * 사용자의 월별 점수 계산
+     *
+     * TODO: 유저 도메인 완성되면 userId 를 파라미터로 받아야 함.
+     * @param userId 사용자 ID
+     * @return
+     */
+    @Transactional
+    public ScoreResponseDto calculateMonthlyScore(Long userId) {
+
+        // 1) 전월 구간(KST)
+        YearMonth last = YearMonth.now(ZoneId.of("Asia/Seoul")).minusMonths(1);
+        LocalDateTime start = last.atDay(1).atStartOfDay();
+        LocalDateTime end = last.atEndOfMonth().atTime(LocalTime.MAX);
+
+        // 2) 통계 조회
+        MonthlyState base =
+                paymentRepository.findIncomeAndOutflow(start, end);
+        List<CategoryState> detail =
+                paymentRepository.findCategoryStats(start, end);
+
+        // 3) DTO 완성
+        MonthlyState stats = MonthlyState.builder()
+                .totalIncome(base.getTotalIncome())
+                .totalOutflow(base.getTotalOutflow())
+                .categoryStates(detail)
+                .build();
+
+        // 4) 점수 요청
+        int score = scoringClient.askScore(stats);
+
+        // 5) 결과 저장 (선택)
+        scoreRepository.save(
+                Score.builder()
+                        .score(score)
+                        .build()
+        );
+
+        ScoreResponseDto response = ScoreResponseDto.builder()
+                .score(score)
+                .build();
+
+        return response;
+    }
 }

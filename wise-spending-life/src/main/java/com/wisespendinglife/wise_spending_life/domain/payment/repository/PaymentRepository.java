@@ -1,7 +1,8 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.repository;
 
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
-import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreStates;
+import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
+import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,6 +36,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
             Pageable pageable);
 
 
+
     /**
      * 총 수입 및 총 지출 금액
      * @param start
@@ -42,17 +44,16 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
      * @return
      */
     @Query("""
-    SELECT new
-           com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreStates.MonthlyState(
-               SUM(CASE WHEN p.direction = 'INFLOW'  THEN p.amount ELSE 0 END),
-               SUM(CASE WHEN p.direction = 'OUTFLOW' THEN p.amount ELSE 0 END),
-               CAST(NULL AS java.util.List)
-           )
-    FROM Payment p
-    WHERE p.transactionAt BETWEEN :start AND :end
-""")
-    ScoreStates.MonthlyState findIncomeAndOutflow(LocalDate start,
-                                                  LocalDate end);
+            SELECT new com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState(
+                SUM(CASE WHEN p.direction = 'INFLOW' THEN p.amount ELSE 0 END),
+                SUM(CASE WHEN p.direction = 'OUTFLOW' THEN p.amount ELSE 0 END),
+                NULL
+            )
+            FROM Payment p
+            WHERE p.transactionAt BETWEEN :start AND :end
+        """)
+    MonthlyState findIncomeAndOutflow(LocalDateTime start,
+                                      LocalDateTime end);
 
 
     /**
@@ -63,7 +64,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
      * @return
      */
     @Query("""
-        SELECT new com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreStates.CategoryState(
+        SELECT new com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState(
             c.name,
             SUM(p.amount),
             COUNT(p)
@@ -74,6 +75,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           AND p.transactionAt BETWEEN :start AND :end
         GROUP BY c.name
     """)
-    List<ScoreStates.CategoryState> findCategoryStats(LocalDate start,
-                                                      LocalDate end);
+    List<CategoryState> findCategoryStats(LocalDateTime start,
+                                          LocalDateTime end);
 }
