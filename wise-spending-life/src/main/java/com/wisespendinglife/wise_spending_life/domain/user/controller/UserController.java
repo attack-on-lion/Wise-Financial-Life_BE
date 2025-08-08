@@ -36,4 +36,12 @@ public class UserController {
                 .body(Map.of("msg", "회원정보가 수정되었습니다"));
     }
 
+    @PostMapping
+    public ResponseEntity<Map<String, String>> createUser(@Validated @RequestBody UserRequestDTO dto) {
+        userService.createUser(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("msg", "유저 정보가 추가되었습니다."));
+    }
+
 }

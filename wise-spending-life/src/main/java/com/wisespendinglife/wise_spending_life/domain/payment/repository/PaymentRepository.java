@@ -24,12 +24,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
      * @param pageable 페이징 정보
      * @return
      */
-    Page<Payment> findByTransactionAtBetween(
+    Page<Payment> findByUserIdAndTransactionAtBetween(
+            Long userId,
             LocalDateTime from,
             LocalDateTime to,
             Pageable pageable);
 
-    Page<Payment> findByCategory_NameIgnoreCaseAndTransactionAtBetween(
+    Page<Payment> findByUser_IdAndCategory_NameIgnoreCaseAndTransactionAtBetween(
+            Long userId,
             String category,             // 카테고리 이름
             LocalDateTime from,
             LocalDateTime to,
@@ -50,10 +52,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
                 NULL
             )
             FROM Payment p
-            WHERE p.transactionAt BETWEEN :start AND :end
+            WHERE p.transactionAt BETWEEN :start AND :end AND p.user.id = :userId
         """)
-    MonthlyState findIncomeAndOutflow(LocalDateTime start,
-                                      LocalDateTime end);
+    MonthlyState findIncomeAndOutflowByUserId(LocalDateTime start,
+                                      LocalDateTime end,
+                                              Long userId);
 
 
     /**
@@ -73,8 +76,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
         JOIN p.category c
         WHERE p.direction = 'OUTFLOW'
           AND p.transactionAt BETWEEN :start AND :end
+              AND p.user.id = :userId
         GROUP BY c.name
     """)
-    List<CategoryState> findCategoryStats(LocalDateTime start,
-                                          LocalDateTime end);
+    List<CategoryState> findCategoryStatsByUserId(LocalDateTime start,
+                                          LocalDateTime end,
+                                          Long userId);
 }

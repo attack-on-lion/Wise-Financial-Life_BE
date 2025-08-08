@@ -14,6 +14,8 @@ import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto
 import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
 import com.wisespendinglife.wise_spending_life.domain.score.repository.ScoreRepository;
 import com.wisespendinglife.wise_spending_life.domain.score.service.ChatGptScoringClient;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -41,11 +43,13 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentResponseAssembler responseAssembler;
     private final ChatGptScoringClient scoringClient;
     private final ScoreRepository scoreRepository;
+    private final UserRepository userRepository;
 
     public PaymentResponseDto.Payments getMonthly(LocalDate from,
                                                   LocalDate to,
                                                   int currentPage,
                                                   int size,
+                                                  Long userId,
                                                   Optional<String> categoryOpt) {
 
         if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
@@ -66,11 +70,11 @@ public class PaymentServiceImpl implements PaymentService {
 
                     // ❷ 정상이라면 조회
                     return paymentRepository
-                            .findByCategory_NameIgnoreCaseAndTransactionAtBetween(
-                                    cat, start, end, pageable);
+                            .findByUser_IdAndCategory_NameIgnoreCaseAndTransactionAtBetween(
+                                    userId, cat, start, end, pageable);
                 })
                 .orElseGet(() -> paymentRepository
-                        .findByTransactionAtBetween(start, end, pageable));
+                        .findByUserIdAndTransactionAtBetween(userId, start, end, pageable));
 
         // Response 생성
         return responseAssembler.assemble(from, to, page);
@@ -96,8 +100,11 @@ public class PaymentServiceImpl implements PaymentService {
                     return categoryRepository.save(newCategory);
                 });
 
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
         // 2) 엔티티 변환 & 저장
-        Payment payment = converter.toEntity(dto, category);
+        Payment payment = converter.toEntity(dto, category, user);
         Payment saved = paymentRepository.save(payment);
 
         // 3) 응답 DTO 변환
@@ -121,9 +128,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 2) 통계 조회
         MonthlyState base =
-                paymentRepository.findIncomeAndOutflow(start, end);
+                paymentRepository.findIncomeAndOutflowByUserId(start, end, userId);
         List<CategoryState> detail =
-                paymentRepository.findCategoryStats(start, end);
+                paymentRepository.findCategoryStatsByUserId(start, end, userId);
 
         // 3) DTO 완성
         MonthlyState stats = MonthlyState.builder()
@@ -134,11 +141,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 4) 점수 요청
         int score = scoringClient.askScore(stats);
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         // 5) 결과 저장 (선택)
         scoreRepository.save(
                 Score.builder()
                         .score(score)
+                        .user(user)
                         .build()
         );
 

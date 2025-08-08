@@ -16,6 +16,7 @@ public interface PaymentService {
                                            LocalDate to,
                                            int currentPage,
                                            int size,
+                                           Long userId,
                                            Optional<String> categoryOpt);
 
     PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto, Long userId);

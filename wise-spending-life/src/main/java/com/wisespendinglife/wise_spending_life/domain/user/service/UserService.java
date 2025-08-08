@@ -10,4 +10,6 @@ public interface UserService {
     //유저 수정 기능
     void updateUserInfo(Long userId, UserRequestDTO userRequestDTO);
 
+    void createUser(UserRequestDTO dto);
+
 }

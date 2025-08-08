@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users/{userId}/ai/point")
+@RequestMapping("/api/users/{userId}/ai/score")
 @RequiredArgsConstructor
 public class ScoreController {
     private final ScoreServiceImpl scoreService;

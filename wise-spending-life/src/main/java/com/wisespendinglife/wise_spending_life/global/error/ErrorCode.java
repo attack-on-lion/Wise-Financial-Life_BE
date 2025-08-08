@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.global.error;
 
+import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -45,12 +46,8 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "4042", "카테고리를 찾을 수 없습니다."),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "4043", "결제 내역을 찾을 수 없습니다."), // 단건 조회용
     PAYMENT_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "4044", "결제 타입을 찾을 수 없습니다."),
-<<<<<<< HEAD
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "4045", "유저 정보를 찾을 수 없습니다."),
-=======
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "4045", "사용자를 찾을 수 없습니다."),
     SCORE_NOT_FOUND(HttpStatus.NOT_FOUND, "4046", "저장 되어있는 점수가 없습니다."),
->>>>>>> 5ea8d41 (Score AI 전용 도메인 구현)
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),

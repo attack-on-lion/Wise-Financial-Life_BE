@@ -4,6 +4,8 @@ import com.wisespendinglife.wise_spending_life.domain.score.converter.ScoreConve
 import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
 import com.wisespendinglife.wise_spending_life.domain.score.repository.ScoreRepository;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -21,10 +23,14 @@ public class ScoreServiceImpl implements ScoreService {
 
     private final ScoreRepository scoreRepository;
     private final ScoreConverter scoreConverter;
+    private final UserRepository userRepository;
 
     public boolean saveScore(Long userId, Integer score){
 
-        Score entity = scoreConverter.toEntity(userId, score);
+        UserEntity user = userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        Score entity = scoreConverter.toEntity(score, user);
         scoreRepository.save(entity);
 
         return true;
@@ -38,7 +44,7 @@ public class ScoreServiceImpl implements ScoreService {
      * @return
      */
     public ScoreResponseDto getScore(Long userId){
-        Optional<Score> last = scoreRepository.findTopByOrderByCreatedAtDesc();
+        Optional<Score> last = scoreRepository.findFirstByUser_IdOrderByCreatedAtDesc(userId);
         if(last.isEmpty()) throw new BusinessException(ErrorCode.SCORE_NOT_FOUND);
         log.info("Score found: {}", last.get());
 
