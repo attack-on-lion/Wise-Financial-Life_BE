@@ -83,7 +83,6 @@ public class PaymentServiceImpl implements PaymentService {
     /**
      * Payment 생성
      *
-     * TODO: userId 도 함께 저장해야함.
      * @param dto - 생성 요청 DTO
      * @param userId - 사용자 ID
      * @return - 생성 결과 DTO
@@ -114,7 +113,6 @@ public class PaymentServiceImpl implements PaymentService {
     /**
      * 사용자의 월별 점수 계산
      *
-     * TODO: 유저 도메인 완성되면 userId 를 파라미터로 받아야 함.
      * @param userId 사용자 ID
      * @return
      */

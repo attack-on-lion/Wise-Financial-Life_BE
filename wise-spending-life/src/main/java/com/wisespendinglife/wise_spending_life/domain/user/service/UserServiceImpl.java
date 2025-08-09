@@ -50,9 +50,10 @@ public class UserServiceImpl implements UserService {
     // 유저 정보 저장
     @Override
     @Transactional
-    public void createUser(UserRequestDTO dto){
+    public Long createUser(UserRequestDTO dto){
         UserEntity user = UserConverter.toEntity(dto);
         userRepository.save(user);
+        return user.getId();
     }
 
 }
