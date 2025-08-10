@@ -11,10 +11,12 @@ import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatGptScoringClient {
 
     private final OpenAIClient openAI;
@@ -36,13 +38,13 @@ public class ChatGptScoringClient {
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_PROCESSING_ERROR);
         }
+        log.info("유저 소비내역 기반 점수 측정 - userJson: {}", userJson);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                .model(ChatModel.GPT_4_1)
+                .model("gpt-5-nano")
                 .addSystemMessage(system)
                 .addUserMessage(userJson)
-                .maxTokens(40)
-                .temperature(0.0)
+                .temperature(1)
                 .build();
 
         /* ② 호출 */
@@ -56,6 +58,7 @@ public class ChatGptScoringClient {
                 .flatMap(choice -> choice.message().content())       // Optional<String>
                 .orElseThrow(() ->
                         new BusinessException(ErrorCode.GPT_EMPTY_RESPONSE));
+        log.info("유저 소비내역 기반 점수 측정 - result: {}", content);
 
         /* ④ Jackson 파싱 — 검사 예외 처리 */
         try {
