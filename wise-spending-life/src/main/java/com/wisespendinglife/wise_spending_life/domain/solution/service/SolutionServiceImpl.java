@@ -104,7 +104,7 @@ public class SolutionServiceImpl implements SolutionService{
         return """
         규칙:
         - 금액은 원 단위로, 과한 확정 표현 금지(예: "~ 가능" 정도).
-        - 솔루션은 행동 팁 또는 일반화 가능한 가이드 위주(2~3개).
+        - 솔루션은 행동 팁 또는 일반화 가능한 가이드 위주(2개).
 
         입력 요약:
         - 기간: %s ~ %s
@@ -122,10 +122,11 @@ public class SolutionServiceImpl implements SolutionService{
 
     private String callAiAndGetJson(String userPrompt) {
         String systemPrompt = """
-        너는 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 한국어(존댓말)로 제안한다.
-        출력은 반드시 다음 JSON 형식으로만 응답해.
+        너는 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 밝고 명쾌하게 한국어(존댓말)로 제안한다.
+        말 끝 마다 ! 를 붙여야해.
+        출력은 반드시 다음 JSON 형식으로만 응답해. 
         {
-          "message": "한 줄의 메시지",
+          "message": "한 줄 요약 메시지",
           "solution": ["솔루션 1", "솔루션 2"]
         }
         """;
