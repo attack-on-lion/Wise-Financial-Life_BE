@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ScoreController {
     private final ScoreServiceImpl scoreService;
-    private final PaymentServiceImpl paymentService;
 
     @PostMapping
     public ResponseEntity<ScoreResponseDto> calculate(@PathVariable Long userId) {
-        ScoreResponseDto response = paymentService.calculateMonthlyScore(userId);
-        saveScore(userId, response);
+        ScoreResponseDto response = scoreService.getMonthlyScore(userId);
+        
         return ResponseEntity.ok(response);
     }
 
