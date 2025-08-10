@@ -55,7 +55,8 @@ public enum ErrorCode {
     /* 500 INTERNAL_SERVER_ERROR */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5000", "알 수 없는 오류가 발생했습니다."),
     JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5001","JSON 직렬화/파싱 실패가 발생했습니다."),
-    GPT_EMPTY_RESPONSE    (HttpStatus.INTERNAL_SERVER_ERROR, "5002", "ChatGPT 응답에 content 가 없습니다.");
+    GPT_EMPTY_RESPONSE    (HttpStatus.INTERNAL_SERVER_ERROR, "5002", "ChatGPT 응답에 content 가 없습니다."),
+    GPT_RESPONSE_PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5003", "ChatGPT 응답 파싱 실패");
 
     private final HttpStatus httpStatus;  // HTTP 상태코드
     private final String code;  // 에러 코드
