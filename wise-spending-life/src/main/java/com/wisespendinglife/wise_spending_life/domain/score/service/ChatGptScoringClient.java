@@ -53,16 +53,16 @@ public class ChatGptScoringClient {
                 .create(params);
 
         /* ③ content 추출 — README 권장 방식 (Optional 처리) */
-        String content = completion.choices().stream()               // List<Choice>
-                .findFirst()                                         // 첫 choice
-                .flatMap(choice -> choice.message().content())       // Optional<String>
+        String content = completion.choices().stream()
+                .findFirst()
+                .flatMap(choice -> choice.message().content())  // Optional<String>
                 .orElseThrow(() ->
                         new BusinessException(ErrorCode.GPT_EMPTY_RESPONSE));
         log.info("유저 소비내역 기반 점수 측정 - result: {}", content);
 
         /* ④ Jackson 파싱 — 검사 예외 처리 */
         try {
-            JsonNode root = mapper.readTree(content);   // JsonProcessingException, JsonMappingException
+            JsonNode root = mapper.readTree(content);
             return root.path("score").asInt(-1);
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_PROCESSING_ERROR);
