@@ -37,19 +37,19 @@ public class ChallengeController {
         return ResponseEntity.ok(validChallenge);
     }
 
-    @GetMapping("/{challengeId}")
+    @GetMapping("/{challenge_id}")
     public ResponseEntity<ChallengeDetailResponseDto> getChallengeById(
-            @PathVariable("challengeId") Long challengeId
+            @PathVariable("challenge_id") Long challenge_id
     ){
-        ChallengeDetailResponseDto challengeDetailResponseDto = challengeService.findChallengeById(challengeId);
+        ChallengeDetailResponseDto challengeDetailResponseDto = challengeService.findChallengeById(challenge_id);
         return ResponseEntity.ok(challengeDetailResponseDto);
     }
 
-    @DeleteMapping("/{challengeId}")
+    @DeleteMapping("/{challenge_id}")
     public ResponseEntity<?> deleteChallenge(
-            @PathVariable("challengeId") Long challengeId
+            @PathVariable("challenge_id") Long challenge_id
     ){
-        challengeService.deleteChallenge(challengeId);
+        challengeService.deleteChallenge(challenge_id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("msg", "챌린지를 성공적으로 삭제했습니다."));
     }

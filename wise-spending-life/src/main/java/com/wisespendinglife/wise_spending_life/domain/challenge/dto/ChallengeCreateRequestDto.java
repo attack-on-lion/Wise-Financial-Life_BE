@@ -20,7 +20,7 @@ import java.util.List;
 public class ChallengeCreateRequestDto {
     @NotNull(message = "{INVALID_USER_ID}")
     @Schema(description = "사용자 ID", example = "15")
-    private Long userId;
+    private Long user_id;
     @NotBlank(message = "{INVALID_CHALLENGE_NAME}")
     @Size(max = 50, message = "{INVALID_CHALLENGE_NAME}")
     @Schema(description = "챌린지 이름", example = "식비 줄이기 챌린지")

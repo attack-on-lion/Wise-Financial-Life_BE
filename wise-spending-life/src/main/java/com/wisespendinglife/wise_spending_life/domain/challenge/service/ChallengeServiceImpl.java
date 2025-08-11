@@ -28,7 +28,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     @Transactional
     public Challenge createChallenge(ChallengeCreateRequestDto dto) {
-        UserEntity user = userRepository.findById(dto.getUserId())
+        UserEntity user = userRepository.findById(dto.getUser_id())
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Challenge newchallenge = Challenge.builder()
@@ -62,16 +62,16 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     @Transactional(readOnly = true)
-    public ChallengeDetailResponseDto findChallengeById(Long challengeId) {
-        Challenge challenge = challengeRepository.findById(challengeId)
+    public ChallengeDetailResponseDto findChallengeById(Long challenge_id) {
+        Challenge challenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CERTAIN_CHALLENGE_NOT_FOUND));
         return new ChallengeDetailResponseDto(challenge);
     }
 
     @Override
     @Transactional
-    public void deleteChallenge(Long challengeId) {
-        Challenge challenge = challengeRepository.findById(challengeId)
+    public void deleteChallenge(Long challenge_id) {
+        Challenge challenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CERTAIN_CHALLENGE_NOT_FOUND));
         // 삭제된 것으로 처리
         challenge.setIsDeleted();

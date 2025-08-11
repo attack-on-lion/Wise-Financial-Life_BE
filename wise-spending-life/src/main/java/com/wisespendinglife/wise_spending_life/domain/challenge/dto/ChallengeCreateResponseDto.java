@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class ChallengeCreateResponseDto {
     private final Long id;
-    private final Long userId;
+    private final Long user_id;
     private final String challengeName;
     private final ChallengeType challengeType;
     private final Long challengeDays;
@@ -23,12 +23,12 @@ public class ChallengeCreateResponseDto {
     private final Boolean isDeleted;
 
     @Builder
-    public ChallengeCreateResponseDto(Long id, Long userId, String challengeName,
+    public ChallengeCreateResponseDto(Long id, Long user_id, String challengeName,
                                       ChallengeType challengeType, Long challengeDays, LocalDate startAt,
                                       LocalDate endAt, LocalDate createdAt, List<String> categories,
                                       String characterImageUrl, Boolean isCompleted, Boolean isDeleted) {
         this.id = id;
-        this.userId = userId;
+        this.user_id = user_id;
         this.challengeName = challengeName;
         this.challengeType = challengeType;
         this.challengeDays = challengeDays;
