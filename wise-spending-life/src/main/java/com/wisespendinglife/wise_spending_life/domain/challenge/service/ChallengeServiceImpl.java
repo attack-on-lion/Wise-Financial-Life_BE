@@ -67,4 +67,16 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.CERTAIN_CHALLENGE_NOT_FOUND));
         return new ChallengeDetailResponseDto(challenge);
     }
+
+    @Override
+    @Transactional
+    public void deleteChallenge(Long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CERTAIN_CHALLENGE_NOT_FOUND));
+        // 삭제된 것으로 처리
+        challenge.setIsDeleted();
+        challengeRepository.save(challenge);
+        // 물리 삭제
+//        challengeRepository.delete(challenge);
+    }
 }

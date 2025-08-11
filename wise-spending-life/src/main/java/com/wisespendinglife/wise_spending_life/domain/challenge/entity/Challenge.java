@@ -57,4 +57,12 @@ public class Challenge {
         this.isCompleted = isCompleted;
         this.isDeleted = isDeleted;
     }
+
+    public void setIsCompleted() {
+        this.isCompleted = true;
+    }
+
+    public void setIsDeleted(){
+        this.isDeleted = true;
+    }
 }

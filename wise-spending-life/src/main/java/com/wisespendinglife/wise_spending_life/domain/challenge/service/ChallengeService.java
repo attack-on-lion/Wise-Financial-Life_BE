@@ -10,4 +10,5 @@ public interface ChallengeService {
     public Challenge createChallenge(ChallengeCreateRequestDto dto);
     public ValidChallengeResponseDto findValidChallenge(boolean isCompleted, boolean isDeleted);
     public ChallengeDetailResponseDto findChallengeById(Long challengeId);
+    public void deleteChallenge(Long challengeId);
 }

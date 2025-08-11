@@ -44,4 +44,13 @@ public class ChallengeController {
         ChallengeDetailResponseDto challengeDetailResponseDto = challengeService.findChallengeById(challengeId);
         return ResponseEntity.ok(challengeDetailResponseDto);
     }
+
+    @DeleteMapping("/{challengeId}")
+    public ResponseEntity<?> deleteChallenge(
+            @PathVariable("challengeId") Long challengeId
+    ){
+        challengeService.deleteChallenge(challengeId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("msg", "챌린지를 성공적으로 삭제했습니다."));
+    }
 }
