@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.challenge.controller;
 
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCreateRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeDetailResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallengeResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.service.ChallengeService;
@@ -34,5 +35,13 @@ public class ChallengeController {
     ){
         ValidChallengeResponseDto validChallenge = challengeService.findValidChallenge(isCompleted, isDeleted);
         return ResponseEntity.ok(validChallenge);
+    }
+
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<ChallengeDetailResponseDto> getChallengeById(
+            @PathVariable("challengeId") Long challengeId
+    ){
+        ChallengeDetailResponseDto challengeDetailResponseDto = challengeService.findChallengeById(challengeId);
+        return ResponseEntity.ok(challengeDetailResponseDto);
     }
 }

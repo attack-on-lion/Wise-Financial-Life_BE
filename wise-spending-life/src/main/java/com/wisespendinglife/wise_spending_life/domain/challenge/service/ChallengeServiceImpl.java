@@ -3,6 +3,7 @@ package com.wisespendinglife.wise_spending_life.domain.challenge.service;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCreateRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeDetailResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallengeResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeCategory;
@@ -57,5 +58,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeRepository.findByIsCompletedAndIsDeleted(isCompleted, isDeleted)
                 .map(ValidChallengeResponseDto::new)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CHALLENGE_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ChallengeDetailResponseDto findChallengeById(Long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CERTAIN_CHALLENGE_NOT_FOUND));
+        return new ChallengeDetailResponseDto(challenge);
     }
 }

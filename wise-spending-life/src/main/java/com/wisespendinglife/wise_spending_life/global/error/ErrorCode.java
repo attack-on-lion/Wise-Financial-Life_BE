@@ -55,6 +55,7 @@ public enum ErrorCode {
     SCORE_NOT_FOUND(HttpStatus.NOT_FOUND, "4046", "저장 되어있는 점수가 없습니다."),
     CHALLENGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "4047", "챌린지 타입을 찾을 수 없습니다."),
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4048", "진행 중인 챌린지를 찾을 수 없습니다."),
+    CERTAIN_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4049", "특정 챌린지를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
