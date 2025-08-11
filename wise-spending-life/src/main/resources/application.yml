@@ -8,3 +8,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+openai:
+  apiKey: ${OPENAI_API_KEY}
+  connect-timeout: 10s
+  read-timeout: 30s
+
