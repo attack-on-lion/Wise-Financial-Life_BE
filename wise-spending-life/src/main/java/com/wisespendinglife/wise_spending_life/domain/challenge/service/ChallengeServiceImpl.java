@@ -3,6 +3,7 @@ package com.wisespendinglife.wise_spending_life.domain.challenge.service;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCreateRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallengeResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeCategory;
 import com.wisespendinglife.wise_spending_life.domain.challenge.repository.ChallengeRepository;
@@ -12,6 +13,7 @@ import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    @Transactional
     public Challenge createChallenge(ChallengeCreateRequestDto dto) {
         UserEntity user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -46,5 +49,13 @@ public class ChallengeServiceImpl implements ChallengeService {
             newchallenge.addChallengeCategory(new ChallengeCategory(category));
         }
         return challengeRepository.save(newchallenge);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ValidChallengeResponseDto findValidChallenge(boolean isCompleted, boolean isDeleted) {
+        return challengeRepository.findByIsCompletedAndIsDeleted(isCompleted, isDeleted)
+                .map(ValidChallengeResponseDto::new)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHALLENGE_NOT_FOUND));
     }
 }
