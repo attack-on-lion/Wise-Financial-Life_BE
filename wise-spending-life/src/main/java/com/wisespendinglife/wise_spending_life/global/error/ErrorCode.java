@@ -32,9 +32,14 @@ public enum ErrorCode {
     INVALID_GENDER(HttpStatus.BAD_REQUEST, "4016", "성별은 필수 입력 항목입니다."),
     INVALID_AGE(HttpStatus.BAD_REQUEST, "4017", "나이는 필수 입력 항목입니다."),
     INVALID_BASE_AMOUNT(HttpStatus.BAD_REQUEST, "4018", "기준 금액은 필수 입력 항목입니다."),
-
-
-
+    INVALID_USER_ID(HttpStatus.BAD_REQUEST, "4019", "사용자 ID는 필수 입력 항목입니다."),
+    INVALID_CHALLENGE_NAME(HttpStatus.BAD_REQUEST, "4020", "챌린지 이름은 필수 입력 항목입니다."),
+    INVALID_CHALLENGE_TYPE(HttpStatus.BAD_REQUEST, "4021", "챌린지 타입은 필수 입력 항목입니다."),
+    INVALID_CHALLENGE_DAYS(HttpStatus.BAD_REQUEST, "4022", "챌린지 일수는 필수 입력 항목입니다."),
+    INVALID_START_AT(HttpStatus.BAD_REQUEST, "4023", "시작일은 필수 입력 항목입니다."),
+    INVALID_END_AT(HttpStatus.BAD_REQUEST, "4024", "종료일은 필수 입력 항목입니다."),
+    INVALID_CREATED_AT(HttpStatus.BAD_REQUEST, "4025", "생성일은 필수 입력 항목입니다."),
+    INVALID_CATEGORIES(HttpStatus.BAD_REQUEST, "4026", "카테고리는 최소 1개 이상 선택해야 합니다."),
 
 
 
@@ -48,6 +53,7 @@ public enum ErrorCode {
     PAYMENT_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "4044", "결제 타입을 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "4045", "유저 정보를 찾을 수 없습니다."),
     SCORE_NOT_FOUND(HttpStatus.NOT_FOUND, "4046", "저장 되어있는 점수가 없습니다."),
+    CHALLENGE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "4047", "챌린지 타입을 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
