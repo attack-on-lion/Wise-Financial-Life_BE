@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.challenge.controller;
 
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCreateRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCreateResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeDetailResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallengeResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
@@ -24,8 +25,24 @@ public class ChallengeController {
             @Validated @RequestBody ChallengeCreateRequestDto challengeCreateRequestDto
     ){
         Challenge createdChallenge = challengeService.createChallenge(challengeCreateRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("msg", "챌린지가 성공적으로 생성되었습니다."));
+        ChallengeCreateResponseDto responseDto = ChallengeCreateResponseDto.builder()
+                .id(createdChallenge.getId())
+                .user_id(createdChallenge.getUser().getId())
+                .challengeName(createdChallenge.getChallengeName())
+                .challengeType(createdChallenge.getChallengeType())
+                .challengeDays(createdChallenge.getChallengeDays())
+                .startAt(createdChallenge.getStartAt())
+                .endAt(createdChallenge.getEndAt())
+                .createdAt(createdChallenge.getCreatedAt())
+                .categories(createdChallenge.getChallengeCategories()
+                        .stream()
+                        .map(v -> v.getCategory().getName())
+                        .toList())
+                .characterImageUrl(createdChallenge.getCharacterImageUrl())
+                .isCompleted(createdChallenge.getIsCompleted())
+                .isDeleted(createdChallenge.getIsDeleted())
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping

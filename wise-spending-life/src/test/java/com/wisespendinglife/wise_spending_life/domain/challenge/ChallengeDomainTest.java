@@ -117,7 +117,18 @@ public class ChallengeDomainTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.msg").value("챌린지가 성공적으로 생성되었습니다."))
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.user_id").value(savedUser.getId()))
+                .andExpect(jsonPath("$.challengeName").value("식비 챌린지"))
+                .andExpect(jsonPath("$.challengeType").value("pay_less"))
+                .andExpect(jsonPath("$.challengeDays").value(7))
+                .andExpect(jsonPath("$.startAt").value(requestDto.getStartAt().toString()))
+                .andExpect(jsonPath("$.endAt").value(requestDto.getEndAt().toString()))
+                .andExpect(jsonPath("$.createdAt").value(requestDto.getCreatedAt().toString()))
+                .andExpect(jsonPath("$.categories[0]").value(savedCategory.getName()))
+                .andExpect(jsonPath("$.characterImageUrl").value("url"))
+                .andExpect(jsonPath("$.isCompleted").value(false))
+                .andExpect(jsonPath("$.isDeleted").value(false))
                 .andDo(print());
     }
 
