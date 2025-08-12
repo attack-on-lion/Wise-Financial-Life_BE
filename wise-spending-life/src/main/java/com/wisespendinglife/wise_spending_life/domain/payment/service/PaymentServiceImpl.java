@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.service;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
+import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.payment.assembler.PaymentResponseAssembler;
 import com.wisespendinglife.wise_spending_life.domain.payment.converter.PaymentConverter;
@@ -99,6 +100,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseGet(() -> {
                     Category newCategory = Category.builder()
                             .name(dto.getCategory())
+                            .type(CategoryType.PAYMENT)
                             .build();
                     return categoryRepository.save(newCategory);
                 });

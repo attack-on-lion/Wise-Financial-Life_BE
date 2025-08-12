@@ -1,9 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.category.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +22,8 @@ public class Category {
     @Column(nullable = false, length = 50)
     private String name;
 
-    private String Type;
+    @Enumerated(EnumType.STRING)
+    private CategoryType type;
 
 
 }
