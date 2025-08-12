@@ -54,7 +54,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
 
-        LocalDateTime start = from.atStartOfDay();          // 2025-07-01 00:00
+        // 유저 확인
+        userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDateTime start = from.atStartOfDay();
         LocalDateTime end   = to.plusDays(1).atStartOfDay();
 
         // Pageable 설정
