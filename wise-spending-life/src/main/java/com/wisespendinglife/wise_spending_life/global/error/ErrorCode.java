@@ -71,7 +71,7 @@ public enum ErrorCode {
     GIFTICON_NOT_FOUND(HttpStatus.NOT_FOUND, "40410", "기프티콘에 대한 정보를 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "스토어 정보를 찾을 수 없습니다."),
 
-    
+
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
 
