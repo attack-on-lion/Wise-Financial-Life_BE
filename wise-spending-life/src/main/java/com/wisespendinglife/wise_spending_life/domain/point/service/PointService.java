@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.point.service;
 
+import com.wisespendinglife.wise_spending_life.domain.point.dto.PointDeltaRequest;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointResponseDto;
 
 public interface PointService {
@@ -13,5 +14,6 @@ public interface PointService {
      * @return summary, pageInfo, items 를 포함한 DTO
      */
     PointResponseDto.PointListResponseDto getPointLedger(Long userId, int page, int size);
+    PointResponseDto.PointBalanceResponseDto handlePointChange(Long userId, PointDeltaRequest dto);
 
 }

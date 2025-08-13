@@ -15,6 +15,14 @@ public class PointResponseDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class PointBalanceResponseDto {
+        private Long balance;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class PointListResponseDto {
         private Summary summary;
         private PageInfo pageInfo;

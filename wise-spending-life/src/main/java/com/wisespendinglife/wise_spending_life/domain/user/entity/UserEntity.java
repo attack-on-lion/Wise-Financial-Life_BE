@@ -43,6 +43,8 @@ public class UserEntity {
 
     private Long baseAmount; //기준금액
 
+    private Long point;
+
     @CreatedDate
     @Column(nullable = false) //자동화함
     private LocalDateTime createdAt; //레코드 생성 날짜
@@ -75,6 +77,7 @@ public class UserEntity {
     public void updateAge(Long age){
         this.age = age;
     }
+    public void updatePoint(Long point){ this.point = point; }
     public void updateBaseAmount(Long baseAmount){
         this.baseAmount = baseAmount;
     }
