@@ -54,6 +54,7 @@ public class PointResponseDto {
         private SourceKind sourceKind; // 포인트 발생/차감 종류
         private Long delta;
         private Long balance;
+        private Long challengeDays;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }

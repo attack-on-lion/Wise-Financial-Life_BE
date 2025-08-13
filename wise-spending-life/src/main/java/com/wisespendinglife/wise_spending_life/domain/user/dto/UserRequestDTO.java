@@ -5,10 +5,12 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @Builder
+@ToString
 public class UserRequestDTO {
 
         @NotBlank(message = "{INVALID_PROFILE_IMAGE}")

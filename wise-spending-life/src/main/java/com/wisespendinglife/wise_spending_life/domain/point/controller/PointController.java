@@ -4,10 +4,12 @@ import com.wisespendinglife.wise_spending_life.domain.point.dto.PointRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.point.service.PointServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users/{user_id}/points")
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class PointController {
             ) {
 
         PointResponseDto.PointListResponseDto pointLedger = pointService.getPointLedger(userId, page, size);
+        log.info(">>> [CTRL] /api/users/{}/points/ledger GET -> page: {}, size: {}", userId, page, size);
 
         return ResponseEntity.ok(pointLedger);
 
@@ -39,6 +42,8 @@ public class PointController {
             @Validated @RequestBody PointRequestDto.EarnPointRequestDto dto
     ){
 
+        log.info(">>> [CTRL] /api/users/{}/points/earn POST -> {}", userId, dto.toString());
+
         PointResponseDto.PointBalanceResponseDto pointBalanceResponseDto = pointService.handlePointChange(userId, dto);
 
         return ResponseEntity.ok(pointBalanceResponseDto);
@@ -54,6 +59,9 @@ public class PointController {
             @PathVariable("user_id") Long userId,
             @Validated @RequestBody PointRequestDto.SpendPointRequestDto dto
     ){
+
+        log.info(">>> [CTRL] /api/users/{}/points/spend POST -> {}", userId, dto.toString());
+
         PointResponseDto.PointBalanceResponseDto pointBalanceResponseDto = pointService.handlePointChange(userId, dto);
 
         return ResponseEntity.ok(pointBalanceResponseDto);

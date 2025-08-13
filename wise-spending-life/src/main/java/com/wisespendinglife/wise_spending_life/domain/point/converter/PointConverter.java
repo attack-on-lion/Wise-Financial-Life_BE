@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.point.converter;
 
+import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointDeltaRequest;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointResponseDto;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,6 +27,7 @@ public class PointConverter {
                 .sourceKind(e.getSourceKind())      // enum 그대로
                 .delta(e.getDelta())
                 .balance(e.getBalance())
+                .challengeDays(e.getChallenge() != null ? e.getChallenge().getChallengeDays() : null)
                 .createdAt(e.getCreatedAt())
                 .updatedAt(e.getUpdatedAt())
                 .build();
@@ -48,12 +51,13 @@ public class PointConverter {
      * @param user 유저 엔티티
      * @return Point 엔티티
      */
-    public Point toEntity(PointDeltaRequest dto, UserEntity user) {
+    public Point toEntity(PointDeltaRequest dto, UserEntity user, Optional<Challenge> challenge) {
         return Point.builder()
                 .user(user)
                 .sourceKind(dto.getSourceKind())
                 .delta(dto.getDelta())
                 .balance(user.getPoint() + dto.getDelta())
+                .challenge(challenge.orElse(null))
                 .build();
     }
 

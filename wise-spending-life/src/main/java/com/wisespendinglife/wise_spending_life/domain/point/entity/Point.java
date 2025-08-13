@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.point.entity;
 
+import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +31,11 @@ public class Point {
     private Long delta;
 
     private Long balance;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challenge_id", nullable = true)
+    private Challenge challenge;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

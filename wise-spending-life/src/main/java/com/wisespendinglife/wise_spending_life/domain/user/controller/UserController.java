@@ -4,6 +4,7 @@ import com.wisespendinglife.wise_spending_life.domain.user.dto.UserRequestDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +12,17 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
-
 public class UserController {
     private final UserService userService;
 
     //유저 정보 조회
     @GetMapping("/{user_id}")
     public UserResponseDTO getUserInfo(@PathVariable("user_id") Long userId) {
+        log.info(">>> [CTRL] /api/users/{} GET", userId);
         return userService.getUserInfo(userId);
     }
 
@@ -30,6 +32,7 @@ public class UserController {
             @PathVariable("user_id") Long userId,
             @Validated @RequestBody UserRequestDTO dto
     ) {
+        log.info(">>> [CTRL] /api/users/{} PATCH -> {}", userId, dto.toString());
         userService.updateUserInfo(userId, dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -38,6 +41,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createUser(@Validated @RequestBody UserRequestDTO dto) {
+        log.info(">>> [CTRL] /api/users POST -> {}", dto.toString());
         userService.createUser(dto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
