@@ -18,4 +18,7 @@ public class StoreRequestDTO {
 
     @NotNull(message = "{INVALID_CATEGORY}")
     private StoreCategory category;
+
+    @NotBlank(message = "{INVALID_STORE_IMAGE_URL}")
+    private String logoURL;
 }

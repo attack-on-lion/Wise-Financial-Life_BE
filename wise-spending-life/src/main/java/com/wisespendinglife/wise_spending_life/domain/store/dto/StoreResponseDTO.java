@@ -11,6 +11,8 @@ import lombok.Getter;
 public class StoreResponseDTO {
     private String storeName; //상점 이름
 
+    private String logoURL; //브랜드 이미지
+
     private String category; //카테고리 한글명 반환 위함
 
     public static StoreResponseDTO from(StoreEntity store) {

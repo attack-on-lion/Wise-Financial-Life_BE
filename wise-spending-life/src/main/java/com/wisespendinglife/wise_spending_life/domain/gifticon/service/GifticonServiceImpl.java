@@ -5,9 +5,13 @@ import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonReque
 import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.gifticon.repository.GifticonRepository;
 import com.wisespendinglife.wise_spending_life.domain.gifticon.entity.GifticonEntity;
-
+import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonListResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.store.repository.StoreRepository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,74 +29,76 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class GifticonServiceImpl implements GifticonService {
-    private static final int DEFAULT_SIZE = 10;
-    private static final int MAX_SIZE = 30;
+    private static final int DEFAULT_SIZE = 9;
+    private static final int MAX_SIZE = 10;
 
     private final GifticonRepository gifticonRepository;
     private final StoreRepository storeRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<GifticonResponseDTO> getAllGifticon(Timestamp lastCreatedAt, Long lastId, int size) {
-        if (size <= 0 || size > MAX_SIZE) {
-            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
-        }
-        if ((lastCreatedAt == null) != (lastId == null)) {
-            throw new BusinessException(ErrorCode.INVALID_CURSOR);
+    public GifticonListResponseDTO getAllGifticon(LocalDateTime lastCreatedAt, Long lastId, int size) {
+        if (size <= 0 || size > MAX_SIZE) {throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);}
+        if ((lastCreatedAt == null) != (lastId == null)) {throw new BusinessException(ErrorCode.INVALID_CURSOR);}
+
+        final boolean firstPage = (lastCreatedAt == null && lastId == null);
+        if (firstPage) {
+            lastCreatedAt = LocalDateTime.of(9999, 12, 31, 23, 59, 59);
+            lastId = Long.MAX_VALUE;
         }
 
-        List<GifticonEntity> entities = gifticonRepository.findSliceAll(lastCreatedAt, lastId, size);
+        // size+1 로 조회
+        // 가져온 리스트가 size+1 이면 마지막 하나를 잘라내고, 그 마지막 요소의 (createdAt, id)를 next로 보냄.
+        Pageable pageable = PageRequest.of(0, size + 1);
+        List<GifticonEntity> entities = gifticonRepository.findAfterCursor(lastCreatedAt, lastId, pageable);
 
-        if (entities.isEmpty()) {
-            if (lastCreatedAt == null && lastId == null) {
-                throw new BusinessException(ErrorCode.GIFTICON_NOT_FOUND);
-            }
-            return java.util.Collections.emptyList();
+        if (entities.isEmpty() && firstPage) {
+            throw new BusinessException(ErrorCode.GIFTICON_NOT_FOUND);
         }
 
-        List<GifticonResponseDTO> result = new ArrayList<>();
-        for (GifticonEntity entity : entities) {
-            result.add(GifticonConverter.togifticonResponseDTO(entity)); // 컨버터 메서드명과 일치
+        boolean hasNext = entities.size() > size;
+        if (hasNext) {
+            entities = entities.subList(0, size); // 마지막 1개 제거
         }
-        return result;
+
+//        List<GifticonResponseDTO> items = new ArrayList<>();
+//        for (GifticonEntity entity : entities) {
+//            items.add(GifticonConverter.togifticonResponseDTO(entity));
+//        }
+        var items = entities.stream().map(GifticonConverter::togifticonResponseDTO).toList();
+
+        GifticonListResponseDTO.Cursor cursor = null;
+        if (!items.isEmpty()) {
+            //GifticonResponseDTO last = items.get(items.size() - 1);
+            var last = items.get(items.size() - 1);
+            cursor = GifticonListResponseDTO.Cursor.builder()
+                    .lastId(last.getId())
+                    .lastCreatedAt(last.getCreatedAt())
+                    .build();
+        }
+
+        return GifticonListResponseDTO.builder()
+                .gifticonlist(items)
+                .nextCursor(cursor)  // null 이면 프론트는 더 불러오지 않으면 됨
+                .hasNext(hasNext)
+                .size(size)
+                .build();
     }
-
-    //기프티콘 스토어별 전체 조회(스크롤)
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<GifticonResponseDTO> getGifticonsByStore(Long storeId, Timestamp lastCreatedAt, Long lastId, int size) {
-//        if (size <= 0 || size > MAX_SIZE) {
-//            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
-//        }
-//        if ((lastCreatedAt == null) != (lastId == null)) {
-//            throw new BusinessException(ErrorCode.INVALID_CURSOR);
-//        }
-//
-//        // 스토어 존재 여부 확인
-//        boolean storeExists = storeRepository.existsById(storeId);
-//        if (!storeExists) {
-//            throw new BusinessException(ErrorCode.STORE_NOT_FOUND);
-//        }
-//
-//        // 스토어별 커서 기반 조회
-//        List<GifticonEntity> entities =
-//                gifticonRepository.findSliceByStoreId(storeId, lastCreatedAt, lastId, size);
-//
-//        // Entity -> DTO 리스트 변환
-//        List<GifticonResponseDTO> result = new java.util.ArrayList<>();
-//        for (GifticonEntity e : entities) {
-//            result.add(GifticonConverter.togifticonResponseDTO(e));
-//        }
-//        return result;
-//    }
 
     //기프티콘 등록(Post)
     @Override
     @Transactional
-    public Long createGifticon(Long storeId, GifticonRequestDTO requestDTO){
-        StoreEntity store = storeRepository.findById(storeId)
+    public Long createGifticon(String storeName, GifticonRequestDTO requestDTO) {
+        if (storeName == null || storeName.trim().isEmpty()) {
+            throw new BusinessException(ErrorCode.INVALID_STORE_NAME);
+        }
+        final String normalized = storeName.trim();
+
+        // 스토어 이름 조회 -> 없으면 예외
+        StoreEntity store = storeRepository.findByStoreName(normalized)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORE_NOT_FOUND));
 
+        // DTO → 엔티티 변환
         GifticonEntity gifticon = GifticonConverter.toEntity(requestDTO, store);
 
         if (gifticon.getIsRecommend() == null) gifticon.updateIsRecommend(false);
@@ -100,6 +107,7 @@ public class GifticonServiceImpl implements GifticonService {
         gifticonRepository.save(gifticon);
         return gifticon.getId();
     }
+
 
     //기프티콘 삭제
     @Override

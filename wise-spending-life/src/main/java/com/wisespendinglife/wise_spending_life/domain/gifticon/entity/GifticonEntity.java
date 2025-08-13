@@ -45,9 +45,6 @@ public class GifticonEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt; //생성 시간
 
-    @Column(nullable = false)
-    private LocalDateTime expiredAt; //만료 시간
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id", nullable = false)
     private StoreEntity store; //스토어 아이디 FK
@@ -76,10 +73,5 @@ public class GifticonEntity {
     public void updateCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }
-    public void updateExpiredAt(LocalDateTime expiredAt){
-        this.expiredAt = expiredAt;
-    }
-
-
 
 }

@@ -53,8 +53,8 @@ public enum ErrorCode {
     INVALID_GIFTICON_EXPIRED_AT_FUTURE(HttpStatus.BAD_REQUEST, "4037", "기프티콘 만료일은 현재 시각 이후여야 합니다."),
     INVALID_PAGE_SIZE(HttpStatus.BAD_REQUEST, "4038", "요청한 페이지 크기가 유효하지 않습니다."),
     INVALID_CURSOR(HttpStatus.BAD_REQUEST, "4039", "커서 값이 유효하지 않습니다."),
-
-
+    INVALID_STORE_NOT_NAME(HttpStatus.BAD_REQUEST, "40301", "스토어 이름이 유효하지 않습니다."),
+    INVALID_STORE_IMAGE_URL(HttpStatus.BAD_REQUEST, "40302", "브랜드 이미지 URL이 유효하지 않습니다."),
 
 
     /* 404 NOT_FOUND */
@@ -70,7 +70,6 @@ public enum ErrorCode {
     CERTAIN_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4049", "특정 챌린지를 찾을 수 없습니다."),
     GIFTICON_NOT_FOUND(HttpStatus.NOT_FOUND, "40410", "기프티콘에 대한 정보를 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "스토어 정보를 찾을 수 없습니다."),
-
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),

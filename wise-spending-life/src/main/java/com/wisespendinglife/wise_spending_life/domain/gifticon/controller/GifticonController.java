@@ -1,7 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.gifticon.controller;
 
-import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonRequestDTO;
+import com.wisespendinglife.wise_spending_life.domain.gifticon.dto.GifticonListResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.gifticon.service.GifticonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,22 +24,20 @@ public class GifticonController {
 
     //기프티콘 전체 조회
     @GetMapping
-    public ResponseEntity<List<GifticonResponseDTO>> getAllGifticon(
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastCreatedAt,
+    public ResponseEntity<GifticonListResponseDTO> getAll(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime lastCreatedAt,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size
     ) {
-        Timestamp ts = (lastCreatedAt == null) ? null : Timestamp.valueOf(lastCreatedAt);
-        List<GifticonResponseDTO> list = gifticonService.getAllGifticon(ts, lastId, size);
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(gifticonService.getAllGifticon(lastCreatedAt, lastId, size));
     }
 
 
     //기프티콘 추가
     @PostMapping
-    public ResponseEntity<String> createGifticon(@Valid @RequestBody GifticonRequestDTO request) {
-        Long newId = gifticonService.createGifticon(request.getStoreId(), request);
+    public ResponseEntity<Map<String, String>> createGifticon(@Valid @RequestBody GifticonRequestDTO request) {
+        Long newId = gifticonService.createGifticon(request.getStoreName(), request);
 
         URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
@@ -48,10 +46,8 @@ public class GifticonController {
                 .toUri();
 
         return ResponseEntity
-                .status(org.springframework.http.HttpStatus.CREATED)
-                .location(location)
-                .contentType(org.springframework.http.MediaType.TEXT_PLAIN)
-                .body("상품 등록이 완료되었습니다.");
+                .created(location)
+                .body(Map.of("msg", "상품 등록이 완료되었습니다."));
     }
 
 
@@ -62,7 +58,9 @@ public class GifticonController {
         gifticonService.deleteGifticon(gifticonId);
 
         record Msg(String msg) {}
-        return ResponseEntity.ok(new Msg("기프티콘이 삭제 되었습니다."));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("msg", "기프티콘이 삭제 되었습니다."));
     }
 
 }
