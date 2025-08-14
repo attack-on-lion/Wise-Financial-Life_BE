@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.point.dto;
 
+import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
 import com.wisespendinglife.wise_spending_life.domain.point.entity.SourceKind;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
