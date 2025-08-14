@@ -38,7 +38,7 @@ public class ChatGptScoringClient {
         } catch (JsonProcessingException e) {
             throw new BusinessException(ErrorCode.JSON_PROCESSING_ERROR);
         }
-        log.info("유저 소비내역 기반 점수 측정 - userJson: {}", userJson);
+        log.info(">>> [GPT] 유저 소비내역 기반 점수 측정 -> userData: {}", userJson);
 
         ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                 .model("gpt-5-nano")
@@ -58,7 +58,7 @@ public class ChatGptScoringClient {
                 .flatMap(choice -> choice.message().content())  // Optional<String>
                 .orElseThrow(() ->
                         new BusinessException(ErrorCode.GPT_EMPTY_RESPONSE));
-        log.info("유저 소비내역 기반 점수 측정 - result: {}", content);
+        log.info(">>> [GPT] 유저 소비내역 기반 점수 측정 -> result: {}", content);
 
         /* ④ Jackson 파싱 — 검사 예외 처리 */
         try {

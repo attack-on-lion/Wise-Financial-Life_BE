@@ -15,8 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class Category {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)

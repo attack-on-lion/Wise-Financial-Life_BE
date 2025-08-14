@@ -34,6 +34,8 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse(ErrorCode.INVALID_INPUT_VALUE);
 
+        log.error("DTO 유효성 검사 실패: CODE={} Message={} (발생시간: {})", code.getCode(), code.getMessage(), LocalDateTime.now());
+
         return ResponseEntity.status(code.getHttpStatus())
                 .body(ErrorResponse.of(code));
     }
@@ -47,6 +49,8 @@ public class GlobalExceptionHandler {
                 .map(this::toErrorCode)
                 .findFirst()
                 .orElse(ErrorCode.INVALID_INPUT_VALUE);
+
+        log.error("메소드 PathVariable 검증 실패: CODE={} Message={} (발생시간: {})", code.getCode(), code.getMessage(), LocalDateTime.now());
 
         return ResponseEntity.status(code.getHttpStatus())
                 .body(ErrorResponse.of(code));

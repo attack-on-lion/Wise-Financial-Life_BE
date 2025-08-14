@@ -3,6 +3,8 @@ spring:
     name: wise-spending-life
 
   datasource:
+    hikari:
+      maximum-pool-size: 10
     url: ${DB_URL}
 
   jpa:

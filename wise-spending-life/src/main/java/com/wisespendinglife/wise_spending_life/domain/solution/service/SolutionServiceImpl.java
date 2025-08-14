@@ -65,7 +65,7 @@ public class SolutionServiceImpl implements SolutionService{
 
         String catAggLog = catLogString(catAgg);
 
-        log.info("유저 심플 AI 솔루션 - User: {}, catAgg: {}", user.getId(), catAggLog);
+        log.info(">>> [GPT] 유저 심플 AI 솔루션 - User: {}, catAgg: {}", user.getId(), catAggLog);
 
         // 프롬프트 생성
         String prompt = buildPrompt(payments, catAgg);
@@ -75,7 +75,7 @@ public class SolutionServiceImpl implements SolutionService{
 
         // 파싱 → DTO
         SimpleSolutionResponseDTO dto = solutionConverter.toResponseDto(aiJson);
-        log.info("유저 심플 AI 솔루션 - result: {}", dto);
+        log.info(">>> [GPT] 유저 심플 AI 솔루션 - result: {}", dto);
 
         // 데이터 저장
         solutionRepository.save(solutionConverter.toEntity(user, dto));

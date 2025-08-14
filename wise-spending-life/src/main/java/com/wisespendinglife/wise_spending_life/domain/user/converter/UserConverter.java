@@ -16,6 +16,7 @@ public class UserConverter {
                 .baseAmount(user.getBaseAmount())
                 .gender(user.getGender())
                 .location(user.getLocation())
+                .point(user.getPoint())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -32,6 +33,7 @@ public class UserConverter {
                 .baseAmount(dto.getBaseAmount())
                 .gender(dto.getGender())
                 .location(dto.getLocation())
+                .point(0L)  // 첫 유저 0 포인트
                 .isDeleted(false)
                 .build();
     }

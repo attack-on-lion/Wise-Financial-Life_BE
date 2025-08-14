@@ -19,6 +19,7 @@ public class UserResponseDTO {
     private String gender;
     private String email;
     private String phoneNumber;
+    private Long point;
     private Long baseAmount;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
