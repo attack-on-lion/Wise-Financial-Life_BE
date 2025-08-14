@@ -1,5 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.user.service;
 
+import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
+import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import com.wisespendinglife.wise_spending_life.domain.user.repository.UserReposi
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 public class UserServiceImpl implements UserService {
     //유저 정보 조회
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -48,6 +53,11 @@ public class UserServiceImpl implements UserService {
         if (dto.getPhoneNumber() != null) user.updatePhoneNumber(dto.getPhoneNumber());
         if (dto.getAge() != null) user.updateAge(dto.getAge());
         if (dto.getBaseAmount() != null) user.updateBaseAmount(dto.getBaseAmount());
+        if (dto.getCategoryId() != null) {
+            Category category = categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+            user.updateCategory(category);
+        }
 
         log.info(">>> [SERVICE] Updated user -> {}", user.toString());
     }
@@ -56,7 +66,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long createUser(UserRequestDTO dto){
-        User user = UserConverter.toEntity(dto);
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        User user = UserConverter.toEntity(dto, category);
         userRepository.save(user);
         log.info(">>> [SERVICE] Created user -> {}", user.toString());
         return user.getId();

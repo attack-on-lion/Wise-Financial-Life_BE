@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 
 public class UserResponseDTO {
+    private Long id;
     private String name;
     private Long age;
     private String profileImgUrl;
@@ -19,10 +20,10 @@ public class UserResponseDTO {
     private String gender;
     private String email;
     private String phoneNumber;
+    private String categoryName;
     private Long point;
     private Long baseAmount;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

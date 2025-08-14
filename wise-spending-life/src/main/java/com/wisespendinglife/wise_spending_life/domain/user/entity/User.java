@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.user.entity;
 
+import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -42,6 +43,12 @@ public class User {
 
     private Long point;
 
+    private String motivationMessage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true, name = "category_id")
+    private Category category;
+
     @CreatedDate
     @Column(nullable = false) //자동화함
     private LocalDateTime createdAt; //레코드 생성 날짜
@@ -78,6 +85,8 @@ public class User {
     public void updateBaseAmount(Long baseAmount){
         this.baseAmount = baseAmount;
     }
+    public void updateMotivationMessage(String motivationMessage){ this.motivationMessage = motivationMessage; }
+    public void updateCategory(Category category){ this.category = category; }
     public void updateIsDeleted(Boolean isDeleted){
         this.isDeleted = isDeleted;
     }
