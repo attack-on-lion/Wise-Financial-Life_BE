@@ -77,6 +77,8 @@ jobs:
         run: |
           docker buildx build \
             --platform linux/amd64 \
+            --file dockerfile \
+            --progress=plain \
             -t $IMAGE_URI:latest \
             -t $IMAGE_URI:${IMAGE_TAG} \
             --push \
