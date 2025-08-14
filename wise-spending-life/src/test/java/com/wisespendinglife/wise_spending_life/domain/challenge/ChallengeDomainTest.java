@@ -7,7 +7,7 @@ import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ChallengeCre
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
 import com.wisespendinglife.wise_spending_life.domain.challenge.repository.ChallengeRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,14 +54,14 @@ public class ChallengeDomainTest {
     @Autowired
     JdbcTemplate jdbc;
 
-    private UserEntity savedUser;
+    private User savedUser;
     private Category savedCategory;
     private Challenge savedChallenge;
 
     @BeforeEach
     void setUp() {
         // User data
-        UserEntity user = UserEntity.builder()
+        User user = User.builder()
                 .name("테스트")
                 .email("korea@kw.ac.kr")
                 .age(20L)

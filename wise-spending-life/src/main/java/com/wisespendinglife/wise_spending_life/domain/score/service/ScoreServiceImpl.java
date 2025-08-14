@@ -5,7 +5,7 @@ import com.wisespendinglife.wise_spending_life.domain.score.converter.ScoreConve
 import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
 import com.wisespendinglife.wise_spending_life.domain.score.repository.ScoreRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -33,7 +33,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     public boolean saveScore(Long userId, Integer score){
 
-        UserEntity user = userRepository.findByIdAndIsDeletedFalse(userId)
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Score entity = scoreConverter.toEntity(score, user);

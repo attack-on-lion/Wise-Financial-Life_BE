@@ -57,7 +57,7 @@ public enum ErrorCode {
     INVALID_STORE_IMAGE_URL(HttpStatus.BAD_REQUEST, "40041", "브랜드 이미지 URL이 유효하지 않습니다."),
     INVALID_SOURCE_KIND(HttpStatus.BAD_REQUEST, "40042", "포인트 출처의 값이 잘못 입력되었습니다."),
     INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "40043", "포인트 값이 없습니다."),
-
+    INVALID_NOT_NULL(HttpStatus.BAD_REQUEST, "40044", "값이 비어있습니다."),
 
 
 

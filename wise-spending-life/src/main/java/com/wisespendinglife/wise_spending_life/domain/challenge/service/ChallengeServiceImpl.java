@@ -8,7 +8,7 @@ import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallen
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeCategory;
 import com.wisespendinglife.wise_spending_life.domain.challenge.repository.ChallengeRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -28,7 +28,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     @Transactional
     public Challenge createChallenge(ChallengeCreateRequestDto dto) {
-        UserEntity user = userRepository.findById(dto.getUser_id())
+        User user = userRepository.findById(dto.getUser_id())
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Challenge newchallenge = Challenge.builder()

@@ -2,7 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.score.converter;
 
 import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class ScoreConverter {
      * @param score
      * @return
      */
-    public static Score toEntity(int score, UserEntity user) {
+    public static Score toEntity(int score, User user) {
         return Score.builder()
                 .user(user)
                 .score(score)

@@ -53,4 +53,8 @@ public class UserRequestDTO {
         @Min(value = 0, message = "{INVALID_BASE_AMOUNT}")
         @Schema(description = "기준 금액", example = "10000")
         private Long baseAmount;
+
+        private String motivationMessage;
+
+        private Long categoryId;
 }

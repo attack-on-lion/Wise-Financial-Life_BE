@@ -3,11 +3,8 @@ package com.wisespendinglife.wise_spending_life.domain.user;
 
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserRequestDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
-import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserServiceImpl;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
