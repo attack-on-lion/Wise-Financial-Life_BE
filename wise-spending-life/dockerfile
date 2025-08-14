@@ -14,7 +14,10 @@ RUN ./gradlew clean bootJar --no-daemon -x test
 # 부트 JAR만 복사 (plain.jar 제외)
 RUN ls -l build/libs && \
     JAR=$(ls build/libs/*.jar | grep -v 'plain' | head -n1) && \
-    cp "$JAR" /workspace/app.jar
+    echo ">> Using boot JAR: $JAR" && \
+    cp "$JAR" /workspace/app.jar && \
+    (jar tf /workspace/app.jar | grep -q 'org/springframework/boot/loader' || (echo 'Not a Boot jar!' && exit 1))
+
 
 # ---------- 2) Runtime stage ----------
 FROM eclipse-temurin:17-jre
