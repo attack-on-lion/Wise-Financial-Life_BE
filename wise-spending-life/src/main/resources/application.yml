@@ -4,11 +4,14 @@ spring:
 
   datasource:
     hikari:
-      maximum-pool-size: 5
-      minimum-idle: 2
-      idle-timeout: 30000
-      max-lifetime: 1800000
-      connection-timeout: 30000
+      maximum-pool-size: 5           # Supabase pooler/플랜 한도 고려 (작게 시작)
+      minimum-idle: 1
+      connection-timeout: 30000      # 30s
+      validation-timeout: 5000
+      idle-timeout: 600000           # 10m
+      max-lifetime: 1800000          # 30m (RDS/pg 기본과 궁합)
+      initialization-fail-timeout: -1  # DB가 잠깐 안 되더라도 '즉시 크래시' 방지
+      leak-detection-threshold: 20000  # 20s 이상 점유되면 로그 경고 (디버깅용)
     url: ${DB_URL}
 
   jpa:
