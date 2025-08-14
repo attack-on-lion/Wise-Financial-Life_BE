@@ -24,7 +24,6 @@ WORKDIR /app
 COPY --from=build /workspace/app.jar /app/app.jar
 
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75"
-ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/app.jar"]
