@@ -2,11 +2,11 @@ package com.wisespendinglife.wise_spending_life.domain.user.converter;
 
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserRequestDTO;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 public class UserConverter {
 
     //Entity -> ResponseDTO //전체 유저 정보 전달
-    public static UserResponseDTO toResponseDTO(UserEntity user) {
+    public static UserResponseDTO toResponseDTO(User user) {
         return UserResponseDTO.builder()
                 .name(user.getName())
                 .age(user.getAge())
@@ -23,8 +23,8 @@ public class UserConverter {
     }
 
     // toEntity
-    public static UserEntity toEntity(UserRequestDTO dto) {
-        return UserEntity.builder()
+    public static User toEntity(UserRequestDTO dto) {
+        return User.builder()
                 .name(dto.getName())
                 .age(dto.getAge())
                 .profileImgUrl(dto.getProfileImgUrl())

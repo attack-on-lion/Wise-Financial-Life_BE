@@ -15,7 +15,7 @@ import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto
 import com.wisespendinglife.wise_spending_life.domain.score.entity.Score;
 import com.wisespendinglife.wise_spending_life.domain.score.repository.ScoreRepository;
 import com.wisespendinglife.wise_spending_life.domain.score.service.ChatGptScoringClient;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -105,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
                     return categoryRepository.save(newCategory);
                 });
 
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         // 2) 엔티티 변환 & 저장
@@ -145,7 +145,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 4) 점수 요청
         int score = scoringClient.askScore(stats);
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         // 5) 결과 저장 (선택)

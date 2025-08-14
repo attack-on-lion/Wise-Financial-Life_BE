@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wisespendinglife.wise_spending_life.domain.user.converter.UserConverter;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserRequestDTO;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 //예외처리
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponseDTO getUserInfo(Long userId){
-        UserEntity user = userRepository.findByIdAndIsDeletedFalse(userId)
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         log.info(">>> [SERVICE] Get user -> {}", user.toString());
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUserInfo(Long userId, UserRequestDTO dto){
-        UserEntity user = userRepository.findByIdAndIsDeletedFalse(userId)
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         if (dto.getName() != null) user.updateName(dto.getName());
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long createUser(UserRequestDTO dto){
-        UserEntity user = UserConverter.toEntity(dto);
+        User user = UserConverter.toEntity(dto);
         userRepository.save(user);
         log.info(">>> [SERVICE] Created user -> {}", user.toString());
         return user.getId();

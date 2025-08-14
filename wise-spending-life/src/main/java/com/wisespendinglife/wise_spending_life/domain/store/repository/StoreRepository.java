@@ -1,6 +1,5 @@
 package com.wisespendinglife.wise_spending_life.domain.store.repository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

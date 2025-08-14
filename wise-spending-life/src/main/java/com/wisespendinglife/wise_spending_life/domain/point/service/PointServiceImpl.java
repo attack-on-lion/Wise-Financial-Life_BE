@@ -8,7 +8,7 @@ import com.wisespendinglife.wise_spending_life.domain.point.dto.PointDeltaReques
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.point.entity.Point;
 import com.wisespendinglife.wise_spending_life.domain.point.repository.PointLedgerRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -45,7 +45,7 @@ public class PointServiceImpl implements PointService {
     @Override
     public PointResponseDto.PointBalanceResponseDto handlePointChange(Long userId, PointDeltaRequest dto) {
 
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Challenge challenge = null;

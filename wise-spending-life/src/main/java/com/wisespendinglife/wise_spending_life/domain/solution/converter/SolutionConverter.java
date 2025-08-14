@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wisespendinglife.wise_spending_life.domain.solution.dto.SimpleSolutionResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.solution.entity.Solution;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class SolutionConverter {
 
     }
 
-    public Solution toEntity(UserEntity user, SimpleSolutionResponseDTO dto) {
+    public Solution toEntity(User user, SimpleSolutionResponseDTO dto) {
         return Solution.builder()
                 .user(user)
                 .solution(toJson(dto))
