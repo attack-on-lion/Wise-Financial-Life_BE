@@ -73,7 +73,7 @@ jobs:
 
       # Dockerfile 이 APP_DIR 안에 있을 때만 working-directory 유지
       - name: Build & Push image to ECR
-        working-directory: ${{ env.APP_DIR }}
+        working-directory: ${{ env.APP_DIR }}   # = wise-spending-life
         run: |
           docker buildx build \
             --platform linux/amd64 \
