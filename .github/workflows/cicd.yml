@@ -1,0 +1,83 @@
+name: CI/CD - ECR push (secrets only)
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+env:
+  APP_DIR: wise-spending-life
+  JAVA_VERSION: '17'
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  # 1) PR/Push 공통: 빌드(+테스트)용
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # push 인지 PR 인지에 따라 테스트 실행 분기
+      - name: Build
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            ./gradlew clean build --stacktrace
+          else
+            ./gradlew clean build -x test --stacktrace
+          fi
+
+  # 2) develop push 에서만 ECR 로그인+푸시
+  push-image:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # OIDC
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      IMAGE_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy-role
+          role-session-name: slgm-cicd-session
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Dockerfile 이 APP_DIR 안에 있을 때만 working-directory 유지
+      - name: Build & Push image to ECR
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          docker buildx build \
+            --platform linux/amd64 \
+            -t $IMAGE_URI:latest \
+            -t $IMAGE_URI:${IMAGE_TAG} \
+            --push \
+            .
