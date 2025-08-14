@@ -13,12 +13,6 @@ public class GifticonRequestDTO {
     @NotBlank(message = "{INVALID_STORE_NOT_NAME}")
     private String storeName;
 
-//    @NotNull(message = "{INVALID_STORE_ID}")
-//    @Positive(message = "{INVALID_STORE_ID_POSITIVE}")
-//    privat    @NotNull(message = "{INVALID_STORE_ID}")
-    ////    @Positive(message = "{INVALID_STORE_ID_POSITIVE}")
-    ////    private Long storeId;e Long storeId;
-
     @NotBlank(message = "{INVALID_GIFTICON_NAME}")
     private String name; //제품명
 

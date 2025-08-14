@@ -6,7 +6,6 @@ import com.wisespendinglife.wise_spending_life.domain.gifticon.entity.GifticonEn
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,5 @@ public interface GifticonRepository extends JpaRepository<GifticonEntity, Long> 
 
     //기프티콘 단건 조회
     Optional<GifticonEntity> findByIdAndIsDeletedFalse(Long id);
-
-    //존재 여부 체크 (업데이트/삭제 전 검증용)
-    Boolean existsByIdAndIsDeletedFalse(Long id);
 
 }
