@@ -7,6 +7,7 @@ import com.wisespendinglife.wise_spending_life.domain.challenge.dto.ValidChallen
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.challenge.service.ChallengeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/challenges")
@@ -42,6 +44,9 @@ public class ChallengeController {
                 .isCompleted(createdChallenge.getIsCompleted())
                 .isDeleted(createdChallenge.getIsDeleted())
                 .build();
+
+        log.info(">>> [CTRL] Created challenge -> {}", responseDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 

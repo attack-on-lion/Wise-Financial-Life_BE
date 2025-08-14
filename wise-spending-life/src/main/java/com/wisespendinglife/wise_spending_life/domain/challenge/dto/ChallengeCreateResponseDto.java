@@ -3,11 +3,13 @@ package com.wisespendinglife.wise_spending_life.domain.challenge.dto;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@ToString
 public class ChallengeCreateResponseDto {
     private final Long id;
     private final Long user_id;
