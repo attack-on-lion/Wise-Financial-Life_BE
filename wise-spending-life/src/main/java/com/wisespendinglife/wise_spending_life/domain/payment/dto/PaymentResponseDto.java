@@ -1,10 +1,13 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -17,6 +20,44 @@ import java.util.List;
  * @since 2025-08-05
  */
 public class PaymentResponseDto {
+
+    /**
+     * 주간(월→오늘) 일자별 총 지출 응답
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WeeklyDailyTotals {
+        private Long userId;
+
+        // 응답 범위 메타데이터 (월요일~오늘)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate from;   // 이번 주 월요일
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate to;     // 오늘
+
+        private List<DailyTotal> days; // 월~오늘까지 날짜순 정렬
+    }
+
+    /**
+     * 특정 일자의 총 지출 합계
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DailyTotal {
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate date;  // 해당 일자
+
+        private DayOfWeek dayOfWeek;  // MONDAY~SUNDAY (자바 표준 enum)
+        private String dayOfWeekKo;  // "월","화","수","목","금","토","일" (프론트 편의)
+
+        private Long totalExpense;  // 해당 일자 총 지출(원). 없으면 0
+        private Integer transactionCount;  // 선택: 해당 일자의 지출 건수(없으면 0)
+    }
 
     @Builder
     @AllArgsConstructor

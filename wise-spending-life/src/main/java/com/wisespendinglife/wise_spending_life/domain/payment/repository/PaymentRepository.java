@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.repository;
 
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
+import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
 import org.springframework.data.domain.Page;
@@ -82,4 +83,22 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<CategoryState> findCategoryStatsByUserId(LocalDateTime start,
                                           LocalDateTime end,
                                           Long userId);
+
+    @Query("""
+    select DATE(p.transactionAt) as txnDate,
+           coalesce(sum(p.amount), 0L) as totalExpense,
+           count(p.id) as transactionCount
+    from Payment p
+    where p.user.id = :userId
+      and p.transactionAt between :from and :to
+          and p.direction = 'OUTFLOW'
+    group by DATE(p.transactionAt)
+    order by DATE(p.transactionAt) asc
+    """)
+    List<PaymentServiceImpl.DailyAggregate> sumDailyExpenseByDate(
+            @Param("userId") Long userId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
 }

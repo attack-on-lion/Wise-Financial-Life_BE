@@ -49,4 +49,16 @@ public class PaymentController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 이번 주 월요일 00:00 ~ 지금까지(Asia/Seoul) 일자별 총 지출 반환
+     * - 지출 없는 날은 0으로 채워서 월~오늘까지 모두 포함
+     */
+    @GetMapping("/{user_id}/weekly")
+    public ResponseEntity<PaymentResponseDto.WeeklyDailyTotals> getWeeklyDailyTotals(
+            @PathVariable("user_id") Long userId
+    ) {
+        PaymentResponseDto.WeeklyDailyTotals body = paymentService.getWeeklyDailyTotals(userId);
+        return ResponseEntity.ok(body);
+    }
+
 }
