@@ -29,8 +29,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Map;
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -39,12 +43,27 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final PaymentConverter paymentConverter;
     private final CategoryRepository categoryRepository;
     private final PaymentConverter converter;
     private final PaymentResponseAssembler responseAssembler;
     private final ChatGptScoringClient scoringClient;
     private final ScoreRepository scoreRepository;
     private final UserRepository userRepository;
+
+
+    public interface DailyAggregate {
+        LocalDate getDate();
+        Long getTotalExpense();
+        Integer getTransactionCount();
+    }
+
+    public interface CategoryAggregate {
+        Long getCategoryId();  // alias: categoryId
+        String getCategoryName();  // alias: categoryName
+        Long getAmount();  // alias: amount  (원)
+        Integer getTransactionCount();  // alias: transactionCount
+    }
 
     public PaymentResponseDto.Payments getMonthly(LocalDate from,
                                                   LocalDate to,
@@ -162,4 +181,55 @@ public class PaymentServiceImpl implements PaymentService {
 
         return response;
     }
+
+
+    /**
+     * 이번 주 월요일(00:00, Asia/Seoul)부터 지금까지의 "일자별 총 지출"을 월~오늘까지 반환.
+     * 지출이 없는 날은 0으로 채워서 모두 포함.
+     */
+    public PaymentResponseDto.WeeklyDailyTotals getWeeklyDailyTotals(Long userId) {
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        LocalDate today = LocalDate.now(zone);
+        LocalDate monday = today.with(java.time.temporal.TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+
+        List<DailyAggregate> aggregates = paymentRepository.sumDailyExpenseByDate(
+                userId, monday.atStartOfDay(), LocalDateTime.now(zone)
+        );
+
+        return paymentConverter.toWeeklyDailyTotals(userId, monday, today, aggregates);
+    }
+
+    // ----- 헬퍼들 -----
+
+    private static Stream<LocalDate> datesBetweenInclusive(LocalDate start, LocalDate end) {
+        long days = Duration.between(start.atStartOfDay(), end.plusDays(1).atStartOfDay()).toDays();
+        return Stream.iterate(start, d -> d.plusDays(1)).limit(days);
+    }
+
+    private static String toKo(DayOfWeek dow) {
+        // 1=MON … 7=SUN
+        switch (dow) {
+            case MONDAY: return "월";
+            case TUESDAY: return "화";
+            case WEDNESDAY: return "수";
+            case THURSDAY: return "목";
+            case FRIDAY: return "금";
+            case SATURDAY: return "토";
+            case SUNDAY: return "일";
+            default: return "";
+        }
+    }
+
+    public PaymentResponseDto.MonthlyTopCategories getMonthlyTop3Categories(Long userId) {
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        LocalDate today = LocalDate.now(zone);
+        LocalDate firstDay = today.withDayOfMonth(1);
+
+        List<CategoryAggregate> aggs = paymentRepository.sumMonthlyExpenseByCategory(
+                userId, firstDay.atStartOfDay(), LocalDateTime.now(zone)
+        );
+
+        return paymentConverter.toMonthlyTop3Categories(userId, firstDay, today, aggs);
+    }
+
 }

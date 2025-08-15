@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.repository;
 
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
+import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
 import org.springframework.data.domain.Page;
@@ -82,4 +83,43 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<CategoryState> findCategoryStatsByUserId(LocalDateTime start,
                                           LocalDateTime end,
                                           Long userId);
+
+    // PaymentRepository
+    @Query(value = """
+    select 
+      cast(p.transaction_at as date) as date,
+      coalesce(sum(p.amount), 0) as totalExpense,
+      count(p.id) as transactionCount
+    from payment p
+    where p.user_id = :userId
+      and p.transaction_at between :from and :to
+            and p.direction = 'OUTFLOW'
+    group by cast(p.transaction_at as date)
+    order by date asc
+    """, nativeQuery = true)
+    List<PaymentServiceImpl.DailyAggregate> sumDailyExpenseByDate(
+            @Param("userId") Long userId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
+    @Query(value = """
+    select 
+      p.category_id as categoryId,
+      coalesce(c.name, '미분류') as categoryName,
+      coalesce(sum(p.amount), 0) as amount,
+      count(p.id) as transactionCount
+    from payment p
+    left join category c on c.id = p.category_id
+    where p.user_id = :userId
+      and p.transaction_at between :from and :to
+      and p.direction = 'OUTFLOW'
+    group by p.category_id, c.name
+    order by amount desc
+""", nativeQuery = true)
+    List<PaymentServiceImpl.CategoryAggregate>
+    sumMonthlyExpenseByCategory(@Param("userId") Long userId,
+                                @Param("from") LocalDateTime from,
+                                @Param("to") LocalDateTime to);
+
 }
