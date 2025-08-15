@@ -84,21 +84,42 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
                                           LocalDateTime end,
                                           Long userId);
 
-    @Query("""
-    select DATE(p.transactionAt) as txnDate,
-           coalesce(sum(p.amount), 0L) as totalExpense,
-           count(p.id) as transactionCount
-    from Payment p
-    where p.user.id = :userId
-      and p.transactionAt between :from and :to
-          and p.direction = 'OUTFLOW'
-    group by DATE(p.transactionAt)
-    order by DATE(p.transactionAt) asc
-    """)
+    // PaymentRepository
+    @Query(value = """
+    select 
+      cast(p.transaction_at as date) as date,
+      coalesce(sum(p.amount), 0) as totalExpense,
+      count(p.id) as transactionCount
+    from payment p
+    where p.user_id = :userId
+      and p.transaction_at between :from and :to
+            and p.direction = 'OUTFLOW'
+    group by cast(p.transaction_at as date)
+    order by date asc
+    """, nativeQuery = true)
     List<PaymentServiceImpl.DailyAggregate> sumDailyExpenseByDate(
             @Param("userId") Long userId,
             @Param("from") LocalDateTime from,
             @Param("to") LocalDateTime to
     );
+
+    @Query(value = """
+    select 
+      p.category_id as categoryId,
+      coalesce(c.name, '미분류') as categoryName,
+      coalesce(sum(p.amount), 0) as amount,
+      count(p.id) as transactionCount
+    from payment p
+    left join category c on c.id = p.category_id
+    where p.user_id = :userId
+      and p.transaction_at between :from and :to
+      and p.direction = 'OUTFLOW'
+    group by p.category_id, c.name
+    order by amount desc
+""", nativeQuery = true)
+    List<PaymentServiceImpl.CategoryAggregate>
+    sumMonthlyExpenseByCategory(@Param("userId") Long userId,
+                                @Param("from") LocalDateTime from,
+                                @Param("to") LocalDateTime to);
 
 }

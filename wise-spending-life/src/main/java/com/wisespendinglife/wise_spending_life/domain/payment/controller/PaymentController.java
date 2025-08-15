@@ -61,4 +61,11 @@ public class PaymentController {
         return ResponseEntity.ok(body);
     }
 
+    @GetMapping("/{user_id}/monthly-top3")
+    public ResponseEntity<PaymentResponseDto.MonthlyTopCategories> getMonthlyTop3(
+            @PathVariable("user_id") Long userId) {
+        PaymentResponseDto.MonthlyTopCategories body = paymentService.getMonthlyTop3Categories(userId);
+        return ResponseEntity.ok(body);
+    }
+
 }

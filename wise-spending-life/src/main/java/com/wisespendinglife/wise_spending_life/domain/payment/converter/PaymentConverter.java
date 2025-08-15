@@ -5,13 +5,19 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequest
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,7 +81,6 @@ public class PaymentConverter {
     public PaymentResponseDto.DailyTotal toDailyTotal(PaymentServiceImpl.DailyAggregate agg) {
         return PaymentResponseDto.DailyTotal.builder()
                 .date(agg.getDate())
-                .dayOfWeek(agg.getDate().getDayOfWeek())
                 .dayOfWeekKo(toKo(agg.getDate().getDayOfWeek()))
                 .totalExpense(agg.getTotalExpense() == null ? 0L : agg.getTotalExpense())
                 .transactionCount(agg.getTransactionCount() == null ? 0 : agg.getTransactionCount())
@@ -100,7 +105,6 @@ public class PaymentConverter {
                         // 지출 없으면 0원 DTO
                         return PaymentResponseDto.DailyTotal.builder()
                                 .date(date)
-                                .dayOfWeek(date.getDayOfWeek())
                                 .dayOfWeekKo(toKo(date.getDayOfWeek()))
                                 .totalExpense(0L)
                                 .transactionCount(0)
@@ -136,6 +140,46 @@ public class PaymentConverter {
     private static Stream<LocalDate> datesBetweenInclusive(LocalDate start, LocalDate end) {
         long days = Duration.between(start.atStartOfDay(), end.plusDays(1).atStartOfDay()).toDays();
         return Stream.iterate(start, d -> d.plusDays(1)).limit(days);
+    }
+
+    public PaymentResponseDto.MonthlyTopCategories toMonthlyTop3Categories(
+            Long userId, LocalDate from, LocalDate to, List<PaymentServiceImpl.CategoryAggregate> aggs) {
+
+        long total = aggs.stream()
+                .mapToLong(a -> a.getAmount() == null ? 0L : a.getAmount())
+                .sum();
+
+        AtomicInteger rank = new AtomicInteger(1);
+        List<PaymentResponseDto.CategoryShare> top3 = aggs.stream()
+                .limit(3) // 쿼리에서 이미 amount desc 정렬됨
+                .map(a -> toCategoryShare(a, rank.getAndIncrement(), total))
+                .collect(Collectors.toList());
+
+        return PaymentResponseDto.MonthlyTopCategories.builder()
+                .userId(userId)
+                .from(from)
+                .to(to)
+                .totalExpense(total)
+                .topCategories(top3)
+                .build();
+    }
+
+    private PaymentResponseDto.CategoryShare toCategoryShare(
+            PaymentServiceImpl.CategoryAggregate a, int rank, long total) {
+
+        long amt = a.getAmount() == null ? 0L : a.getAmount();
+        BigDecimal percentage = (total <= 0)
+                ? BigDecimal.ZERO
+                : BigDecimal.valueOf(amt).multiply(BigDecimal.valueOf(100))
+                .divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP);
+
+        return PaymentResponseDto.CategoryShare.builder()
+                .rank(rank)
+                .categoryName(a.getCategoryName())
+                .amount(amt)
+                .transactionCount(a.getTransactionCount() == null ? 0 : a.getTransactionCount())
+                .percentage(percentage)
+                .build();
     }
 
 }

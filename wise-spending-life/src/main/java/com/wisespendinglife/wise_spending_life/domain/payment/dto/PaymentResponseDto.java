@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,7 +53,6 @@ public class PaymentResponseDto {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate date;  // 해당 일자
 
-        private DayOfWeek dayOfWeek;  // MONDAY~SUNDAY (자바 표준 enum)
         private String dayOfWeekKo;  // "월","화","수","목","금","토","일" (프론트 편의)
 
         private Long totalExpense;  // 해당 일자 총 지출(원). 없으면 0
@@ -147,6 +147,45 @@ public class PaymentResponseDto {
     public static class Category {
         private Long id;
         private String name;
+    }
+
+    /**
+     * 이번달 TOP N 카테고리 응답
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class MonthlyTopCategories {
+        private Long userId;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate from;  // 이번 달 1일
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate to;  // 오늘
+
+        private Long totalExpense;  // 월 총 지출(원) - 퍼센트 계산 분모
+
+        private List<CategoryShare> topCategories;  // 금액 내림차순 상위 N개 (기본 3)
+    }
+
+    /**
+     * 카테고리별 점유율(%) 항목
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryShare {
+        private Integer rank;  // 1,2,3
+        private String categoryName;  // 카테고리 명 (필요 시 한글명)
+
+        private Long amount;  // 해당 카테고리 총 지출(원)
+        private Integer transactionCount;  // 해당 카테고리 지출 건수
+
+        private BigDecimal percentage;  // 월 총 지출 대비 점유율(%) 소수점 2자리
     }
 
 }

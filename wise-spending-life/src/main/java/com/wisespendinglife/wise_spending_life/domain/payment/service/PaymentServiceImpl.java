@@ -51,6 +51,20 @@ public class PaymentServiceImpl implements PaymentService {
     private final ScoreRepository scoreRepository;
     private final UserRepository userRepository;
 
+
+    public interface DailyAggregate {
+        LocalDate getDate();
+        Long getTotalExpense();
+        Integer getTransactionCount();
+    }
+
+    public interface CategoryAggregate {
+        Long getCategoryId();  // alias: categoryId
+        String getCategoryName();  // alias: categoryName
+        Long getAmount();  // alias: amount  (원)
+        Integer getTransactionCount();  // alias: transactionCount
+    }
+
     public PaymentResponseDto.Payments getMonthly(LocalDate from,
                                                   LocalDate to,
                                                   int currentPage,
@@ -168,11 +182,6 @@ public class PaymentServiceImpl implements PaymentService {
         return response;
     }
 
-    public interface DailyAggregate {
-        LocalDate getDate();
-        Long getTotalExpense();
-        Integer getTransactionCount();
-    }
 
     /**
      * 이번 주 월요일(00:00, Asia/Seoul)부터 지금까지의 "일자별 총 지출"을 월~오늘까지 반환.
@@ -209,6 +218,18 @@ public class PaymentServiceImpl implements PaymentService {
             case SUNDAY: return "일";
             default: return "";
         }
+    }
+
+    public PaymentResponseDto.MonthlyTopCategories getMonthlyTop3Categories(Long userId) {
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+        LocalDate today = LocalDate.now(zone);
+        LocalDate firstDay = today.withDayOfMonth(1);
+
+        List<CategoryAggregate> aggs = paymentRepository.sumMonthlyExpenseByCategory(
+                userId, firstDay.atStartOfDay(), LocalDateTime.now(zone)
+        );
+
+        return paymentConverter.toMonthlyTop3Categories(userId, firstDay, today, aggs);
     }
 
 }
