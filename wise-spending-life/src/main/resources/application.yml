@@ -32,3 +32,7 @@ openai:
   connect-timeout: 10s
   read-timeout: 30s
 
+s3:
+  region: ${AWS_REGION}
+  bucket: ${S3_BUCKET}
+  base-prefix: images/
