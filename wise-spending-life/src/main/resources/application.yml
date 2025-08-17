@@ -4,7 +4,7 @@ spring:
 
   datasource:
     hikari:
-      maximum-pool-size: 5           # Supabase pooler/플랜 한도 고려 (작게 시작)
+      maximum-pool-size: 2           # Supabase pooler/플랜 한도 고려 (작게 시작)
       minimum-idle: 1
       connection-timeout: 30000      # 30s
       validation-timeout: 5000
@@ -33,6 +33,6 @@ openai:
   read-timeout: 30s
 
 s3:
-  region: ${AWS_REGION}
+  region: ap-northeast-1
   bucket: ${S3_BUCKET}
   base-prefix: images/
