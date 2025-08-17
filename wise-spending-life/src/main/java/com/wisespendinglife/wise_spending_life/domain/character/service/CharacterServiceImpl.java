@@ -1,6 +1,8 @@
 package com.wisespendinglife.wise_spending_life.domain.character.service;
 
 import com.wisespendinglife.wise_spending_life.domain.character.assembler.CharacterAssembler;
+import com.wisespendinglife.wise_spending_life.domain.character.converter.CharacterConverter;
+import com.wisespendinglife.wise_spending_life.domain.character.dto.CharacterRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.character.dto.CharacterResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.character.entity.Character;
 import com.wisespendinglife.wise_spending_life.domain.character.repository.CharacterRepository;
@@ -21,6 +23,7 @@ public class CharacterServiceImpl implements CharacterService{
 
     private final CharacterRepository characterRepository;
     private final CharacterAssembler assembler;
+    private final CharacterConverter converter;
 
     /**
      * 상점에서 판매중인 캐릭터 리스트
@@ -37,5 +40,20 @@ public class CharacterServiceImpl implements CharacterService{
         Page<Character> all = characterRepository.findAll(pageable);
 
         return assembler.assemble(all);
+    }
+
+    /**
+     * 판매 캐릭터 추가
+     *
+     * @param requestDto - 캐릭터 추가에 필요한 Dto
+     * @return - 캐릭터 id
+     */
+    @Override
+    public CharacterResponseDto.CharacterCreateDto saveCharacter(CharacterRequestDto.CreateCharacterDto requestDto) {
+
+        Character entity = converter.toEntity(requestDto);
+        entity = characterRepository.save(entity);
+
+        return converter.toCreateResponseDto(entity);
     }
 }

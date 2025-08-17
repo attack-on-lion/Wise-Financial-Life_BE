@@ -1,13 +1,18 @@
 package com.wisespendinglife.wise_spending_life.domain.character.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 public class CharacterResponseDto {
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class CharacterCreateDto{
+        private Long id;
+    }
 
     /**
      * 요약

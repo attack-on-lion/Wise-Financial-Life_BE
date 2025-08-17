@@ -10,6 +10,12 @@ import java.util.List;
 @Component
 public class CharacterConverter {
 
+    public CharacterResponseDto.CharacterCreateDto toCreateResponseDto(Character character) {
+        return CharacterResponseDto.CharacterCreateDto.builder()
+                .id(character.getId())
+                .build();
+    }
+
     public Character toEntity(CharacterRequestDto.CreateCharacterDto dto) {
         return Character.builder()
                 .name(dto.getName())
