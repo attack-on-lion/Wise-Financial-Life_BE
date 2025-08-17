@@ -18,9 +18,7 @@ public class CharacterAssembler {
 
     private final CharacterConverter converter;
 
-    public CharacterResponseDto.Characters assemble(LocalDate from,
-                                                    LocalDate to,
-                                                    Page<Character> page) {
+    public CharacterResponseDto.Characters assemble(Page<Character> page) {
 
         // 1) summary 계산
         var summary = CharacterResponseDto.Summary.builder()
