@@ -28,6 +28,8 @@ public class CharacterController {
             @RequestParam(required = false, defaultValue = "15") int size
             ) {
 
+        log.info(">>> [CTRL] /api/store/characters?page={}, size={} GET", currentPage, size);
+
         return ResponseEntity.ok(service.getCharacters(currentPage, size));
     }
 
@@ -40,6 +42,8 @@ public class CharacterController {
     public ResponseEntity<CharacterResponseDto.CharacterCreateDto> addCharacter(
             @Validated @RequestBody CharacterRequestDto.CreateCharacterDto createDto
             ){
+
+        log.info(">>> [CTRL] /api/store/characters POST -> {}", createDto);
 
         return ResponseEntity.ok(service.saveCharacter(createDto));
     }

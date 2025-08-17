@@ -27,7 +27,6 @@ public class CharacterServiceImpl implements CharacterService{
 
     /**
      * 상점에서 판매중인 캐릭터 리스트
-     *
      * @param currenPage - 현재 페이지 (기본값: 0)
      * @param size - 현재 페이지에서 반환 할 개수
      * @return - 캐릭터 레코드 객체가 담겨있는 DTO
@@ -39,12 +38,13 @@ public class CharacterServiceImpl implements CharacterService{
 
         Page<Character> all = characterRepository.findAll(pageable);
 
+        log.info(">>> [SERVICE] getCharacters");
+
         return assembler.assemble(all);
     }
 
     /**
      * 판매 캐릭터 추가
-     *
      * @param requestDto - 캐릭터 추가에 필요한 Dto
      * @return - 캐릭터 id
      */
@@ -53,6 +53,8 @@ public class CharacterServiceImpl implements CharacterService{
 
         Character entity = converter.toEntity(requestDto);
         entity = characterRepository.save(entity);
+
+        log.info(">>> [SERVICE] saveCharacter -> {}", entity.toString());
 
         return converter.toCreateResponseDto(entity);
     }
