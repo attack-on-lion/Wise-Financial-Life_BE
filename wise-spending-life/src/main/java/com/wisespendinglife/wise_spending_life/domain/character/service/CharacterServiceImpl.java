@@ -6,6 +6,8 @@ import com.wisespendinglife.wise_spending_life.domain.character.dto.CharacterReq
 import com.wisespendinglife.wise_spending_life.domain.character.dto.CharacterResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.character.entity.Character;
 import com.wisespendinglife.wise_spending_life.domain.character.repository.CharacterRepository;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,12 @@ public class CharacterServiceImpl implements CharacterService{
     private final CharacterRepository characterRepository;
     private final CharacterAssembler assembler;
     private final CharacterConverter converter;
+
+    @Override
+    public Character getEntity(Long characterId) {
+        return characterRepository.findById(characterId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHARACTER_NOT_FOUND));
+    }
 
     /**
      * 상점에서 판매중인 캐릭터 리스트

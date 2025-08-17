@@ -76,4 +76,10 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
+    @Override
+    public User getEntity(Long userId) {
+        return userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
 }

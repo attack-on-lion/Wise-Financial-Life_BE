@@ -58,7 +58,7 @@ public enum ErrorCode {
     INVALID_SOURCE_KIND(HttpStatus.BAD_REQUEST, "40042", "포인트 출처의 값이 잘못 입력되었습니다."),
     INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "40043", "포인트 값이 없습니다."),
     STORE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "40044", "이미 존재하는 스토어입니다."),
-    INVALID_NOT_NULL(HttpStatus.BAD_REQUEST, "40044", "값이 비어있습니다."),
+    INVALID_NOT_NULL(HttpStatus.BAD_REQUEST, "40045", "값이 비어있습니다."),
 
 
 
@@ -79,8 +79,7 @@ public enum ErrorCode {
     GIFTICON_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "기프티콘에 대한 정보를 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "스토어 정보를 찾을 수 없습니다."),
     STORE_CREATE_FAILED(HttpStatus.NOT_FOUND, "40413", "제휴 상점 등록에 실패하였습니다."),
-
-
+    CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "캐릭터 정보를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),

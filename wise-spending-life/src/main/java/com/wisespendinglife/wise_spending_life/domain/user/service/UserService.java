@@ -2,6 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.user.service;
 
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserRequestDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 
 public interface UserService {
     //유저 조회
@@ -11,5 +12,7 @@ public interface UserService {
     void updateUserInfo(Long userId, UserRequestDTO userRequestDTO);
 
     Long createUser(UserRequestDTO dto);
+
+    User getEntity(Long userId);
 
 }
