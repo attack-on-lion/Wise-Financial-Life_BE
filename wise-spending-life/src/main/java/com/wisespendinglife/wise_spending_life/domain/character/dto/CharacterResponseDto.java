@@ -10,7 +10,7 @@ public class CharacterResponseDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class CharacterCreateDto{
+    public static class CharacterCreateDto{
         private Long id;
     }
 
@@ -20,7 +20,7 @@ public class CharacterResponseDto {
     @Getter @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class Summary {
+    public static class Summary {
         private long count;  // 전체 개수
     }
 
@@ -29,7 +29,7 @@ public class CharacterResponseDto {
      */
     @Getter
     @Builder @AllArgsConstructor @NoArgsConstructor
-    public class PageInfo {
+    public static class PageInfo {
         private int page;  // default = 0
         private int size;  // default = 15
         private boolean hasNext;
@@ -40,7 +40,7 @@ public class CharacterResponseDto {
      */
     @Getter @Builder
     @AllArgsConstructor @NoArgsConstructor
-    public class Item {
+    public static class Item {
         private Long id;
         private String code;
         private String name;
@@ -52,7 +52,7 @@ public class CharacterResponseDto {
      * 캐릭터 목록 반환 ResponseDto
      */
     @Getter @Builder @AllArgsConstructor @NoArgsConstructor
-    public class Characters {
+    public static class Characters {
         private Summary summary;
         private PageInfo pageInfo;
         private List<Item> items;

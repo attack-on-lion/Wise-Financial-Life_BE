@@ -11,7 +11,7 @@ public class ItemRequestDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class CreateItemDto {
+    public static class CreateItemDto {
         private String name;
         private String code;
         private String imageUrl;
@@ -22,7 +22,7 @@ public class ItemRequestDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UpdateItemDto {
+    public static class UpdateItemDto {
         private Long id;
         private String name;
         private String code;

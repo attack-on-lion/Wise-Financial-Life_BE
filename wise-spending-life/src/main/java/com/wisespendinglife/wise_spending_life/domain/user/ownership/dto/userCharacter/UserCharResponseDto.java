@@ -10,7 +10,7 @@ public class UserCharResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class OwnedCharacterDto {
+    public static class OwnedCharacterDto {
         private Long characterId;
     }
 
@@ -18,7 +18,7 @@ public class UserCharResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class OwnedCharacterListDto {
+    public static class OwnedCharacterListDto {
         private List<OwnedCharacterDto> ownedCharacters;
     }
 
@@ -26,7 +26,7 @@ public class UserCharResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class PurchaseCharacterDto {
+    public static class PurchaseCharacterDto {
         private Long id;
     }
 }

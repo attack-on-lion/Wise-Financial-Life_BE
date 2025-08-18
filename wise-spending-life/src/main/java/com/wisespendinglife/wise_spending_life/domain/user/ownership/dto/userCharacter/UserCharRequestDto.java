@@ -11,7 +11,7 @@ public class UserCharRequestDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public class PurchaseCharacterDto {
+    public static class PurchaseCharacterDto {
         private Long price;
     }
 }

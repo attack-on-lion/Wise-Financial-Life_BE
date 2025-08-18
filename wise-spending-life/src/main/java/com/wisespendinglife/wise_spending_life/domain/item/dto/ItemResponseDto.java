@@ -13,7 +13,7 @@ public class ItemResponseDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class ItemCreateDto{
+    public static class ItemCreateDto{
         private Long id;
     }
 
@@ -24,7 +24,7 @@ public class ItemResponseDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class Summary {
+    public static class Summary {
         private long count;  // 전체 개수
     }
 
@@ -33,7 +33,7 @@ public class ItemResponseDto {
      */
     @Getter
     @Builder @AllArgsConstructor @NoArgsConstructor
-    public class PageInfo {
+    public static class PageInfo {
         private int page;  // default = 0
         private int size;  // default = 15
         private boolean hasNext;
@@ -44,7 +44,7 @@ public class ItemResponseDto {
      */
     @Getter @Builder
     @AllArgsConstructor @NoArgsConstructor
-    public class Item {
+    public static class Item {
         private Long id;
         private String code;
         private String name;
@@ -54,7 +54,7 @@ public class ItemResponseDto {
 
     @Getter @Builder
     @AllArgsConstructor @NoArgsConstructor
-    public class Items {
+    public static class Items {
         private Summary summary;
         private PageInfo pageInfo;
         private List<Item> items;

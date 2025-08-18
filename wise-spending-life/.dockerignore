@@ -4,3 +4,6 @@ build
 out
 *.iml
 .DS_Store
+
+application-local.yml
+application-prod.yml

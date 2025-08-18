@@ -8,7 +8,7 @@ public class CharacterRequestDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class CreateCharacterDto {
+    public static class CreateCharacterDto {
         private String name;
         private String code;
         private String imageUrl;
@@ -19,7 +19,7 @@ public class CharacterRequestDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class UpdateCharacterDto {
+    public static class UpdateCharacterDto {
         private Long id;
         private String name;
         private String code;

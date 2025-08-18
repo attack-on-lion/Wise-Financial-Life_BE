@@ -10,7 +10,7 @@ public class UserItemResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class OwnedItemDto {
+    public static class OwnedItemDto {
         private Long itemId;
     }
 
@@ -18,7 +18,7 @@ public class UserItemResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class OwnedCharacterListDto {
+    public static class OwnedCharacterListDto {
         private List<OwnedItemDto> ownedItems;
     }
 
@@ -26,7 +26,7 @@ public class UserItemResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public class PurchaseItemDto {
+    public static class PurchaseItemDto {
         private Long id;
     }
 }
