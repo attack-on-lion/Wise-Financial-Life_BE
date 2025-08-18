@@ -1,4 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.user.ownership.dto;
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

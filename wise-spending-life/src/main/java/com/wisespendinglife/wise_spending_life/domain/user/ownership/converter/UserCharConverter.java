@@ -2,8 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.user.ownership.converter;
 
 import com.wisespendinglife.wise_spending_life.domain.character.entity.Character;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.UserCharRequestDto;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.UserCharResponseDto;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserCharacter;
 import org.springframework.stereotype.Component;
 

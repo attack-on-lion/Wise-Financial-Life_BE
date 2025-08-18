@@ -6,11 +6,10 @@ import com.wisespendinglife.wise_spending_life.domain.point.converter.PointConve
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.point.entity.SourceKind;
 import com.wisespendinglife.wise_spending_life.domain.point.service.PointService;
-import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.converter.UserCharConverter;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.UserCharRequestDto;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.UserCharResponseDto;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserCharacter;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserCharRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
