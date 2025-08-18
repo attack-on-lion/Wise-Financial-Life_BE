@@ -10,6 +10,15 @@ public class CompositeResponseDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class CreateResponse {
+        private Long id;
+    }
+
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CompositeResponse {
         private Long id;
         private Long characterId;

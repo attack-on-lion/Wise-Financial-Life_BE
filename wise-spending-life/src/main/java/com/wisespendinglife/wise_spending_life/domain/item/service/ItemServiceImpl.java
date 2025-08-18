@@ -74,4 +74,13 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
         return item;
     }
+
+    @Override
+    public Item getEntity(String name) {
+
+        Item item = itemRepository.findByName(name)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ITEM_NOT_FOUND));
+
+        return item;
+    }
 }

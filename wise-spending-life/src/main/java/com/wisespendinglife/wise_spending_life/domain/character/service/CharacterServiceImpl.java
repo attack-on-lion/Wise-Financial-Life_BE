@@ -66,4 +66,15 @@ public class CharacterServiceImpl implements CharacterService{
 
         return converter.toCreateResponseDto(entity);
     }
+
+    @Override
+    public Character getEntity(String name) {
+
+        Character entity = characterRepository.findByName(name)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHARACTER_NOT_FOUND));
+
+        log.info(">>> [SERVICE] getEntity -> {}", entity.toString());
+
+        return entity;
+    }
 }

@@ -8,4 +8,5 @@ public interface CharacterService {
     CharacterResponseDto.Characters getCharacters(int currenPage, int size);
     CharacterResponseDto.CharacterCreateDto saveCharacter(CharacterRequestDto.CreateCharacterDto character);
     Character getEntity(Long characterId);
+    Character getEntity(String name);
 }
