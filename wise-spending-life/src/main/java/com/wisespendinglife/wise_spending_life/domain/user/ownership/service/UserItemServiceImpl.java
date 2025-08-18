@@ -13,6 +13,8 @@ import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userIte
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserItem;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserItemRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +63,16 @@ public class UserItemServiceImpl implements UserItemService {
 
 
         return userItemConverter.toPurchaseItemResponseDto(userItem);
+    }
+
+    @Override
+    public Boolean isOwned(Long userId, Long itemId) {
+        boolean result = userItemRepository.existsByUser_IdAndItem_Id(userId, itemId);
+
+        if (!result) {
+            throw new BusinessException(ErrorCode.INVALID_ITEM_REQUEST);
+        }
+
+        return result;
     }
 }

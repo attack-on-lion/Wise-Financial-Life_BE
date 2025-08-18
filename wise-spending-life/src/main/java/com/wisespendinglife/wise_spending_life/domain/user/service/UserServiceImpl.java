@@ -2,6 +2,13 @@ package com.wisespendinglife.wise_spending_life.domain.user.service;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
+import com.wisespendinglife.wise_spending_life.domain.character.service.CharacterService;
+import com.wisespendinglife.wise_spending_life.domain.composite.entity.Composite;
+import com.wisespendinglife.wise_spending_life.domain.composite.service.CompositeService;
+import com.wisespendinglife.wise_spending_life.domain.item.service.ItemService;
+import com.wisespendinglife.wise_spending_life.domain.item.service.ItemServiceImpl;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserCharService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +28,38 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
     //유저 정보 조회
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CompositeService compositeService;
+    private final UserCharService userCharService;
+    private final UserItemService userItemService;
+
+    @Override
+    public void updateComposite(Long userId, Long CompositeId) {
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        Composite composite = compositeService.getEntity(CompositeId);
+
+        /**
+         * 유저의 소유 여부 확인.
+         * 각 메소드 안에서 예외 처리
+         */
+        userCharService.isOwned(user.getId(), composite.getId());
+        userItemService.isOwned(user.getId(), composite.getId());
+
+        /**
+         * 소유권 문제 없으면 업데이트 진행
+         */
+        user.updateComposite(composite);
+
+        log.info(">>> [SERVICE] Updated composite -> userId:{}, CompositeId:{} ", user.getId(), CompositeId);
+
+    }
 
     @Override
     @Transactional(readOnly = true)

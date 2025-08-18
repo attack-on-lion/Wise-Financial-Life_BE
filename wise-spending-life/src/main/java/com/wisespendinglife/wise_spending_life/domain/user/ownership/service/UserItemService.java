@@ -11,5 +11,6 @@ public interface UserItemService {
             Long userId,
             Long itemId
             );
+    Boolean isOwned(Long userId, Long compositeId);
 
 }

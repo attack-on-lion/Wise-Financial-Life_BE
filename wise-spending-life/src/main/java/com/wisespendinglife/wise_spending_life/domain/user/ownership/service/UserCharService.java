@@ -13,6 +13,8 @@ import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCha
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserCharacter;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserCharRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,16 @@ public class UserCharService {
         UserCharacter save = userCharRepository.save(entity);
 
         return userCharConverter.toPurchaseCharacterResponseDto(save);
+    }
+
+    public boolean isOwned(Long userId, Long characterId) {
+        boolean result = userCharRepository.existsByUser_IdAndCharacter_Id(userId, characterId);
+
+        if (!result) {
+            throw new BusinessException(ErrorCode.INVALID_CHARACTER_REQUEST);
+        }
+
+        return result;
     }
 
 }

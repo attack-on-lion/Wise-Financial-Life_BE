@@ -10,6 +10,9 @@ import com.wisespendinglife.wise_spending_life.domain.composite.entity.Composite
 import com.wisespendinglife.wise_spending_life.domain.composite.repository.CompositeRepository;
 import com.wisespendinglife.wise_spending_life.domain.item.entity.Item;
 import com.wisespendinglife.wise_spending_life.domain.item.service.ItemService;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -54,5 +57,14 @@ public class CompositeServiceImpl implements CompositeService {
         Composite save = compositeRepository.save(entity);
 
         return compositeConverter.toCreateResponse(save);
+    }
+
+    @Override
+    public Composite getEntity(Long compositeId) {
+
+        Composite composite = compositeRepository.findById(compositeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COMPOSITE_NOT_FOUND));
+
+        return composite;
     }
 }
