@@ -10,6 +10,7 @@ public class UserConverter {
     public static UserResponseDTO toResponseDTO(User user) {
         return UserResponseDTO.builder()
                 .id(user.getId())
+                .compositeId(user.getComposite().getId())
                 .name(user.getName())
                 .age(user.getAge())
                 .profileImgUrl(user.getProfileImgUrl())
