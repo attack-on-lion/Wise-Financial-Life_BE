@@ -80,6 +80,7 @@ public enum ErrorCode {
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "스토어 정보를 찾을 수 없습니다."),
     STORE_CREATE_FAILED(HttpStatus.NOT_FOUND, "40413", "제휴 상점 등록에 실패하였습니다."),
     CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "캐릭터 정보를 찾을 수 없습니다."),
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "40413", "아이템 정보를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),

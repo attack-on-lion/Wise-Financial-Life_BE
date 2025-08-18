@@ -18,19 +18,19 @@ public class CharacterController {
 
     /**
      * 상점 판매 캐릭터 리스트 반환
-     * @param currentPage
+     * @param page
      * @param size
      * @return
      */
     @GetMapping("/store/characters")
     public ResponseEntity<CharacterResponseDto.Characters> storeCharacters(
-            @RequestParam(required = false, defaultValue = "0") int currentPage,
+            @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "15") int size
             ) {
 
-        log.info(">>> [CTRL] /api/store/characters?page={}, size={} GET", currentPage, size);
+        log.info(">>> [CTRL] /api/store/characters?page={}, size={} GET", page, size);
 
-        return ResponseEntity.ok(service.getCharacters(currentPage, size));
+        return ResponseEntity.ok(service.getCharacters(page, size));
     }
 
     /**
