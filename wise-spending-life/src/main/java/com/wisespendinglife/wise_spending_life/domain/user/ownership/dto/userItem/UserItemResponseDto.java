@@ -18,7 +18,7 @@ public class UserItemResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class OwnedCharacterListDto {
+    public static class OwnedItemListDto {
         private List<OwnedItemDto> ownedItems;
     }
 

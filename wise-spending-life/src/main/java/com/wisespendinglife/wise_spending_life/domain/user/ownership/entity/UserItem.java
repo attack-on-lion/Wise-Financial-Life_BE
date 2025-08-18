@@ -1,13 +1,19 @@
 package com.wisespendinglife.wise_spending_life.domain.user.ownership.entity;
 
+import com.wisespendinglife.wise_spending_life.domain.item.entity.Item;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
+@ToString
 @Table(
         name = "user_item",
         uniqueConstraints = {
@@ -26,4 +32,25 @@ public class UserItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_item_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_user_item_user")
+    )
+    private User user;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+            name = "item_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_user_item_item")
+    )
+    private Item item;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
 }

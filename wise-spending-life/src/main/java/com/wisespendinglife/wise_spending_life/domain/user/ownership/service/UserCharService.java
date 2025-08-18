@@ -65,7 +65,7 @@ public class UserCharService {
 
         // 포인트 차감 DTO 로 변환
         PointRequestDto.SpendPointRequestDto pointSpendDto =
-                pointConverter.toSpendPointRequestDto(dto.getPrice(), SourceKind.purchase);
+                pointConverter.toSpendPointRequestDto(-dto.getPrice(), SourceKind.purchase);
 
         // 포인트 차감
         pointService.handlePointChange(userId, pointSpendDto);
