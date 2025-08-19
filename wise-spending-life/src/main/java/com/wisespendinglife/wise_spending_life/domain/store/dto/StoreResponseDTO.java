@@ -1,24 +1,39 @@
 package com.wisespendinglife.wise_spending_life.domain.store.dto;
-import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL) //null 필드 응답에서 숨기기 위함.
 public class StoreResponseDTO {
+    private Long storeId;
     private String storeName; //상점 이름
+    private String logoUrl; //브랜드 이미지
 
-    private String logoURL; //브랜드 이미지
+    private Long categoryId; //카테고리 FK
+    private String categoryName;
 
-    private String category; //카테고리 한글명 반환 위함
+    public StoreResponseDTO(Long storeId, String storeName, String logoUrl,
+                             Long categoryId, String categoryName) {
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.logoUrl = logoUrl;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
 
-    public static StoreResponseDTO from(StoreEntity store) {
-        return StoreResponseDTO.builder()
-                .storeName(store.getStoreName())
-                .category(store.getCategory().getName())
-                .build();
+    // 브랜드용 3개 (브랜드 카드에 필요한 최소 정보)
+    public StoreResponseDTO(Long storeId, String storeName, String logoUrl) {
+        this(storeId, storeName, logoUrl, null,null);
+    }
+
+    // 풀 정보 (전체 리스트 조회 등에 쓰임)
+    @Builder
+    public static StoreResponseDTO of(Long storeId, String storeName, String logoUrl,
+                                      Long categoryId, StoreCategory category) {
+        return new StoreResponseDTO(storeId, storeName, logoUrl, categoryId, category != null ? category.name() : null);
     }
 }
