@@ -76,6 +76,7 @@ public enum ErrorCode {
     POINT_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "40410", "포인트 내역이 존재하지 않습니다."),
     GIFTICON_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "기프티콘에 대한 정보를 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "스토어 정보를 찾을 수 없습니다."),
+    RECOMMENDATION_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "추천 챌린지를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
