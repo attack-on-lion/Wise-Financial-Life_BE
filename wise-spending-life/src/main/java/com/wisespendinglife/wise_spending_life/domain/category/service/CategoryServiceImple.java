@@ -1,12 +1,11 @@
 package com.wisespendinglife.wise_spending_life.domain.category.service;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
-import com.wisespendinglife.wise_spending_life.domain.category.entity.converter.CategoryConverter;
-import com.wisespendinglife.wise_spending_life.domain.category.entity.dto.CategoryListResponseDto;
-import com.wisespendinglife.wise_spending_life.domain.category.entity.dto.CategoryRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.category.converter.CategoryConverter;
+import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
+import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

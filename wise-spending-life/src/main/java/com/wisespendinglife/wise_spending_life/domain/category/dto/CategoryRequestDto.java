@@ -1,4 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.category.entity.dto;
+package com.wisespendinglife.wise_spending_life.domain.category.dto;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import jakarta.validation.constraints.Max;

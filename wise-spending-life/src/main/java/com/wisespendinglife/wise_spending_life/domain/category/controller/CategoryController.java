@@ -1,7 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.category.controller;
 
-import com.wisespendinglife.wise_spending_life.domain.category.entity.dto.CategoryListResponseDto;
-import com.wisespendinglife.wise_spending_life.domain.category.entity.dto.CategoryRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
+import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
