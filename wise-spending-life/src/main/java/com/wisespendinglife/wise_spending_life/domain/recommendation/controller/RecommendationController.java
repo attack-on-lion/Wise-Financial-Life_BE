@@ -7,6 +7,7 @@ import com.wisespendinglife.wise_spending_life.domain.recommendation.service.Rec
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class RecommendationController {
 
     @PostMapping
     public ResponseEntity<?> recommend(
-            @RequestBody RecommendationCreateRequestDto recommendationCreateRequestDto
+            @Validated @RequestBody RecommendationCreateRequestDto recommendationCreateRequestDto
     ){
         RecommendationCreateResponseDto res = recommendationService.generateRecommendation(recommendationCreateRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
