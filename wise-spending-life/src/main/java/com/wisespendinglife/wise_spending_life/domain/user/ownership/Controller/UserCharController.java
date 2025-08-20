@@ -2,7 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.user.ownership.Controller
 
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserCharService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService.UserCharService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

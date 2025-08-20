@@ -2,13 +2,10 @@ package com.wisespendinglife.wise_spending_life.domain.user.service;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
-import com.wisespendinglife.wise_spending_life.domain.character.service.CharacterService;
 import com.wisespendinglife.wise_spending_life.domain.composite.entity.Composite;
 import com.wisespendinglife.wise_spending_life.domain.composite.service.CompositeService;
-import com.wisespendinglife.wise_spending_life.domain.item.service.ItemService;
-import com.wisespendinglife.wise_spending_life.domain.item.service.ItemServiceImpl;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserCharService;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserItemService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService.UserCharService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userItemService.UserItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +19,6 @@ import com.wisespendinglife.wise_spending_life.domain.user.repository.UserReposi
 //예외처리
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
-
-import java.util.Optional;
 
 
 @Service

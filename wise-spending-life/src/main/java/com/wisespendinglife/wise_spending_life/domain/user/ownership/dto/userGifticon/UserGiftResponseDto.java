@@ -12,6 +12,23 @@ public class UserGiftResponseDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UseResponseDto {
+        private boolean isSuccess;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PurchaseResponseDto {
+        private boolean isSuccess;
+        private Long remainingPoint;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class OwnedGifticonListDto {
         private int size;
         private List<OwnedGifticonDto> ownedGifticonList;

@@ -173,4 +173,12 @@ public class GifticonServiceImpl implements GifticonService {
                 .build();
     }
 
+    @Override
+    public GifticonEntity getEntity(Long gifticonId) {
+
+        GifticonEntity entity = gifticonRepository.findByIdAndIsDeletedFalse(gifticonId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.GIFTICON_NOT_FOUND));
+
+        return entity;
+    }
 }

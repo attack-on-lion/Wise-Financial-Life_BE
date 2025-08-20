@@ -1,4 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.user.ownership.service;
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userItemService;
 
 import com.wisespendinglife.wise_spending_life.domain.item.entity.Item;
 import com.wisespendinglife.wise_spending_life.domain.item.service.ItemService;
@@ -13,7 +13,6 @@ import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userIte
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserItem;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserItemRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserReadServiceImpl;
-import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.AccessLevel;

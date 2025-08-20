@@ -1,4 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.user.ownership.service;
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService;
 
 import com.wisespendinglife.wise_spending_life.domain.character.entity.Character;
 import com.wisespendinglife.wise_spending_life.domain.character.service.CharacterService;
