@@ -4,6 +4,7 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.converter.CategoryConverter;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -36,8 +38,15 @@ public class CategoryServiceImple implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public CategoryListResponseDto findAll() {
-        List<Category> categories = categoryRepository.findAll();
+    public CategoryListResponseDto findAll(CategoryType type) {
+
+        List<Category> categories;
+        if(type == null){
+             categories = categoryRepository.findAll();
+        } else {
+            categories = categoryRepository.findAllByType(type);
+        }
+
         return categoryConverter.toListDto(categories);
     }
 }

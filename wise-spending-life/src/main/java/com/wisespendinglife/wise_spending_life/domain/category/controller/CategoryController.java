@@ -2,6 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.category.controller;
 
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
+import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,10 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<CategoryListResponseDto> getCategories() {
-        return ResponseEntity.ok(categoryService.findAll());
+    public ResponseEntity<CategoryListResponseDto> getCategories(
+            @RequestParam(required = false) CategoryType type
+    ) {
+        return ResponseEntity.ok(categoryService.findAll(type));
     }
 
     @PostMapping
