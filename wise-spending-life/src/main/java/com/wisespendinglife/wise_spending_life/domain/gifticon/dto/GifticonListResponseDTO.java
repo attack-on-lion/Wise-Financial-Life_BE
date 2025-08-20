@@ -25,5 +25,4 @@ public class GifticonListResponseDTO {
     private boolean hasNext;                 // 다음 페이지 존재 여부
     private int size;                        // 요청 페이지 크기(응답에 복사)
 
-
 }

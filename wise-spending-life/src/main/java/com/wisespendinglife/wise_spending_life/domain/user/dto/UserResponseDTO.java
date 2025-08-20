@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 public class UserResponseDTO {
     private Long id;
+    private Long compositeId;
     private String name;
     private Long age;
     private String profileImgUrl;

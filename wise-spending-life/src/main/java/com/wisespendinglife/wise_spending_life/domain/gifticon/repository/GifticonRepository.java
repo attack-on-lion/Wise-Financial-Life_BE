@@ -28,7 +28,25 @@ public interface GifticonRepository extends JpaRepository<GifticonEntity, Long> 
             Pageable pageable
     );
 
+    // 스토어별 커서 조회 (새로 추가)
+    @Query("""
+    SELECT g
+    FROM GifticonEntity g
+    WHERE g.isDeleted = false
+      AND g.store.id = :storeId
+      AND (
+            g.createdAt < :lastCreatedAt
+            OR (g.createdAt = :lastCreatedAt AND g.id < :lastId)
+          )
+    ORDER BY g.createdAt DESC, g.id DESC
+""")
+    List<GifticonEntity> findByStoreIdAfterCursor(
+            @Param("storeId") Long storeId,
+            @Param("lastCreatedAt") LocalDateTime lastCreatedAt,
+            @Param("lastId") Long lastId,
+            Pageable pageable
+    );
+
     //기프티콘 단건 조회
     Optional<GifticonEntity> findByIdAndIsDeletedFalse(Long id);
-
 }

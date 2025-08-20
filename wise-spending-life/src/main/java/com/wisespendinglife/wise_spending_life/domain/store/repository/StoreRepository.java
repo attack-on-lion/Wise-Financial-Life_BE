@@ -1,6 +1,10 @@
 package com.wisespendinglife.wise_spending_life.domain.store.repository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -8,12 +12,36 @@ import java.util.List;
 
 @Repository
 public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
-    // 전체 목록 조회 : 등록 순서(id 내림차순)
-    List<StoreEntity> findAllByIsDeletedFalseOrderByIdDesc();
-
-    //기프티콘에서 스토어 이름 받아올 때 사용
+    //스토어 이름 조회
     Optional<StoreEntity> findByStoreName(String storeName);
 
-    //DB에 스토어 이름이 존재하는지 확인용
-    boolean existsByStoreName(String storeName);
+    // 삭제 제외 버전 (권장)
+    Optional<StoreEntity> findByStoreNameAndIsDeletedFalse(String storeName);
+
+    //중복 생성 사전 체크
+    boolean existsByStoreNameAndCategory_NameAndIsDeletedFalse(String storeName, String categoryName);
+
+    //단건조회
+    Optional<StoreEntity> findByIdAndIsDeletedFalse(Long id);
+
+    List<StoreEntity> findAllByIsDeletedFalse();
+
+    // 전체 조회 (삭제 제외, 가나다순 정렬, 커서 기반)
+    @Query("""
+        SELECT s
+        FROM StoreEntity s
+        WHERE s.isDeleted = false
+          AND (
+                s.storeName > :lastStoreName
+                OR (s.storeName = :lastStoreName AND s.id > :lastId)
+              )
+        ORDER BY s.storeName ASC, s.id ASC
+    """)
+    List<StoreEntity> findAfterCursor(
+            @Param("lastStoreName") String lastStoreName,
+            @Param("lastId") Long lastId,
+            Pageable pageable
+    );
+    boolean existsByIdAndIsDeletedFalse(Long id);
+
 }

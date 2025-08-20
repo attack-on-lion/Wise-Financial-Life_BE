@@ -4,5 +4,6 @@ public enum SourceKind {
     pay_not,
     pay_less,
     pay_save,
-    gifticon_purchase
+    gifticon_purchase,
+    purchase
 }

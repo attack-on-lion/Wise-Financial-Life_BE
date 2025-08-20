@@ -48,4 +48,17 @@ public class UserController {
                 .body(Map.of("msg", "유저 정보가 추가되었습니다."));
     }
 
+    @PatchMapping("/{user_id}/composites/{composite_id}")
+    public ResponseEntity<Map<String, String>> updateUserComposite(
+            @PathVariable("user_id") Long userId,
+            @PathVariable("composite_id") Long compositeId
+    ){
+
+        userService.updateComposite(userId, compositeId);
+
+        log.info(">>> [CTRL] /api/users/{}/composites/{} PATCH", userId, compositeId);
+
+        return ResponseEntity.ok(Map.of("msg", "조합 적용이 적용되었습니다."));
+    }
+
 }

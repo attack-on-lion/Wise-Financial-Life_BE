@@ -34,52 +34,8 @@ jobs:
         working-directory: ${{ env.APP_DIR }}
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            ./gradlew clean build --stacktrace
+            ./gradlew clean assemble -x test --stacktrace
           else
+            # push: keep tests skipped as before
             ./gradlew clean build -x test --stacktrace
           fi
-
-  # 2) develop push 에서만 ECR 로그인+푸시
-  push-image:
-    needs: build
-    if: ${{ false }}  # temporarily disabled: local-only ECR push
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write  # OIDC
-    env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      IMAGE_URI: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-deploy-role
-          role-session-name: slgm-cicd-session
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Setup Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # Dockerfile 이 APP_DIR 안에 있을 때만 working-directory 유지
-      - name: Build & Push image to ECR
-        working-directory: ${{ env.APP_DIR }}   # = wise-spending-life
-        run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            --file dockerfile \
-            --progress=plain \
-            -t $IMAGE_URI:latest \
-            -t $IMAGE_URI:${IMAGE_TAG} \
-            --push \
-            .

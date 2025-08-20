@@ -1,7 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.store.dto;
 
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.URL;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,11 +13,14 @@ import lombok.NoArgsConstructor;
 
 public class StoreRequestDTO {
     @NotBlank(message = "{INVALID_STORE_NAME}")
+    @Size(max = 100)
     private String storeName;
 
     @NotNull(message = "{INVALID_CATEGORY}")
-    private StoreCategory category;
+    @Size(max = 225)
+    private String categoryName;
 
     @NotBlank(message = "{INVALID_STORE_IMAGE_URL}")
-    private String logoURL;
+    @Size(max = 255)
+    private String logoUrl;
 }

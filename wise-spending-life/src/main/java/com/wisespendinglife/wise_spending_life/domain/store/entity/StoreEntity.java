@@ -8,11 +8,24 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.hibernate.annotations.SQLDelete;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Store")
+@Table(
+        name = "store",
+        uniqueConstraints = {
+                //같은 이름이라도 카테고리별로는 중복 허용
+              @UniqueConstraint(name = "uk_store_store_name", columnNames = {"storeName", "categoryId"})
+        },
+        indexes = { //중복 등록 방지를 위한 유니크 설정
+                @Index(name = "idx_store_active_id", columnList = "isDeleted, id"),
+                @Index(name = "idx_store_cat_active_id", columnList = "categoryId, isDeleted, id"),
+                @Index(name = "idx_store_name", columnList = "storeName")
+})
+// 소프트 삭제만 수행(조회 필터는 제거: 기존 코드와 호환)
+@SQLDelete(sql = "UPDATE store SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,20 +36,41 @@ public class StoreEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String storeName; //상점 이름
 
-    @Column(nullable = false)
-    private String logoURL; //브랜드 로고
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category; //카테고리 아이디 FK
+    @Column(nullable = false, length = 255)
+    private String logoUrl; //브랜드 로고
 
     @Column(nullable = false)
     private Boolean isDeleted; //삭제여부
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "categoryId", nullable = false)
+    private Category category; //카테고리 아이디 FK
+
+    //가게 이름/로고 변경 로직
+    public void updateBasics(String newName, String newLogoUrl){
+        setNameAndLogo(newName, newLogoUrl);
+    }
+
+    //카테고리 변경 로직
+    public void changeCategory(Category newCategory){
+        this.category = newCategory;
+    }
+    private void setNameAndLogo(String name, String logo){
+        this.storeName = name == null ? null : name.trim();
+        this.logoUrl = logo == null ? null : logo.trim();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        if(isDeleted == null) isDeleted = false;
+        if(storeName != null) storeName = storeName.trim();
+        if(logoUrl != null) logoUrl = logoUrl.trim();
+    }
+
+    public void setIsDeleted(){
+        this.isDeleted = true;
+    }
 }

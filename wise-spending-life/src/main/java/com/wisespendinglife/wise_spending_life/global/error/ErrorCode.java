@@ -58,7 +58,11 @@ public enum ErrorCode {
     INVALID_SOURCE_KIND(HttpStatus.BAD_REQUEST, "40042", "포인트 출처의 값이 잘못 입력되었습니다."),
     INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "40043", "포인트 값이 없습니다."),
     INVALID_NOT_NULL(HttpStatus.BAD_REQUEST, "40044", "값이 비어있습니다."),
-
+    INVALID_ITEM_REQUEST(HttpStatus.BAD_REQUEST, "40045", "구매하지 않은 아이템입니다."),
+    INVALID_CHARACTER_REQUEST(HttpStatus.BAD_REQUEST, "40046", "구매하지 않은 캐릭터입니다."),
+    STORE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "40047", "이미 존재하는 스토어입니다."),
+    POINT_INSUFFICIENT(HttpStatus.BAD_REQUEST, "40048", "포인트가 부족합니다."),
+    DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "40049", "이미 존재하는 카테고리 이름입니다."),
 
 
 
@@ -75,8 +79,11 @@ public enum ErrorCode {
     CERTAIN_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "4049", "특정 챌린지를 찾을 수 없습니다."),
     POINT_HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "40410", "포인트 내역이 존재하지 않습니다."),
     GIFTICON_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "기프티콘에 대한 정보를 찾을 수 없습니다."),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40411", "스토어 정보를 찾을 수 없습니다."),
-    RECOMMENDATION_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "추천 챌린지를 찾을 수 없습니다."),
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "스토어 정보를 찾을 수 없습니다."),
+    STORE_CREATE_FAILED(HttpStatus.NOT_FOUND, "40413", "제휴 상점 등록에 실패하였습니다."),
+    CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "캐릭터 정보를 찾을 수 없습니다."),
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "40413", "아이템 정보를 찾을 수 없습니다."),
+    COMPOSITE_NOT_FOUND(HttpStatus.NOT_FOUND, "40414", "조합 결과물을 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
