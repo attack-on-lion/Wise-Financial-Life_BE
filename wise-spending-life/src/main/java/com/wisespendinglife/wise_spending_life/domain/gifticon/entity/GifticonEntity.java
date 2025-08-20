@@ -46,7 +46,7 @@ public class GifticonEntity {
     private LocalDateTime createdAt; //생성 시간
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "store_id", nullable = false)
+    @JoinColumn(name = "storeId", nullable = false)
     private StoreEntity store; //스토어 아이디 FK
 
     @PrePersist
