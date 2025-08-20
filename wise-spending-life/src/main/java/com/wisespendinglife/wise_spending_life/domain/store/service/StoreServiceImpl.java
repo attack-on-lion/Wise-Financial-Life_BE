@@ -4,37 +4,78 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryTy
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.store.converter.StoreConverter;
 import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreRequestDTO;
-import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreResponseDTO;
+import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreListResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.store.repository.StoreRepository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
+    final int MAX_SIZE = 10;
+
     private final StoreRepository storeRepository;
     private final CategoryRepository categoryRepository;
 
     //브랜드 전체 조회
     @Override
     @Transactional(readOnly = true)
-    public List<StoreResponseDTO> getAllStores() {
-        List<StoreEntity> entities = storeRepository.findAllByIsDeletedFalse();
+    public StoreListResponseDTO getAllStores(String lastStoreName, Long lastId, int size) {
+        if (size <= 0 || size > MAX_SIZE) {
+            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
+        }
+        // 커서 파라미터는 둘 다 null 이거나, 둘 다 값이 있어야 함
+        if ((lastStoreName == null) != (lastId == null)) {
+            throw new BusinessException(ErrorCode.INVALID_CURSOR);
+        }
 
-        if (entities.isEmpty()) {
+        final boolean firstPage = (lastStoreName == null && lastId == null);
+        if (firstPage) {
+            // 가나다순 ASC 이므로, "처음부터" 가져오려면 가장 작은 커서를 준다.
+            // 공백/빈 문자열 상호주의: 실제 저장 시 trim 해두셨으면 ""이면 충분합니다.
+            lastStoreName = "";
+            lastId = 0L;
+        }
+
+        Pageable pageable = PageRequest.of(0, size + 1); // size+1로 더 가져와서 다음 페이지 여부 판단
+        List<StoreEntity> entities = storeRepository.findAfterCursor(lastStoreName, lastId, pageable);
+
+        if (entities.isEmpty() && firstPage) {
             throw new BusinessException(ErrorCode.STORE_NOT_FOUND);
         }
 
-        return entities.stream()
+        boolean hasNext = entities.size() > size;
+        if (hasNext) {
+            entities = entities.subList(0, size);
+        }
+
+        var items = entities.stream()
                 .map(StoreConverter::toStoreResponseDTO)
                 .toList();
+
+        StoreListResponseDTO.Cursor cursor = null;
+        if (!items.isEmpty()) {
+            var last = items.get(items.size() - 1);
+            cursor = StoreListResponseDTO.Cursor.builder()
+                    .lastStoreName(last.getStoreName())
+                    .lastId(last.getStoreId())
+                    .build();
+        }
+
+        return StoreListResponseDTO.builder()
+                .stores(items)
+                .nextCursor(cursor) // null이면 프론트는 더 불러오지 않으면 됨
+                .hasNext(hasNext)
+                .size(size)
+                .build();
     }
 
     //신규 브랜드 등록

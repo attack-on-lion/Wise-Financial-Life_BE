@@ -1,7 +1,9 @@
 package com.wisespendinglife.wise_spending_life.domain.store.repository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -23,4 +25,20 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
 
     List<StoreEntity> findAllByIsDeletedFalse();
 
+    // 전체 조회 (삭제 제외, 가나다순 정렬, 커서 기반)
+    @Query("""
+        SELECT s
+        FROM StoreEntity s
+        WHERE s.isDeleted = false
+          AND (
+                s.storeName > :lastStoreName
+                OR (s.storeName = :lastStoreName AND s.id > :lastId)
+              )
+        ORDER BY s.storeName ASC, s.id ASC
+    """)
+    List<StoreEntity> findAfterCursor(
+            @Param("lastStoreName") String lastStoreName,
+            @Param("lastId") Long lastId,
+            Pageable pageable
+    );
 }
