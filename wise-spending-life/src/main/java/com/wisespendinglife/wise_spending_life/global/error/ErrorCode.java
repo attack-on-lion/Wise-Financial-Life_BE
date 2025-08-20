@@ -61,8 +61,8 @@ public enum ErrorCode {
     INVALID_ITEM_REQUEST(HttpStatus.BAD_REQUEST, "40045", "구매하지 않은 아이템입니다."),
     INVALID_CHARACTER_REQUEST(HttpStatus.BAD_REQUEST, "40046", "구매하지 않은 캐릭터입니다."),
     STORE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "40047", "이미 존재하는 스토어입니다."),
-
-
+    POINT_INSUFFICIENT(HttpStatus.BAD_REQUEST, "40048", "포인트가 부족합니다."),
+    DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "40049", "이미 존재하는 카테고리 이름입니다."),
 
 
 

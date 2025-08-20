@@ -101,19 +101,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long createUser(UserRequestDTO dto){
 
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category = null;
+        if(dto.getCategoryId() != null){
+            category = categoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+        }
 
         User user = UserConverter.toEntity(dto, category);
         userRepository.save(user);
         log.info(">>> [SERVICE] Created user -> {}", user.toString());
         return user.getId();
-    }
-
-    @Override
-    public User getEntity(Long userId) {
-        return userRepository.findByIdAndIsDeletedFalse(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
 }

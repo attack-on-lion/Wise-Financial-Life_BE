@@ -5,6 +5,9 @@ import com.wisespendinglife.wise_spending_life.domain.user.dto.UserResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 
 public interface UserService {
+    /**
+     * TODO: 읽기 전용 service 로 변경해야함.
+     */
     //유저 조회
     UserResponseDTO getUserInfo(Long userId);
 
@@ -14,7 +17,5 @@ public interface UserService {
     void updateComposite(Long userId, Long CompositeId);
 
     Long createUser(UserRequestDTO dto);
-
-    User getEntity(Long userId);
 
 }
