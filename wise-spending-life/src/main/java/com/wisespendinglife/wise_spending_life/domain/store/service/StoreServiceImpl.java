@@ -24,19 +24,17 @@ public class StoreServiceImpl implements StoreService {
     //브랜드 전체 조회
     @Override
     @Transactional(readOnly = true)
-    public List<StoreResponseDTO> getAllStores(){
-        List<StoreResponseDTO> stores = storeRepository.findAll().stream()
-                .filter(store -> Boolean.FALSE.equals(store.getIsDeleted()))
-                .map(StoreConverter::toStoreResponseDTO)
-                .toList();
+    public List<StoreResponseDTO> getAllStores() {
+        List<StoreEntity> entities = storeRepository.findAllByIsDeletedFalse();
 
-        if (stores.isEmpty()) {
+        if (entities.isEmpty()) {
             throw new BusinessException(ErrorCode.STORE_NOT_FOUND);
         }
 
-        return stores;
+        return entities.stream()
+                .map(StoreConverter::toStoreResponseDTO)
+                .toList();
     }
-
 
     //신규 브랜드 등록
     @Override
