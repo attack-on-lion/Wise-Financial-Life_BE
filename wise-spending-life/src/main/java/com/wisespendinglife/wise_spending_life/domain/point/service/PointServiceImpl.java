@@ -54,6 +54,10 @@ public class PointServiceImpl implements PointService {
                     .orElseThrow(() -> new BusinessException(ErrorCode.CHALLENGE_NOT_FOUND));
         }
 
+        if(user.getPoint() + dto.getDelta() < 0){
+            throw new BusinessException(ErrorCode.POINT_INSUFFICIENT);
+        }
+
         Point entity = pointConverter.toEntity(dto, user, Optional.ofNullable(challenge));
 
         pointLedgerRepository.save(entity);

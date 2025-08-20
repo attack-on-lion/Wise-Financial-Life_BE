@@ -8,9 +8,13 @@ public class UserConverter {
 
     //Entity -> ResponseDTO //전체 유저 정보 전달
     public static UserResponseDTO toResponseDTO(User user) {
+
+        String categoryName = user.getCategory() != null ? user.getCategory().getName() : null;
+        Long compositeId = user.getComposite() != null ? user.getComposite().getId() : null;
+
         return UserResponseDTO.builder()
                 .id(user.getId())
-                .compositeId(user.getComposite().getId())
+                .compositeId(compositeId)
                 .name(user.getName())
                 .age(user.getAge())
                 .profileImgUrl(user.getProfileImgUrl())
@@ -19,7 +23,7 @@ public class UserConverter {
                 .baseAmount(user.getBaseAmount())
                 .gender(user.getGender())
                 .location(user.getLocation())
-                .categoryName(user.getCategory().getName())
+                .categoryName(categoryName)
                 .point(user.getPoint())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

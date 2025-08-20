@@ -12,6 +12,7 @@ import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userIte
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userItem.UserItemResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserItem;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserItemRepository;
+import com.wisespendinglife.wise_spending_life.domain.user.service.UserReadServiceImpl;
 import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -34,7 +35,7 @@ public class UserItemServiceImpl implements UserItemService {
     private final ItemService itemService;
     private final PointConverter pointConverter;
     private final PointService pointService;
-    private final UserService userService;
+    private final UserReadServiceImpl userReadService;
 
     @Override
     @Transactional(readOnly = true)
@@ -51,7 +52,7 @@ public class UserItemServiceImpl implements UserItemService {
             Long userId,
             Long itemId) {
 
-        User user = userService.getEntity(userId);
+        User user = userReadService.getEntity(userId);
         Item item = itemService.getEntity(itemId);
 
         UserItem userItem = userItemConverter.toEntity(user, item);
@@ -61,8 +62,10 @@ public class UserItemServiceImpl implements UserItemService {
 
         pointService.handlePointChange(userId, spendPointRequestDto);
 
+        UserItem save = userItemRepository.save(userItem);
 
-        return userItemConverter.toPurchaseItemResponseDto(userItem);
+
+        return userItemConverter.toPurchaseItemResponseDto(save);
     }
 
     @Override

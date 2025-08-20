@@ -1,14 +1,13 @@
 package com.wisespendinglife.wise_spending_life.domain.item.controller;
 
+import com.wisespendinglife.wise_spending_life.domain.item.dto.ItemRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.item.dto.ItemResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.item.service.ItemServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +23,7 @@ public class ItemController {
      * @param size - 반환 할 개수
      * @return
      */
-    @GetMapping("/api/store/items")
+    @GetMapping("/store/items")
     ResponseEntity<ItemResponseDto.Items> getAllItems(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "15") int size
@@ -33,5 +32,15 @@ public class ItemController {
         log.info(">>> [CTRL] /api/store/items?page={}, size={} GET", page, size);
 
         return ResponseEntity.ok(itemService.getItems(page, size));
+    }
+
+    @PostMapping("/store/items")
+    ResponseEntity<ItemResponseDto.ItemCreateDto> addItem(
+            @Validated @RequestBody ItemRequestDto.CreateItemDto dto
+    ){
+
+        log.info(">>> [CTRL] /api/store/items?dto={}", dto);
+
+        return ResponseEntity.ok(itemService.saveItem(dto));
     }
 }

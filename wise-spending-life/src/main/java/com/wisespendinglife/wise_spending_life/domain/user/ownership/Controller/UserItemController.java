@@ -22,7 +22,7 @@ public class UserItemController {
      * @param userId
      * @return
      */
-    @GetMapping("/api/users/{user_id}/items")
+    @GetMapping("/users/{user_id}/items")
     ResponseEntity<UserItemResponseDto.OwnedItemListDto> getOwnedCharacters(
             @PathVariable("user_id") Long userId
     ){
@@ -36,7 +36,7 @@ public class UserItemController {
      * @param requestDto
      * @return
      */
-    @PostMapping("/user/{user_is}/items/{item_id}/purchase")
+    @PostMapping("/users/{user_id}/items/{item_id}/purchase")
     ResponseEntity<UserItemResponseDto.PurchaseItemDto> purchaseItem(
             @PathVariable("user_id") Long userId,
             @PathVariable("item_id") Long itemId,
