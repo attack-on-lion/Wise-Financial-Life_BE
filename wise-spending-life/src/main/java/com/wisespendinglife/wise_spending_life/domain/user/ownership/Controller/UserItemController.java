@@ -26,6 +26,9 @@ public class UserItemController {
     ResponseEntity<UserItemResponseDto.OwnedItemListDto> getOwnedCharacters(
             @PathVariable("user_id") Long userId
     ){
+
+        log.info(">>> [CTRL] /api/users/{}/items GET", userId);
+
         return ResponseEntity.ok(userItemService.getOwnedItems(userId));
     }
 
@@ -42,6 +45,8 @@ public class UserItemController {
             @PathVariable("item_id") Long itemId,
             @RequestBody @Validated UserItemRequestDto.PurchaseItemDto requestDto
             ){
+
+        log.info(">>> [CTRL] /api/user/{}/items/{}/purchase POST -> requestDto: {}", userId, itemId,  requestDto);
 
         return ResponseEntity.ok(userItemService.addUserItem(requestDto, userId, itemId));
     }

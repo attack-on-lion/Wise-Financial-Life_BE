@@ -45,6 +45,8 @@ public class UserCharService {
 
         List<UserCharacter> ownedCharacters = userCharRepository.findByUser_IdOrderByIdDesc(userId);
 
+        log.info(">>> [SERVICE] Get user owned characters -> userId: {}", userId);
+
         return userCharConverter.toOwnedListDto(ownedCharacters);
     }
 
@@ -65,6 +67,8 @@ public class UserCharService {
 
         UserCharacter entity = userCharConverter.toEntity(user, character);
 
+        log.info(">>> [SERVICE] 캐릭터 시도 -> {}", entity.toString());
+
         // 포인트 차감 DTO 로 변환
         PointRequestDto.SpendPointRequestDto pointSpendDto =
                 pointConverter.toSpendPointRequestDto(-dto.getPrice(), SourceKind.purchase);
@@ -75,11 +79,16 @@ public class UserCharService {
         // 캐릭터 소유권 추가
         UserCharacter save = userCharRepository.save(entity);
 
+        log.info(">>> [SERVICE] 캐릭터 구매 완료 -> {}", entity.toString());
+
         return userCharConverter.toPurchaseCharacterResponseDto(save);
     }
 
     public boolean isOwned(Long userId, Long characterId) {
         boolean result = userCharRepository.existsByUser_IdAndCharacter_Id(userId, characterId);
+
+        log.info(">>> [SERVICE] 특정 유저의 캐릭터 보유 조회 -> userId: {}, characterId: {}, 결과: {}", userId, characterId, result);
+        
 
         if (!result) {
             throw new BusinessException(ErrorCode.INVALID_CHARACTER_REQUEST);

@@ -20,6 +20,10 @@ public class UserCharController {
     public ResponseEntity<UserCharResponseDto.OwnedCharacterListDto> getOwnedCharacters(
             @PathVariable("user_id") Long userId
     ){
+
+        log.info(">>> [CTRL] /api/users/{}/charactors GET", userId);
+
+
         return ResponseEntity.ok(userCharService.getOwnedCharacters(userId));
     }
 
@@ -29,6 +33,9 @@ public class UserCharController {
             @PathVariable("character_id") Long characterId,
             @RequestBody UserCharRequestDto.PurchaseCharacterDto requestDto
     ){
+
+        log.info(">>> [CTRL] /api/user/{}/charactors/{}/purchase POST -> requestDto: {}", userId, characterId,  requestDto);
+
         return ResponseEntity.ok(userCharService.addUserCharacter(requestDto, userId, characterId));
     }
 }
