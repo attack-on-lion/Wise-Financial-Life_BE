@@ -24,14 +24,19 @@ public class StoreController {
     private final StoreService storeService;
     private final GifticonService gifticonService;
 
-        //제휴 상점 리스트 (기프티콘 리스트 그대로 가져온것)
-        @GetMapping
-        public ResponseEntity<GifticonListResponseDTO> getAllGifticons(
-                @RequestParam(required = false) LocalDateTime lastCreatedAt,
+        //브랜드별 기프티콘 조회
+        @GetMapping("/{storeId}/gifticons")
+        public ResponseEntity<GifticonListResponseDTO> getGifticonsByStore(
+                @PathVariable("storeId") Long storeId,
+                @RequestParam(required = false)
+                @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME)
+                LocalDateTime lastCreatedAt,
                 @RequestParam(required = false) Long lastId,
-                @RequestParam(defaultValue = "10") int size) {
-
-            return ResponseEntity.ok(gifticonService.getAllGifticon(lastCreatedAt, lastId, size));
+                @RequestParam(defaultValue = "10") int size
+        ) {
+            GifticonListResponseDTO result =
+                    gifticonService.getGifticonsByStore(storeId, lastCreatedAt, lastId, size);
+            return ResponseEntity.ok(result);
         }
 
 

@@ -61,10 +61,7 @@ public class GifticonServiceImpl implements GifticonService {
             entities = entities.subList(0, size); // 마지막 1개 제거
         }
 
-//        List<GifticonResponseDTO> items = new ArrayList<>();
-//        for (GifticonEntity entity : entities) {
-//            items.add(GifticonConverter.togifticonResponseDTO(entity));
-//        }
+
         var items = entities.stream().map(GifticonConverter::togifticonResponseDTO).toList();
 
         GifticonListResponseDTO.Cursor cursor = null;
@@ -118,6 +115,62 @@ public class GifticonServiceImpl implements GifticonService {
 
         // 소프트 삭제 처리
         gifticon.updateIsDeleted(true);
+    }
+
+    //브랜드별 기프티콘 조회
+    @Override
+    @Transactional(readOnly = true)
+    public GifticonListResponseDTO getGifticonsByStore(
+            Long storeId,
+            LocalDateTime lastCreatedAt,
+            Long lastId,
+            int size
+    ) {
+        if (size <= 0 || size > MAX_SIZE) {
+            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
+        }
+        if ((lastCreatedAt == null) != (lastId == null)) {
+            throw new BusinessException(ErrorCode.INVALID_CURSOR);
+        }
+        if (!storeRepository.existsByIdAndIsDeletedFalse(storeId)) {
+            throw new BusinessException(ErrorCode.STORE_NOT_FOUND);
+        }
+
+        final boolean firstPage = (lastCreatedAt == null && lastId == null);
+        if (firstPage) {
+            lastCreatedAt = LocalDateTime.of(9999, 12, 31, 23, 59, 59);
+            lastId = Long.MAX_VALUE;
+        }
+
+        // size+1 로 조회 후 hasNext 계산
+        Pageable pageable = PageRequest.of(0, size + 1);
+        List<GifticonEntity> entities = gifticonRepository
+                .findByStoreIdAfterCursor(storeId, lastCreatedAt, lastId, pageable);
+
+        boolean hasNext = entities.size() > size;
+        if (hasNext) {
+            entities = entities.subList(0, size); // 마지막 1개 제거
+        }
+
+        var items = entities.stream()
+                .map(GifticonConverter::togifticonResponseDTO)
+                .toList();
+
+        GifticonListResponseDTO.Cursor cursor = null;
+        if (!items.isEmpty()) {
+            var lastItem = items.get(items.size() - 1);
+            cursor = GifticonListResponseDTO.Cursor.builder()
+                    .lastId(lastItem.getId())
+                    .lastCreatedAt(lastItem.getCreatedAt())
+                    .build();
+        }
+
+        return GifticonListResponseDTO.builder()
+                .gifticonlist(items)
+                .nextCursor(cursor)   // null이면 프론트는 더 불러오지 않으면 됨
+                .hasNext(hasNext)
+                .size(size)
+                .build();
     }
 
 }

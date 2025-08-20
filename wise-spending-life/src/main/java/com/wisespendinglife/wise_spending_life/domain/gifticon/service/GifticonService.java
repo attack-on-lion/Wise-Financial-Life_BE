@@ -13,4 +13,6 @@ public interface GifticonService {
     Long createGifticon(String storeName, GifticonRequestDTO requestDTO); //기프티콘 등록(Post)
 
     void deleteGifticon(Long gifticonId); //기프티콘 삭제
+
+    GifticonListResponseDTO getGifticonsByStore(Long storeId, LocalDateTime lastCreatedAt, Long lastId, int size); //스토어별 기프티콘 조회
 }

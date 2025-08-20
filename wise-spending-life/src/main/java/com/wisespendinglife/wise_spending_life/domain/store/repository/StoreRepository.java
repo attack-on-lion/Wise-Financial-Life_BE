@@ -41,4 +41,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
             @Param("lastId") Long lastId,
             Pageable pageable
     );
+    boolean existsByIdAndIsDeletedFalse(Long id);
+
 }
