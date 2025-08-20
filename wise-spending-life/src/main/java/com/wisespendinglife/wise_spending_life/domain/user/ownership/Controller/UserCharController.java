@@ -23,7 +23,7 @@ public class UserCharController {
         return ResponseEntity.ok(userCharService.getOwnedCharacters(userId));
     }
 
-    @PostMapping("/user/{user_is}/charactors/{character_id}/purchase")
+    @PostMapping("/user/{user_id}/charactors/{character_id}/purchase")
     public ResponseEntity<UserCharResponseDto.PurchaseCharacterDto> purchase(
             @PathVariable("user_id") Long userId,
             @PathVariable("character_id") Long characterId,

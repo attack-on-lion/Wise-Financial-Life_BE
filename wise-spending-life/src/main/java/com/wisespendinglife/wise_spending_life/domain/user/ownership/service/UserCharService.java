@@ -12,7 +12,7 @@ import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCha
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserCharacter;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.repository.UserCharRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.service.UserService;
+import com.wisespendinglife.wise_spending_life.domain.user.service.UserReadService;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserCharService {
 
     private final UserCharRepository userCharRepository;
     private final UserCharConverter userCharConverter;
-    private final UserService userService;
+    private final UserReadService userReadService;
     private final CharacterService characterService;
     private final PointService pointService;
     private final PointConverter pointConverter;
@@ -60,7 +60,7 @@ public class UserCharService {
             Long userId,
             Long characterId
     ) {
-        User user = userService.getEntity(userId);
+        User user = userReadService.getEntity(userId);
         Character character = characterService.getEntity(characterId);
 
         UserCharacter entity = userCharConverter.toEntity(user, character);
