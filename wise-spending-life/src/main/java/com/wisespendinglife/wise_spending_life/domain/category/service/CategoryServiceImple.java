@@ -38,6 +38,6 @@ public class CategoryServiceImple implements CategoryService {
     @Transactional(readOnly = true)
     public CategoryListResponseDto findAll() {
         List<Category> categories = categoryRepository.findAll();
-        return categoryConverter.toDto(categories);
+        return categoryConverter.toListDto(categories);
     }
 }

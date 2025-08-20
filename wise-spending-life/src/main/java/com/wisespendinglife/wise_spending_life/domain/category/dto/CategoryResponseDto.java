@@ -1,16 +1,17 @@
 package com.wisespendinglife.wise_spending_life.domain.category.dto;
 
+import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryListResponseDto {
-    List<CategoryResponseDto> categories;
+public class CategoryResponseDto {
+    private Long categoryId;
+    private String categoryName;
+    private CategoryType categoryType;
 }

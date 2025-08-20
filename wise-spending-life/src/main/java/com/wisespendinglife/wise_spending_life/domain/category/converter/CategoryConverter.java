@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.category.converter;
 
+import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
@@ -20,13 +21,24 @@ public class CategoryConverter {
                 .build();
     }
 
-    public CategoryListResponseDto toDto(List<Category> categories) {
-        List<String> categoriesNames = categories.stream()
-                .map(Category::getName)
-                .collect(Collectors.toList());
+    public CategoryResponseDto toDto(Category category){
 
+        return CategoryResponseDto.builder()
+                .categoryId(category.getId())
+                .categoryName(category.getName())
+                .categoryType(category.getType())
+                .build();
+    }
+
+    public List<CategoryResponseDto> toDto(List<Category> categories) {
+        return categories.stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public CategoryListResponseDto toListDto(List<Category> categories){
         return CategoryListResponseDto.builder()
-                .categories(categoriesNames)
+                .categories(toDto(categories))
                 .build();
     }
 

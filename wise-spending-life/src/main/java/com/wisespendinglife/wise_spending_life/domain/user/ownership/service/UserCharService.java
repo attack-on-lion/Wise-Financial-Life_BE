@@ -88,7 +88,7 @@ public class UserCharService {
         boolean result = userCharRepository.existsByUser_IdAndCharacter_Id(userId, characterId);
 
         log.info(">>> [SERVICE] 특정 유저의 캐릭터 보유 조회 -> userId: {}, characterId: {}, 결과: {}", userId, characterId, result);
-        
+
 
         if (!result) {
             throw new BusinessException(ErrorCode.INVALID_CHARACTER_REQUEST);
