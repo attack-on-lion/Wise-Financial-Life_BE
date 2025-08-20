@@ -3,6 +3,7 @@ package com.wisespendinglife.wise_spending_life.domain.store.service;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.store.converter.StoreConverter;
+import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreRequestDTO;
 import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.store.repository.StoreRepository;
 import com.wisespendinglife.wise_spending_life.domain.store.entity.StoreEntity;
@@ -39,7 +40,11 @@ public class StoreServiceImpl implements StoreService {
     //신규 브랜드 등록
     @Override
     @Transactional
-    public Long createStore(String storeName, String logoUrl, String categoryName) {
+    public Long createStore(StoreRequestDTO request) {
+        String storeName = request.getStoreName() != null ? request.getStoreName().trim() : null;
+        String logoUrl = request.getLogoUrl()   != null ? request.getLogoUrl().trim()   : null;
+        String categoryName = request.getCategoryName() != null ? request.getCategoryName().trim() : null;
+
         // 카테고리 조회 (없으면 에러)
         Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));

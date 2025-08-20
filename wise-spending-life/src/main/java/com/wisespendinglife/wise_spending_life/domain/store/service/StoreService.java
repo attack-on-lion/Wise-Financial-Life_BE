@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.store.service;
 
+import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreRequestDTO;
 import com.wisespendinglife.wise_spending_life.domain.store.dto.StoreResponseDTO;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 
@@ -10,7 +11,7 @@ public interface StoreService {
     List<StoreResponseDTO> getAllStores();
 
     //신규 브랜드 등록
-    Long createStore(String storeName, String logoUrl, String categoryName);
+    Long createStore(StoreRequestDTO request);
 
     //브랜드 삭제
     void deleteStore(Long storeId);

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +37,18 @@ public class StoreController {
         //제휴 상점 추가 (상점 새로 등록. 이미지, 브랜드명 필요)
         @PostMapping
         public ResponseEntity<Map<String, String>> createStore(@Valid @RequestBody StoreRequestDTO requestDto) {
-            Long newId = storeService.createStore(
-                    requestDto.getStoreName(),
-                    requestDto.getLogoUrl(),
-                    requestDto.getCategoryName()
-            );
+            Long newId = storeService.createStore(requestDto);
+
+            URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(newId)
+                    .toUri();
+
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(Map.of("msg", "제휴 상점이 성공적으로 등록되었습니다."));
+                    .created(location)
+                    .body(Map.of(
+                            "msg", "제휴 상점이 성공적으로 등록되었습니다."));
         }
 
         //제휴 상점 삭제
