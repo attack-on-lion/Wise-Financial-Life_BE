@@ -5,6 +5,8 @@ import com.wisespendinglife.wise_spending_life.domain.category.converter.Categor
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
+import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
+import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,11 @@ public class CategoryServiceImple implements CategoryService {
 
     @Override
     public void addCategory(CategoryRequestDto dto) {
+        if (categoryRepository.findByNameIgnoreCase(dto.getName())
+                .isPresent()){
+            throw new BusinessException(ErrorCode.DUPLICATE_CATEGORY_NAME);
+        }
+
         Category category = categoryConverter.toEntity(dto);
         categoryRepository.save(category);
     }
