@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL) //null 필드 응답에서 숨기기 위함.
 public class StoreResponseDTO {
     private Long storeId;
     private String storeName; //상점 이름
