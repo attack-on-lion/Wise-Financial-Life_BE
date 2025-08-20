@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.recommendation.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -15,6 +16,7 @@ public class RecommendationCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recommendation_id")
     private Recommendation recommendation;
@@ -23,11 +25,7 @@ public class RecommendationCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public RecommendationCategory(Category category) {
-        this.category = category;
-    }
-
-    void setRecommendationCategory(Recommendation recommendation) {
+    void setRecommendation(Recommendation recommendation) {
         this.recommendation = recommendation;
     }
 

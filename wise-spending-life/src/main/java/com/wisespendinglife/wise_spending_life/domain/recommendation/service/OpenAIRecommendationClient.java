@@ -6,7 +6,6 @@ import com.openai.client.OpenAIClient;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
-import com.wisespendinglife.wise_spending_life.domain.recommendation.dto.PaymentMiniDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +49,7 @@ public class OpenAIRecommendationClient {
             제약:
             - challengeType ∈ {"pay_not","pay_less","pay_save"}.
             - 각 recommendation.categories는 입력으로 제공된 카테고리 집합 안에서만 선택. 새로운 카테고리 금지.
-            - challengeDays는 3~30 사이의 정수.
+            - challengeDays는 {3,7,14,30} 중 하나의 정수.
             - 한국어 간결 표현.
             - categories는 최소 1개, 최대 8개.
             - 최소 1개, 최대 5개 추천.

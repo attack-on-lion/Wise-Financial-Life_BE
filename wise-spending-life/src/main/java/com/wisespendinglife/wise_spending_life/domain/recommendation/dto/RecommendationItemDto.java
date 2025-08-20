@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -15,14 +16,13 @@ public class RecommendationItemDto {
     private final String challengeName;
     private final ChallengeType challengeType;
     private final Long challengeDays;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private final LocalDate createdAt;
+    private final LocalDateTime createdAt;
     private final List<String> categories;
 
     @Builder
     public RecommendationItemDto(Long id, Long user_id,String challengeName,
                                  ChallengeType challengeType, Long challengeDays,
-                                 LocalDate createdAt, List<String> categories) {
+                                 LocalDateTime createdAt, List<String> categories) {
         this.id = id;
         this.user_id = user_id;
         this.challengeName = challengeName;

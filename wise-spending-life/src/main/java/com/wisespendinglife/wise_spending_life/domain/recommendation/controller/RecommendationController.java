@@ -31,4 +31,16 @@ public class RecommendationController {
         RecommendationDetailResponseDto res = recommendationService.getById(recommendationId);
         return ResponseEntity.ok(res);
     }
+
+    @GetMapping("/check")
+    public ResponseEntity<?> getAll(){
+        return ResponseEntity.ok(recommendationService.getAllRecommendations());
+    }
+
+    @GetMapping("/{challengeDays}")
+    public ResponseEntity<?> getByChallengeDays(
+            @PathVariable Long challengeDays
+    ){
+        return ResponseEntity.ok(recommendationService.getRecommendationsByDays(challengeDays));
+    }
 }

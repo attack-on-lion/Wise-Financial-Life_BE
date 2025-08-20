@@ -1,5 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.recommendation.dto;
-
+package com.wisespendinglife.wise_spending_life.domain.payment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -19,8 +19,7 @@ import java.time.LocalDate;
 public class PaymentMiniDto {
     @NotNull(message = "{INVALID_DATE_REQUEST}")
     @Schema(description = "거래 일시", example = "2025-07-09")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate transactionAt;
+    private LocalDateTime transactionAt;
 
     @NotBlank(message = "{INVALID_CATEGORY_REQUEST}")
     @Schema(description = "카테고리", example = "식비")

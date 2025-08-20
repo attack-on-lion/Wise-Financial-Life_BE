@@ -4,6 +4,9 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMiniDto;
+import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentService;
+import com.wisespendinglife.wise_spending_life.domain.recommendation.converter.RecommendationConverter;
 import com.wisespendinglife.wise_spending_life.domain.recommendation.dto.*;
 import com.wisespendinglife.wise_spending_life.domain.recommendation.entity.Recommendation;
 import com.wisespendinglife.wise_spending_life.domain.recommendation.entity.RecommendationCategory;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +36,8 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationCategoryRepository recommendationCategoryRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final PaymentService paymentService;
+    private final RecommendationConverter recommendationConverter;
 
     @Override
     @Transactional
@@ -39,27 +45,24 @@ public class RecommendationServiceImpl implements RecommendationService {
         Long userId = recommendationCreateRequestDto.getUser_id();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        List<PaymentMiniDto> pays = recommendationCreateRequestDto.getPays();
-
-        if (pays == null || pays.isEmpty()) {
-            throw new BusinessException(ErrorCode.PAYMENT_NOT_FOUND);
-        }
+        LocalDateTime today = LocalDateTime.now(SEOUL);
+        LocalDateTime from = today.toLocalDate().withDayOfMonth(1).atStartOfDay();
+        List<PaymentMiniDto> pays = paymentService.getPaymentMiniList(userId, from, today);
 
         List<Map<String, Object>> payMaps = pays.stream()
                 .map(p -> Map.<String, Object>of(
-                        "transactionAt", String.valueOf(p.getTransactionAt()), // LocalDate → "yyyy-MM-dd"
+                        "transactionAt", String.valueOf(p.getTransactionAt()),
                         "category", p.getCategory() == null ? "" : p.getCategory().trim()
                 ))
                 .collect(Collectors.toList());
 
         var llmRes = llm.generate(userId, payMaps, null);
-        var today = LocalDate.now(SEOUL);
 
         List<RecommendationItemDto> itemDtos = new ArrayList<>();
         for (var item : llmRes.recommendations()) {
             Set<Category> cats = item.categories().stream()
                     .map(name -> categoryRepository
-                            .findByNameAndType(name, CategoryType.PAYMENT)
+                            .findByName(name)
                             .orElseGet(() -> categoryRepository.save(
                                     Category.builder()
                                             .name(name)
@@ -80,16 +83,15 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .challengeDays(item.challengeDays())
                     .createdAt(today)
                     .build();
-            rec = recommendationRepository.save(rec);
 
             for (Category c : cats) {
-                recommendationCategoryRepository.save(
-                        RecommendationCategory.builder()
-                                .recommendation(rec)
-                                .category(c)
-                                .build()
-                );
+                RecommendationCategory link = RecommendationCategory.builder()
+                        .category(c)
+                        .build();
+                rec.addRecommendationCategory(link);
             }
+
+            recommendationRepository.save(rec);
 
             itemDtos.add(RecommendationItemDto.builder()
                     .id(rec.getId())
@@ -120,5 +122,19 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .challengeDays(recommendation.getChallengeDays())
                 .createdAt(recommendation.getCreatedAt())
                 .build();
+    }
+
+    @Override
+    public List<RecommendationSummaryDto> getAllRecommendations() {
+        return recommendationConverter.toSummaryList(
+                recommendationRepository.findAll()
+        );
+    }
+
+    @Override
+    public List<RecommendationSummaryDto> getRecommendationsByDays(Long challengeDays) {
+        return recommendationConverter.toSummaryList(
+                recommendationRepository.findByChallengeDays(challengeDays)
+        );
     }
 }

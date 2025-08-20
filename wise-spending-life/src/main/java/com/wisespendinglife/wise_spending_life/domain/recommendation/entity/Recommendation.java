@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.recommendation.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.ChallengeType;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,22 +29,25 @@ public class Recommendation {
     @Enumerated(EnumType.STRING)
     private ChallengeType challengeType;
     private Long challengeDays;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "recommendation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecommendationCategory> recommendationCategories = new ArrayList<>();
 
-    public void setRecommendationCategory(RecommendationCategory recommendationCategory) {
+    public void addRecommendationCategory(RecommendationCategory recommendationCategory) {
         this.recommendationCategories.add(recommendationCategory);
-        recommendationCategory.setRecommendationCategory(this);
+        recommendationCategory.setRecommendation(this);
     }
     @Builder
-    public Recommendation(User user, String challengeName, ChallengeType challengeType, Long challengeDays, LocalDate createdAt, List<RecommendationCategory> recommendationCategories) {
+    public Recommendation(User user, String challengeName, ChallengeType challengeType, Long challengeDays, LocalDateTime createdAt, List<RecommendationCategory> recommendationCategories) {
         this.user = user;
         this.challengeName = challengeName;
         this.challengeType = challengeType;
         this.challengeDays = challengeDays;
         this.createdAt = createdAt;
-        this.recommendationCategories = recommendationCategories;
+        if (recommendationCategories != null) {
+            recommendationCategories.forEach(this::addRecommendationCategory);
+        }
     }
 }

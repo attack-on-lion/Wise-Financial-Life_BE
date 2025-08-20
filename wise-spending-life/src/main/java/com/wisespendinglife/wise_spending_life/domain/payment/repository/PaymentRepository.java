@@ -121,5 +121,4 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     sumMonthlyExpenseByCategory(@Param("userId") Long userId,
                                 @Param("from") LocalDateTime from,
                                 @Param("to") LocalDateTime to);
-
 }
