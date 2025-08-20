@@ -1,7 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.point.entity;
 
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,7 +23,7 @@ public class Point {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private SourceKind sourceKind;

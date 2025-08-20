@@ -7,9 +7,8 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRespons
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentService;
 import com.wisespendinglife.wise_spending_life.domain.solution.converter.SolutionConverter;
 import com.wisespendinglife.wise_spending_life.domain.solution.dto.SimpleSolutionResponseDTO;
-import com.wisespendinglife.wise_spending_life.domain.solution.entity.Solution;
 import com.wisespendinglife.wise_spending_life.domain.solution.repository.SolutionRepository;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +37,7 @@ public class SolutionServiceImpl implements SolutionService{
     @Override
     @Transactional
     public SimpleSolutionResponseDTO getSimpleSolution(Long userId) {
-        UserEntity user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND)); // 네 에러 체계에 맞춰 변경
 
         // 이번 달 기간

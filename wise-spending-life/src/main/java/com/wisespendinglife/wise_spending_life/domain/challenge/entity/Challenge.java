@@ -1,6 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.challenge.entity;
 
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class Challenge {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user;
+    private User user;
 
     private String challengeName;
     @Enumerated(EnumType.STRING)
@@ -43,7 +43,7 @@ public class Challenge {
     }
 
     @Builder
-    public Challenge(UserEntity user, String challengeName, ChallengeType challengeType,
+    public Challenge(User user, String challengeName, ChallengeType challengeType,
                      Long challengeDays, LocalDate startAt, LocalDate endAt, LocalDate createdAt,
                      String characterImageUrl, Boolean isCompleted, Boolean isDeleted) {
         this.user = user;

@@ -2,7 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.payment.entity;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentDirection;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMethod;
-import com.wisespendinglife.wise_spending_life.domain.user.entity.UserEntity;
+import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +30,7 @@ public class Payment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private User user;
 
     // 단방향 연관관계
     @ManyToOne(fetch = FetchType.LAZY)

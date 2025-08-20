@@ -42,7 +42,7 @@ jobs:
   # 2) develop push 에서만 ECR 로그인+푸시
   push-image:
     needs: build
-    if: github.event_name == 'push'
+    if: ${{ false }}  # temporarily disabled: local-only ECR push
     runs-on: ubuntu-latest
     permissions:
       contents: read

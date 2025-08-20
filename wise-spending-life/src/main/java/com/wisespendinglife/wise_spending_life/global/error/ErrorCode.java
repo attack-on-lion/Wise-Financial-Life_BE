@@ -58,6 +58,7 @@ public enum ErrorCode {
     INVALID_SOURCE_KIND(HttpStatus.BAD_REQUEST, "40042", "포인트 출처의 값이 잘못 입력되었습니다."),
     INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "40043", "포인트 값이 없습니다."),
     STORE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "40044", "이미 존재하는 스토어입니다."),
+    INVALID_NOT_NULL(HttpStatus.BAD_REQUEST, "40044", "값이 비어있습니다."),
 
 
 
