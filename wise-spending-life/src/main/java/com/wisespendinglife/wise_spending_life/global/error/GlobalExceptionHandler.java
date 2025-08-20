@@ -10,8 +10,13 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 애플리케이션 전역 예외를 한 곳에서 처리.
@@ -97,6 +102,29 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(code.getHttpStatus())
                 .body(ErrorResponse.of(code));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("error", "INVALID_PARAMETER");
+        body.put("errorMessage", String.format("파라미터 '%s' 값 '%s'를 %s로 변환할 수 없습니다.",
+                ex.getName(), ex.getValue(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "요구타입"));
+
+        // Enum이면 허용 가능한 값들도 같이 내려주기
+        if (ex.getRequiredType() != null && ex.getRequiredType().isEnum()) {
+            Object[] constants = ex.getRequiredType().getEnumConstants();
+            List<String> allowed = Arrays.stream(constants)
+                    .map(Object::toString)
+                    .toList();
+            body.put("allowedValues", allowed);
+        }
+
+        // 어떤 필드가 문제인지, 거부된 값은 무엇인지
+        body.put("field", ex.getName());
+        body.put("rejectedValue", ex.getValue());
+
+        return ResponseEntity.badRequest().body(body); // 400
     }
 
     /** 3️⃣ 알 수 없는 예외—최종 안전망 */

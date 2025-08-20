@@ -1,6 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.user.entity;
 
 import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
+import com.wisespendinglife.wise_spending_life.domain.composite.entity.Composite;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,6 +50,14 @@ public class User {
     @JoinColumn(nullable = true, name = "category_id")
     private Category category;
 
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "composite_id",
+            nullable = true
+    )
+    private Composite composite;
+
     @CreatedDate
     @Column(nullable = false) //자동화함
     private LocalDateTime createdAt; //레코드 생성 날짜
@@ -90,5 +99,6 @@ public class User {
     public void updateIsDeleted(Boolean isDeleted){
         this.isDeleted = isDeleted;
     }
+    public void updateComposite(Composite composite){ this.composite = composite; }
 
 }

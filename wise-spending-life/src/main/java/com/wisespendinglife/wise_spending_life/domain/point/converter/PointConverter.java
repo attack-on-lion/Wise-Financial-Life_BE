@@ -2,8 +2,10 @@ package com.wisespendinglife.wise_spending_life.domain.point.converter;
 
 import com.wisespendinglife.wise_spending_life.domain.challenge.entity.Challenge;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointDeltaRequest;
+import com.wisespendinglife.wise_spending_life.domain.point.dto.PointRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.point.dto.PointResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.point.entity.Point;
+import com.wisespendinglife.wise_spending_life.domain.point.entity.SourceKind;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -57,6 +59,13 @@ public class PointConverter {
                 .delta(dto.getDelta())
                 .balance(user.getPoint() + dto.getDelta())
                 .challenge(challenge.orElse(null))
+                .build();
+    }
+
+    public PointRequestDto.SpendPointRequestDto toSpendPointRequestDto(Long delta, SourceKind sourceKind) {
+        return PointRequestDto.SpendPointRequestDto.builder()
+                .sourceKind(sourceKind)
+                .delta(delta)
                 .build();
     }
 

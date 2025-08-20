@@ -54,12 +54,17 @@ public class PointServiceImpl implements PointService {
                     .orElseThrow(() -> new BusinessException(ErrorCode.CHALLENGE_NOT_FOUND));
         }
 
+        /** 포인트가 부족 예외처리 */
+        if(user.getPoint() + dto.getDelta() < 0){
+            throw new BusinessException(ErrorCode.POINT_INSUFFICIENT);
+        }
+
         Point entity = pointConverter.toEntity(dto, user, Optional.ofNullable(challenge));
 
         pointLedgerRepository.save(entity);
 
         user.updatePoint(user.getPoint() + dto.getDelta());  // 업데이트된 포인트 저장
-        log.info(">>> [SERVICE] Updated Point, userId={} delta={} Balance={}", userId, dto.getDelta(), user.getPoint());
+        log.info(">>> [SERVICE] 포인트 업데이트, userId={} delta={} Balance={}", userId, dto.getDelta(), user.getPoint());
 
         return pointConverter.toPointBalanceDto(entity);
     }

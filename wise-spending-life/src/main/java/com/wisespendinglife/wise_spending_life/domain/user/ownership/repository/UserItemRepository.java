@@ -1,0 +1,17 @@
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.repository;
+
+import com.wisespendinglife.wise_spending_life.domain.item.entity.Item;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.entity.UserItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserItemRepository extends JpaRepository<UserItem, Long> {
+
+    boolean existsByUser_IdAndItem_Id(Long userId, Long itemId);
+    List<UserItem> findByUser_IdOrderByIdDesc(Long userId);
+
+    Long item(Item item);
+}
