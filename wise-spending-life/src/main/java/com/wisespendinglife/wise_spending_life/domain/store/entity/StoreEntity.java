@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
         name = "store",
         uniqueConstraints = {
                 //같은 이름이라도 카테고리별로는 중복 허용
-              @UniqueConstraint(name = "uk_store_store_name", columnNames = {"store_name", "category_id"})
+              @UniqueConstraint(name = "uk_store_store_name", columnNames = {"storeName", "categoryId"})
         },
         indexes = { //중복 등록 방지를 위한 유니크 설정
-                @Index(name = "idx_store_active_id", columnList = "is_deleted, id"),
-                @Index(name = "idx_store_cat_active_id", columnList = "category_id, is_deleted, id"),
-                @Index(name = "idx_store_name", columnList = "store_name")
+                @Index(name = "idx_store_active_id", columnList = "isDeleted, id"),
+                @Index(name = "idx_store_cat_active_id", columnList = "categoryId, isDeleted, id"),
+                @Index(name = "idx_store_name", columnList = "storeName")
 })
 // 소프트 삭제만 수행(조회 필터는 제거: 기존 코드와 호환)
 @SQLDelete(sql = "UPDATE store SET is_deleted = true WHERE id = ?")
@@ -36,17 +36,17 @@ public class StoreEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "store_name", nullable = false, length = 100)
+    @Column(nullable = false, length = 100)
     private String storeName; //상점 이름
 
-    @Column(name = "logo_url", nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
     private String logoUrl; //브랜드 로고
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(nullable = false)
     private Boolean isDeleted; //삭제여부
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "categoryId", nullable = false)
     private Category category; //카테고리 아이디 FK
 
     //가게 이름/로고 변경 로직

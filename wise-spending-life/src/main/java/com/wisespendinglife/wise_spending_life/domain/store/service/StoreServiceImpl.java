@@ -10,7 +10,6 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.Store;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
