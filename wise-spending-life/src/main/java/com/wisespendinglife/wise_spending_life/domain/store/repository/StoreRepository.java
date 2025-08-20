@@ -16,7 +16,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
     Optional<StoreEntity> findByStoreNameAndIsDeletedFalse(String storeName);
 
     //중복 생성 사전 체크
-    boolean existsByStoreNameAndCategory_IdAndIsDeletedFalse(String storeName, Long categoryId);
+    boolean existsByStoreNameAndCategory_NameAndIsDeletedFalse(String storeName, String categoryName);
 
     //단건조회
     Optional<StoreEntity> findByIdAndIsDeletedFalse(Long id);

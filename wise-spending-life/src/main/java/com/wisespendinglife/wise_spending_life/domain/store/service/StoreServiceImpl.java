@@ -42,13 +42,13 @@ public class StoreServiceImpl implements StoreService {
     //신규 브랜드 등록
     @Override
     @Transactional
-    public Long createStore(String storeName, String logoUrl, Long categoryId) {
+    public Long createStore(String storeName, String logoUrl, String categoryName) {
         // 카테고리 조회 (없으면 에러)
-        Category category = categoryRepository.findById(categoryId)
+        Category category = categoryRepository.findByName(categoryName)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
 
         // 중복 체크
-        if (storeRepository.existsByStoreNameAndCategory_IdAndIsDeletedFalse(storeName, categoryId)) {
+        if (storeRepository.existsByStoreNameAndCategory_NameAndIsDeletedFalse(storeName, category.getName())) {
             throw new BusinessException(ErrorCode.STORE_ALREADY_EXISTS);
         }
 
@@ -76,8 +76,8 @@ public class StoreServiceImpl implements StoreService {
 
     //브랜드명 중복 여부 체크
     @Override
-    public boolean isStoreDuplicate(String storeName, Long categoryId) {
-        return storeRepository.existsByStoreNameAndCategory_IdAndIsDeletedFalse(storeName, categoryId);
+    public boolean isStoreDuplicate(String storeName, String categoryName) {
+        return storeRepository.existsByStoreNameAndCategory_NameAndIsDeletedFalse(storeName, categoryName);
     }
 
     //카테고리 찾기 (없으면 생성)

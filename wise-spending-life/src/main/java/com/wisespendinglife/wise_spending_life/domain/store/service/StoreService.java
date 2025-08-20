@@ -10,13 +10,13 @@ public interface StoreService {
     List<StoreResponseDTO> getAllStores();
 
     //신규 브랜드 등록
-    Long createStore(String storeName, String logoUrl, Long categoryId);
+    Long createStore(String storeName, String logoUrl, String categoryName);
 
     //브랜드 삭제
     void deleteStore(Long storeId);
 
     //브랜드명 중복 여부 체크
-    boolean isStoreDuplicate(String storeName, Long categoryId);
+    boolean isStoreDuplicate(String storeName, String categoryName);
 
     //카테고리 찾기
     Category getOrCreateCategory(String categoryName);

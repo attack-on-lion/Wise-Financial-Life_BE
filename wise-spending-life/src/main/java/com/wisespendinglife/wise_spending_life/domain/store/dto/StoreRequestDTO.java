@@ -17,7 +17,8 @@ public class StoreRequestDTO {
     private String storeName;
 
     @NotNull(message = "{INVALID_CATEGORY}")
-    private Long categoryId;
+    @Size(max = 225)
+    private String categoryName;
 
     @NotBlank(message = "{INVALID_STORE_IMAGE_URL}")
     @Size(max = 255)

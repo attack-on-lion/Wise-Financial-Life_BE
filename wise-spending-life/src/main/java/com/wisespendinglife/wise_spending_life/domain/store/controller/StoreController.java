@@ -38,7 +38,7 @@ public class StoreController {
             Long newId = storeService.createStore(
                     requestDto.getStoreName(),
                     requestDto.getLogoUrl(),
-                    requestDto.getCategoryId()
+                    requestDto.getCategoryName()
             );
             return ResponseEntity
                     .status(HttpStatus.CREATED)

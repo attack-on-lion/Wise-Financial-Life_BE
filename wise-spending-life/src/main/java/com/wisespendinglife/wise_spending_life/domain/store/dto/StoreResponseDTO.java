@@ -14,7 +14,7 @@ public class StoreResponseDTO {
     private String logoUrl; //브랜드 이미지
 
     private Long categoryId; //카테고리 FK
-    private String categoryName;
+    private String categoryName; //카테고리 등록 위함
 
     public StoreResponseDTO(Long storeId, String storeName, String logoUrl,
                              Long categoryId, String categoryName) {
