@@ -22,4 +22,5 @@ public interface NoticeRepository extends JpaRepository<Notification, Long> {
     Optional<Notification> findByIdAndUser_IdAndIsDeletedFalse(Long id, Long userId);
 
 
+
 }

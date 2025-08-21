@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class NoticConverter {
+public class NoticeConverter {
 
     public NoticeResponseDto.NoticCreateResponseDto toCreateResponseDto(Notification entity) {
         return NoticeResponseDto.NoticCreateResponseDto.builder()

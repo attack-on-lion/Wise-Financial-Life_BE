@@ -1,6 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.notification.assembler;
 
-import com.wisespendinglife.wise_spending_life.domain.notification.converter.NoticConverter;
+import com.wisespendinglife.wise_spending_life.domain.notification.converter.NoticeConverter;
 import com.wisespendinglife.wise_spending_life.domain.notification.dto.NoticeResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.notification.entity.Notification;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NoticeAssembler {
 
-    private final NoticConverter noticConverter;
+    private final NoticeConverter noticConverter;
 
     public NoticeResponseDto.Notices assemble(Page<Notification> page) {
 

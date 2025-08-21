@@ -55,4 +55,10 @@ public class Notification {
 
     @Column(name = "isDeleted", nullable = false)
     private boolean isDeleted;
+
+    public boolean updateIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+
+        return true;
+    }
 }
