@@ -84,6 +84,7 @@ public enum ErrorCode {
     CHARACTER_NOT_FOUND(HttpStatus.NOT_FOUND, "40412", "캐릭터 정보를 찾을 수 없습니다."),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "40413", "아이템 정보를 찾을 수 없습니다."),
     COMPOSITE_NOT_FOUND(HttpStatus.NOT_FOUND, "40414", "조합 결과물을 찾을 수 없습니다."),
+    RECOMMENDATION_NOT_FOUND(HttpStatus.NOT_FOUND, "40415", "특정 추천 챌린지를 찾을 수 없습니다."),
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),

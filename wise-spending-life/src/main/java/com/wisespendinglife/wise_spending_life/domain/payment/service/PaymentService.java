@@ -1,10 +1,13 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.service;
 
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMiniDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.ScoreResponseDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -28,4 +31,5 @@ public interface PaymentService {
      */
     ScoreResponseDto calculateMonthlyScore(Long userId);
 
+    List<PaymentMiniDto> getPaymentMiniList(Long userId, LocalDateTime from, LocalDateTime to);
 }

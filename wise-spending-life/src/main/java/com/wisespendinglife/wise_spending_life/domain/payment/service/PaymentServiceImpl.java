@@ -5,6 +5,8 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryTy
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
 import com.wisespendinglife.wise_spending_life.domain.payment.assembler.PaymentResponseAssembler;
 import com.wisespendinglife.wise_spending_life.domain.payment.converter.PaymentConverter;
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentDirection;
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMiniDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
@@ -232,4 +234,37 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentConverter.toMonthlyTop3Categories(userId, firstDay, today, aggs);
     }
 
+    @Override
+    public List<PaymentMiniDto> getPaymentMiniList(Long userId, LocalDateTime from, LocalDateTime to) {
+        if (userId == null){
+            throw new BusinessException(ErrorCode.INVALID_USER_ID);
+        }
+        if (from == null | to == null){
+            throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
+        }
+
+        LocalDateTime start = from;
+        LocalDateTime end = to;
+
+        Page<Payment> page = paymentRepository.findByUserIdAndTransactionAtBetween(
+                userId, start, end, Pageable.unpaged()
+        );
+
+        List<PaymentMiniDto> minis = page.getContent().stream()
+                .filter(p -> p.getDirection() == PaymentDirection.OUTFLOW)
+                .map(this::toMini)
+                .toList();
+
+        if (minis.isEmpty()){
+            throw new BusinessException(ErrorCode.PAYMENT_NOT_FOUND);
+        }
+        return minis;
+    }
+
+    private PaymentMiniDto toMini(Payment payment) {
+        return PaymentMiniDto.builder()
+                .transactionAt(payment.getTransactionAt())
+                .category(payment.getCategory().getName())
+                .build();
+    }
 }
