@@ -30,9 +30,9 @@ public class NoticeCommandServiceImpl implements NoticeCommandService{
     private final CategoryService categoryService;
 
     @Override
-    public NoticeResponseDto.NoticCreateResponseDto createNotice(NoticeRequestDto.CreateNoticDto requestDto) {
+    public NoticeResponseDto.NoticCreateResponseDto createNotice(NoticeRequestDto.CreateNoticDto requestDto, Long userId) {
 
-        User user = userReadService.getEntity(requestDto.getUserId());
+        User user = userReadService.getEntity(userId);
         Category category = categoryService.getEntity(requestDto.getCategoryName().name());
 
         Notification save = noticeRepository.save(noticeConverter.toEntity(requestDto, user, category));

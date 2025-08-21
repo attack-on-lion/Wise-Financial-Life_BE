@@ -4,6 +4,6 @@ import com.wisespendinglife.wise_spending_life.domain.notification.dto.NoticeReq
 import com.wisespendinglife.wise_spending_life.domain.notification.dto.NoticeResponseDto;
 
 public interface NoticeCommandService {
-    NoticeResponseDto.NoticCreateResponseDto createNotice(NoticeRequestDto.CreateNoticDto requestDto);
+    NoticeResponseDto.NoticCreateResponseDto createNotice(NoticeRequestDto.CreateNoticDto requestDto, Long userId);
     NoticeResponseDto.NoticeDeleteResponseDto deleteNotice(Long noticeId);
 }

@@ -34,21 +34,22 @@ public class NoticeController {
 
     }
 
-    @PostMapping("/api/notifications")
+    @PostMapping("/api/notifications/{user_id}")
     public ResponseEntity<NoticeResponseDto.NoticCreateResponseDto> addNotification(
+            @PathVariable("user_id") Long userId,
             @Validated @RequestBody NoticeRequestDto.CreateNoticDto requestDto
     ) {
 
-        log.info(">>> [CTRL] /api/notifications POST -> {}", requestDto);
+        log.info(">>> [CTRL] /api/notifications/{} POST -> {}", userId, requestDto);
 
-        return ResponseEntity.ok(noticeCommandService.createNotice(requestDto));
+        return ResponseEntity.ok(noticeCommandService.createNotice(requestDto, userId));
     }
 
     @DeleteMapping("/api/notifications/{notice_id}")
     public ResponseEntity<NoticeResponseDto.NoticeDeleteResponseDto> deleteNotification(
             @PathVariable("notice_id") Long noticeId
     ) {
-        
+
         log.info(">>> [CTRL] /api/notifications/{} DELETE", noticeId);
 
         return ResponseEntity.ok(noticeCommandService.deleteNotice(noticeId));
