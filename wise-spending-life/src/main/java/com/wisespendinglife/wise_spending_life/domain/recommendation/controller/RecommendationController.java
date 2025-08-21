@@ -37,7 +37,7 @@ public class RecommendationController {
         return ResponseEntity.ok(recommendationService.getAllRecommendations());
     }
 
-    @GetMapping("/{challengeDays}")
+    @GetMapping("/days/{challengeDays}")
     public ResponseEntity<?> getByChallengeDays(
             @PathVariable Long challengeDays
     ){

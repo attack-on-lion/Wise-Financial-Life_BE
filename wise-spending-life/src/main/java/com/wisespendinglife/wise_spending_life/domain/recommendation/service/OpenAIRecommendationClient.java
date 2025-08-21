@@ -91,7 +91,7 @@ public class OpenAIRecommendationClient {
                 .model((model == null || model.isBlank()) ? DEFAULT_MODEL : model)
                 .addSystemMessage(systemPrompt)
                 .addUserMessage(userPrompt)
-                .temperature(0.2)
+                .temperature(1)
                 .build();
 
         final ChatCompletion completion;
