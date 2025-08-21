@@ -28,7 +28,7 @@ public class UserGiftQueryServiceImpl implements UserGiftQueryService {
         // 유저가 존재하는지 체크
         userReadService.getEntity(userId);
 
-        List<UserGifticon> entities = userGifticonRepository.findByUserId(userId);
+        List<UserGifticon> entities = userGifticonRepository.findByUser_Id(userId);
 
         return userGiftConverter.toListDto(entities);
     }

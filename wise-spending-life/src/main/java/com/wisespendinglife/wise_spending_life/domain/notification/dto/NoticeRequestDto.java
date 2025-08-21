@@ -11,7 +11,7 @@ public class NoticeRequestDto {
     @NoArgsConstructor
     @ToString
     public static class CreateNoticDto {
-        private CategoryType categoryName;
+        private NotificationType categoryName;
         private String content;
     }
 

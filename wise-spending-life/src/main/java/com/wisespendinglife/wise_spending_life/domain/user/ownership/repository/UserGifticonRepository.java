@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserGifticonRepository extends JpaRepository<UserGifticon, Long> {
-    List<UserGifticon> findByUserId(Long userId);
-    Optional<UserGifticon> findByUserIdAndGifticonId(Long userId, Long gifticonId);
-    Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
+    List<UserGifticon> findByUser_Id(Long userId);
+    Optional<UserGifticon> findByUser_IdAndGifticon_Id(Long userId, Long gifticonId);
+    boolean existsByUser_IdAndGifticon_Id(Long userId, Long gifticonId);
 }
