@@ -54,6 +54,10 @@ public class UserItemServiceImpl implements UserItemService {
         User user = userReadService.getEntity(userId);
         Item item = itemService.getEntity(itemId);
 
+        // 아이템 중복 구매 제한
+        if(userItemRepository.existsByUser_IdAndItem_Id(userId, itemId))
+            throw new BusinessException(ErrorCode.ITEM_ALREADY_OWNED);
+
         UserItem userItem = userItemConverter.toEntity(user, item);
 
         PointRequestDto.SpendPointRequestDto spendPointRequestDto =

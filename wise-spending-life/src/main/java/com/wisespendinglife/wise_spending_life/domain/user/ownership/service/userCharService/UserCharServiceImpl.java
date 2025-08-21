@@ -65,6 +65,10 @@ public class UserCharServiceImpl {
         User user = userReadService.getEntity(userId);
         Character character = characterService.getEntity(characterId);
 
+        // 캐릭터 중복 구매 제한
+        if(userCharRepository.existsByUser_IdAndCharacter_Id(userId, characterId))
+            throw new BusinessException(ErrorCode.CHARACTER_ALREADY_OWNED);
+
         UserCharacter entity = userCharConverter.toEntity(user, character);
 
         log.info(">>> [SERVICE] 캐릭터 시도 -> {}", entity.toString());
