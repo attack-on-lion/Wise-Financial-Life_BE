@@ -42,12 +42,15 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @Column(nullable = false, columnDefinition = "text")
     private String content;
+
+    @Column(length = 255)
+    private String deeplink;
 
     @CreationTimestamp
     @Column(name = "createdAt", nullable = false, updatable = false)

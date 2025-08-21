@@ -71,6 +71,7 @@ public class NoticeResponseDto {
         private Long id;
         private Long userId;
         private String content;
+        private String deeplink;
         private String categoryName;
         private LocalDateTime createdAt;
     }

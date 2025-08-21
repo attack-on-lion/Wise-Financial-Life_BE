@@ -22,6 +22,7 @@ public class NoticeConverter {
          return Notification.builder()
                  .user(user)
                  .content(requestDto.getContent())
+                 .deeplink(requestDto.getDeeplink())
                  .category(category)
                  .isDeleted(false)
                  .build();
@@ -32,6 +33,7 @@ public class NoticeConverter {
                 .id(entity.getId())
                 .userId(entity.getUser().getId())
                 .content(entity.getContent())
+                .deeplink(entity.getDeeplink())
                 .categoryName(entity.getCategory().getName())
                 .createdAt(entity.getCreatedAt())
                 .build();

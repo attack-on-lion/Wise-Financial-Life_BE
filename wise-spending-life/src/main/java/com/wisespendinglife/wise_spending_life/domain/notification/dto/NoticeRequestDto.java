@@ -12,6 +12,7 @@ public class NoticeRequestDto {
     @ToString
     public static class CreateNoticDto {
         private NotificationType categoryName;
+        private String deeplink;
         private String content;
     }
 
