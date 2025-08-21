@@ -27,10 +27,9 @@ public class CategoryServiceImple implements CategoryService {
 
     @Override
     public void addCategory(CategoryRequestDto dto) {
-        if (categoryRepository.findByNameIgnoreCase(dto.getName())
-                .isPresent()){
+        if (categoryRepository.existsByNameIgnoreCaseAndType(dto.getName(), dto.getType()))
             throw new BusinessException(ErrorCode.DUPLICATE_CATEGORY_NAME);
-        }
+
 
         Category category = categoryConverter.toEntity(dto);
         categoryRepository.save(category);
