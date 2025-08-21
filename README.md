@@ -58,12 +58,12 @@
 <br />
 
 ## 🤔 기술적 이슈와 해결 과정
-- Stream 써야할까?
-  - [Stream API에 대하여](https://velog.io/@yewo2nn16/Java-Stream-API)
-- Gmail STMP 이용하여 이메일 전송하기
-  - [gmail 보내기](https://velog.io/@yewo2nn16/Email-이메일-전송하기with-첨부파일)
-- AWS EC2에 배포하기
-  - [서버 배포하기-1](https://velog.io/@yewo2nn16/SpringBoot-서버-배포)
+- Over-Fetch 와 Under-Fetch 개념 및 대안
+  - [오버 페치(Over-Fetch)와 언더 페치(Under-Fetch)란?](https://happydhkim.tistory.com/entry/%EC%98%A4%EB%B2%84-%ED%8E%98%EC%B9%98Over-Fetch%EC%99%80-%EC%96%B8%EB%8D%94-%ED%8E%98%EC%B9%98Under-Fetch%EB%9E%80)
+- 순환참조 해결을 위한 CQRS 패턴
+  - [Spring CQRS 패턴](https://rebugs.tistory.com/895)
+- 글로벌 예외 처리
+  - [Spring Java 예외(Exception) 처리 전략](https://turtledev.tistory.com/67)
   - [서버 배포하기-2](https://velog.io/@yewo2nn16/SpringBoot-서버-배포-인텔리제이에서-jar-파일-빌드해서-배포하기)
 
 
