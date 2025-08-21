@@ -58,8 +58,8 @@ public class UserGiftCommandServiceImpl implements UserGiftCommandService {
     @Override
     public UserGiftResponseDto.UseResponseDto useGifticon(Long gifticonId, Long userId) {
 
-        User user = userReadService.getEntity(userId);
-        GifticonEntity gifticon = gifticonService.getEntity(gifticonId);
+        userReadService.getEntity(userId);
+        gifticonService.getEntity(gifticonId);
 
         UserGifticon userGifticon = userGifticonRepository.findByUserIdAndGifticonId(userId, gifticonId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GIFTICON_NOT_FOUND));

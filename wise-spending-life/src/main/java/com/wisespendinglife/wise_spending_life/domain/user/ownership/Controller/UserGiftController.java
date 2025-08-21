@@ -20,7 +20,7 @@ public class UserGiftController {
 
     @GetMapping("/users/{user_id}/gifticons")
     public ResponseEntity<UserGiftResponseDto.OwnedGifticonListDto> getOwnedGiftList(
-            @PathVariable Long userId
+            @PathVariable("user_id") Long userId
     ) {
 
         log.info(">>> [CTRL] /api/users/{}/gifticons GET", userId);
@@ -30,14 +30,15 @@ public class UserGiftController {
 
     @PostMapping("/users/{user_id}/gifticons/{gifticon_id}/purchase")
     public ResponseEntity<UserGiftResponseDto.PurchaseResponseDto> purchaseGifticon(
-        @RequestParam("user_id") Long userId,
-        @RequestParam("gifticon_id") Long gifticonId
+        @PathVariable("user_id") Long userId,
+        @PathVariable("gifticon_id") Long gifticonId
     ){
         log.info(">>> [CTRL] /api/user/{}/gifticons/{}/purchase POST", userId, gifticonId);
 
         return ResponseEntity.ok(userGiftCommandService.purchaseGifticon(userId, gifticonId));
     }
 
+    @PatchMapping("/api/users/{user_id}/gifticons/{gifticon_id}/use")
     public ResponseEntity<UserGiftResponseDto.UseResponseDto> useGifticon(
             @RequestParam("user_id") Long userId,
             @RequestParam("gifticon_id") Long gifticonId
