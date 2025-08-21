@@ -14,6 +14,14 @@ public class NoticeResponseDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class NoticeDeleteResponseDto {
+        private boolean isSuccess;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class NoticCreateResponseDto {
         private Long id;
     }

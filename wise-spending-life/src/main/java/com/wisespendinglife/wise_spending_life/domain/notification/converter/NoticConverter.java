@@ -49,4 +49,10 @@ public class NoticConverter {
                 .build();
     }
 
+    public NoticeResponseDto.NoticeDeleteResponseDto toDeleteResponseDto(boolean isDeleted) {
+        return NoticeResponseDto.NoticeDeleteResponseDto.builder()
+                .isSuccess(isDeleted)
+                .build();
+    }
+
 }

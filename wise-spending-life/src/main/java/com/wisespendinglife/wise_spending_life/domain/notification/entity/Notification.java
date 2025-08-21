@@ -42,7 +42,6 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

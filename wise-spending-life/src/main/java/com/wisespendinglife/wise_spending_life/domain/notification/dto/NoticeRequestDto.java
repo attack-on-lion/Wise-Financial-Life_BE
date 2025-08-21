@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.notification.dto;
 
+import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class NoticeRequestDto {
     @NoArgsConstructor
     public static class CreateNoticDto {
         private Long userId;
-        private Long categoryName;
+        private CategoryType categoryName;
         private String content;
     }
 
