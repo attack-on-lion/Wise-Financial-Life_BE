@@ -42,7 +42,7 @@ public class UserGiftCommandServiceImpl implements UserGiftCommandService {
         GifticonEntity gifticon = gifticonService.getEntity(gifticonId);
 
         // 보유한 기프티콘 중복 구매X
-        if(userGifticonRepository.existsByUserIdAndChallengeId(userId, gifticonId))
+        if (userGifticonRepository.existsByUser_IdAndGifticon_Id(userId, gifticonId))
             throw new BusinessException(ErrorCode.GIFTICON_ALREADY_OWNED);
 
         PointRequestDto.SpendPointRequestDto spendPointRequestDto =
@@ -65,7 +65,7 @@ public class UserGiftCommandServiceImpl implements UserGiftCommandService {
         userReadService.getEntity(userId);
         gifticonService.getEntity(gifticonId);
 
-        UserGifticon userGifticon = userGifticonRepository.findByUserIdAndGifticonId(userId, gifticonId)
+        UserGifticon userGifticon = userGifticonRepository.findByUser_IdAndGifticon_Id(userId, gifticonId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GIFTICON_NOT_FOUND));
 
         userGifticon.updateUsedAt(LocalDateTime.now());

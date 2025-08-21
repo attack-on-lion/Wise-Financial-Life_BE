@@ -6,6 +6,7 @@ import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryListR
 import com.wisespendinglife.wise_spending_life.domain.category.dto.CategoryRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.category.entity.CategoryType;
 import com.wisespendinglife.wise_spending_life.domain.category.repository.CategoryRepository;
+import com.wisespendinglife.wise_spending_life.domain.notification.dto.NotificationType;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
@@ -47,5 +48,19 @@ public class CategoryServiceImple implements CategoryService {
         }
 
         return categoryConverter.toListDto(categories);
+    }
+
+    @Override
+    public Category getEntity(Long categoryId) {
+
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+    }
+
+    @Override
+    public Category getEntity(String name) {
+        return categoryRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
     }
 }
