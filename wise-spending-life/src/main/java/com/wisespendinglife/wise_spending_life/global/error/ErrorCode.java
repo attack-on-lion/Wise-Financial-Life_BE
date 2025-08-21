@@ -88,6 +88,10 @@ public enum ErrorCode {
 
     /* 409 CONFLICT */
     CONFLICT(HttpStatus.CONFLICT, "4091", "요청 충돌이 발생했습니다."),
+    CHARACTER_ALREADY_OWNED(HttpStatus.CONFLICT, "4092", "이미 보유한 캐릭터입니다."),
+    ITEM_ALREADY_OWNED(HttpStatus.CONFLICT, "4093", "이미 보유한 아이템입니다."),
+    DUPLICATE_POINT_LEDGER_FOR_CHALLENGE(HttpStatus.CONFLICT, "4094", "해당 챌린지에 대한 포인트 내역이 이미 존재합니다."),
+    GIFTICON_ALREADY_OWNED(HttpStatus.CONFLICT, "4094", "이미 보유한 기프티콘입니다."),
 
     /* 500 INTERNAL_SERVER_ERROR */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "5000", "알 수 없는 오류가 발생했습니다."),

@@ -1,6 +1,5 @@
-package com.wisespendinglife.wise_spending_life.domain.user.ownership.service;
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userItemService;
 
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userItem.UserItemRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userItem.UserItemResponseDto;
 

@@ -48,8 +48,15 @@ public class PointServiceImpl implements PointService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
+        // 챌린지 ID 가 존재한다면 챌린지 엔티티 꺼내기
         Challenge challenge = null;
         if(dto.getChallengeId() != null) {
+            // 만약 동일한 유저-챌린지 조합이 존재하면 예외 던지기
+            if(pointLedgerRepository.existsByChallengeIdAndUserId(challenge.getId(), user.getId())) {
+                throw new BusinessException(ErrorCode.DUPLICATE_POINT_LEDGER_FOR_CHALLENGE);
+            }
+
+            // 없으면 챌린지 엔티티 조회
             challenge = challengeRepository.findById(dto.getChallengeId())
                     .orElseThrow(() -> new BusinessException(ErrorCode.CHALLENGE_NOT_FOUND));
         }

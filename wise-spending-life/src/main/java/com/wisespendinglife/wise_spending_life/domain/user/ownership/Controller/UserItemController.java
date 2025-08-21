@@ -1,9 +1,8 @@
 package com.wisespendinglife.wise_spending_life.domain.user.ownership.Controller;
 
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userItem.UserItemRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userItem.UserItemResponseDto;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.UserItemService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userItemService.UserItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

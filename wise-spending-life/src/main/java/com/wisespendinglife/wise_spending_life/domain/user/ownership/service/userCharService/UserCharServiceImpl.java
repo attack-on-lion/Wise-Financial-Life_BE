@@ -1,4 +1,4 @@
-package com.wisespendinglife.wise_spending_life.domain.user.ownership.service;
+package com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService;
 
 import com.wisespendinglife.wise_spending_life.domain.character.entity.Character;
 import com.wisespendinglife.wise_spending_life.domain.character.service.CharacterService;
@@ -26,7 +26,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class UserCharService {
+public class UserCharServiceImpl {
 
     private final UserCharRepository userCharRepository;
     private final UserCharConverter userCharConverter;
@@ -64,6 +64,10 @@ public class UserCharService {
     ) {
         User user = userReadService.getEntity(userId);
         Character character = characterService.getEntity(characterId);
+
+        // 캐릭터 중복 구매 제한
+        if(userCharRepository.existsByUser_IdAndCharacter_Id(userId, characterId))
+            throw new BusinessException(ErrorCode.CHARACTER_ALREADY_OWNED);
 
         UserCharacter entity = userCharConverter.toEntity(user, character);
 
