@@ -41,6 +41,10 @@ public class UserGiftCommandServiceImpl implements UserGiftCommandService {
         User user = userReadService.getEntity(userId);
         GifticonEntity gifticon = gifticonService.getEntity(gifticonId);
 
+        // 보유한 기프티콘 중복 구매X
+        if(userGifticonRepository.existsByUserIdAndChallengeId(userId, gifticonId))
+            throw new BusinessException(ErrorCode.GIFTICON_ALREADY_OWNED);
+
         PointRequestDto.SpendPointRequestDto spendPointRequestDto =
                 pointConverter.toSpendPointRequestDto(-gifticon.getPrice(), SourceKind.purchase);
 

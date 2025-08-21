@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserGifticonRepository extends JpaRepository<UserGifticon, Long> {
     List<UserGifticon> findByUserId(Long userId);
     Optional<UserGifticon> findByUserIdAndGifticonId(Long userId, Long gifticonId);
+    Boolean existsByUserIdAndChallengeId(Long userId, Long challengeId);
 }

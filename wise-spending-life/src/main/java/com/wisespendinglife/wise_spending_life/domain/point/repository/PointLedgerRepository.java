@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PointLedgerRepository extends JpaRepository<Point, Long> {
 
     Page<Point> findByUserId(Long userId, Pageable pageable);
+    Boolean existsByChallengeIdAndUserId(Long challengeId, Long userId);
 }
