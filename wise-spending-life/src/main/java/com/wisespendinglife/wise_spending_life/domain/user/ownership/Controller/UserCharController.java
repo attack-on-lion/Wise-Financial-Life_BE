@@ -2,7 +2,7 @@ package com.wisespendinglife.wise_spending_life.domain.user.ownership.Controller
 
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.user.ownership.dto.userCharacter.UserCharResponseDto;
-import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService.UserCharService;
+import com.wisespendinglife.wise_spending_life.domain.user.ownership.service.userCharService.UserCharServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UserCharController {
 
-    private final UserCharService userCharService;
+    private final UserCharServiceImpl userCharService;
 
     @GetMapping("/users/{user_id}/charactors")
     public ResponseEntity<UserCharResponseDto.OwnedCharacterListDto> getOwnedCharacters(
