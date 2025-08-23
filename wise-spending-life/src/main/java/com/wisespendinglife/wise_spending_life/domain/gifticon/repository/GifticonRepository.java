@@ -13,17 +13,19 @@ import java.util.Optional;
 public interface GifticonRepository extends JpaRepository<GifticonEntity, Long> {
     //전체 조회 (스크롤기반)
     @Query("""
-        SELECT g
-        FROM GifticonEntity g
-        WHERE g.isDeleted = false
-          AND (
-                g.createdAt < :lastCreatedAt
-                OR (g.createdAt = :lastCreatedAt AND g.id < :lastId)
-              )
-        ORDER BY g.createdAt DESC, g.id DESC
-    """)
-    List<GifticonEntity> findAfterCursor(
-            @Param("lastCreatedAt") LocalDateTime lastCreatedAt,
+    SELECT g
+    FROM GifticonEntity g
+    WHERE g.isDeleted = false
+      AND (
+            g.store.storeName > :lastStoreName
+         OR (g.store.storeName = :lastStoreName AND g.name > :lastGifticonName)
+         OR (g.store.storeName = :lastStoreName AND g.name = :lastGifticonName AND g.id > :lastId)
+      )
+    ORDER BY g.store.storeName ASC, g.name ASC, g.id ASC
+""")
+    List<GifticonEntity> findAfterCursorByStoreNameAndGifticonName(
+            @Param("lastStoreName") String lastStoreName,
+            @Param("lastGifticonName") String lastGifticonName,
             @Param("lastId") Long lastId,
             Pageable pageable
     );

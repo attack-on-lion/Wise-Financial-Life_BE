@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 
 public interface GifticonService {
 
-    GifticonListResponseDTO getAllGifticon(LocalDateTime lastCreatedAt, Long lastId, int size); //기프티콘 전체 조회(스크롤)
+     //기프티콘 전체 조회(스크롤)
+    GifticonListResponseDTO getAllGifticon(String lastStoreName, String lastGifticonName, Long lastId, int size);
 
     Long createGifticon(String storeName, GifticonRequestDTO requestDTO); //기프티콘 등록(Post)
 

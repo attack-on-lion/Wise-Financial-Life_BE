@@ -37,20 +37,26 @@ public class GifticonServiceImpl implements GifticonService {
 
     @Override
     @Transactional(readOnly = true)
-    public GifticonListResponseDTO getAllGifticon(LocalDateTime lastCreatedAt, Long lastId, int size) {
-        if (size <= 0 || size > MAX_SIZE) {throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);}
-        if ((lastCreatedAt == null) != (lastId == null)) {throw new BusinessException(ErrorCode.INVALID_CURSOR);}
-
-        final boolean firstPage = (lastCreatedAt == null && lastId == null);
-        if (firstPage) {
-            lastCreatedAt = LocalDateTime.of(9999, 12, 31, 23, 59, 59);
-            lastId = Long.MAX_VALUE;
+    public GifticonListResponseDTO getAllGifticon(String lastStoreName, String lastGifticonName, Long lastId, int size) {
+        if (size <= 0 || size > MAX_SIZE) {
+            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
+        }
+        if ((lastStoreName == null || lastGifticonName == null) != (lastId == null)) {
+            throw new BusinessException(ErrorCode.INVALID_CURSOR);
         }
 
-        // size+1 로 조회
-        // 가져온 리스트가 size+1 이면 마지막 하나를 잘라내고, 그 마지막 요소의 (createdAt, id)를 next로 보냄.
+        final boolean firstPage = (lastStoreName == null && lastGifticonName == null && lastId == null);
+        if (firstPage) {
+            // 가나다 정렬이므로 가장 작은 값으로 초기화
+            lastStoreName = "";
+            lastGifticonName = "";
+            lastId = 0L;
+        }
+
         Pageable pageable = PageRequest.of(0, size + 1);
-        List<GifticonEntity> entities = gifticonRepository.findAfterCursor(lastCreatedAt, lastId, pageable);
+        List<GifticonEntity> entities = gifticonRepository.findAfterCursorByStoreNameAndGifticonName(
+                lastStoreName, lastGifticonName, lastId, pageable
+        );
 
         if (entities.isEmpty() && firstPage) {
             throw new BusinessException(ErrorCode.GIFTICON_NOT_FOUND);
@@ -58,25 +64,25 @@ public class GifticonServiceImpl implements GifticonService {
 
         boolean hasNext = entities.size() > size;
         if (hasNext) {
-            entities = entities.subList(0, size); // 마지막 1개 제거
+            entities = entities.subList(0, size);
         }
 
-
-        var items = entities.stream().map(GifticonConverter::togifticonResponseDTO).toList();
+        var items = entities.stream()
+                .map(GifticonConverter::togifticonResponseDTO)
+                .toList();
 
         GifticonListResponseDTO.Cursor cursor = null;
         if (!items.isEmpty()) {
-            //GifticonResponseDTO last = items.get(items.size() - 1);
             var last = items.get(items.size() - 1);
             cursor = GifticonListResponseDTO.Cursor.builder()
                     .lastId(last.getId())
-                    .lastCreatedAt(last.getCreatedAt())
+                    .lastCreatedAt(last.getCreatedAt()) // 필요시 storeName, gifticonName도 포함 가능
                     .build();
         }
 
         return GifticonListResponseDTO.builder()
                 .gifticonlist(items)
-                .nextCursor(cursor)  // null 이면 프론트는 더 불러오지 않으면 됨
+                .nextCursor(cursor)
                 .hasNext(hasNext)
                 .size(size)
                 .build();
