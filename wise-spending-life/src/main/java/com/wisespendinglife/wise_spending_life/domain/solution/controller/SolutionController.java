@@ -18,4 +18,9 @@ public class SolutionController {
         return ResponseEntity.ok(solutionService.getSimpleSolutionMonthly(userId));
     }
 
+    @PostMapping("/comparison-solution")
+    public ResponseEntity<SimpleSolutionResponseDTO> aiComparisonSolution(@PathVariable Long userId) {
+        return ResponseEntity.ok(solutionService.getMonthlyComparisonSolution(userId));
+    }
+
 }

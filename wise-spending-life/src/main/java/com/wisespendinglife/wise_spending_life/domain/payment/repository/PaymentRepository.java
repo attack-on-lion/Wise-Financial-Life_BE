@@ -33,7 +33,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     Page<Payment> findByUser_IdAndCategory_NameIgnoreCaseAndTransactionAtBetween(
             Long userId,
-            String category,             // 카테고리 이름
+            String category,
             LocalDateTime from,
             LocalDateTime to,
             Pageable pageable);
