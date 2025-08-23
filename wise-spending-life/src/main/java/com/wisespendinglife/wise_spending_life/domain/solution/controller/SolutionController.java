@@ -15,7 +15,12 @@ public class SolutionController {
 
     @PostMapping("/simple-solution")
     public ResponseEntity<SimpleSolutionResponseDTO> aiSimpleSolution(@PathVariable Long userId) {
-        return ResponseEntity.ok(solutionService.getSimpleSolution(userId));
+        return ResponseEntity.ok(solutionService.getSimpleSolutionMonthly(userId));
+    }
+
+    @PostMapping("/comparison-solution")
+    public ResponseEntity<SimpleSolutionResponseDTO> aiComparisonSolution(@PathVariable Long userId) {
+        return ResponseEntity.ok(solutionService.getMonthlyComparisonSolution(userId));
     }
 
 }
