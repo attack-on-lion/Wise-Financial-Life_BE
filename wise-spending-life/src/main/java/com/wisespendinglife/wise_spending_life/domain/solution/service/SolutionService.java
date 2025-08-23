@@ -4,5 +4,5 @@ import com.wisespendinglife.wise_spending_life.domain.solution.dto.SimpleSolutio
 
 
 public interface SolutionService {
-    SimpleSolutionResponseDTO getSimpleSolution(Long userId);
+    SimpleSolutionResponseDTO getSimpleSolutionMonthly(Long userId);
 }
