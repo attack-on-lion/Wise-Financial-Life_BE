@@ -25,12 +25,12 @@ public class GifticonController {
     //기프티콘 전체 조회
     @GetMapping
     public ResponseEntity<GifticonListResponseDTO> getAll(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            LocalDateTime lastCreatedAt,
+            @RequestParam(required = false) String lastStoreName,
+            @RequestParam(required = false) String lastGifticonName,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(gifticonService.getAllGifticon(lastCreatedAt, lastId, size));
+        return ResponseEntity.ok(gifticonService.getAllGifticon(lastStoreName, lastGifticonName,lastId, size));
     }
 
 

@@ -73,5 +73,6 @@ public class GifticonEntity {
     public void updateCreatedAt(LocalDateTime createdAt){
         this.createdAt = createdAt;
     }
+    public void updateStore(StoreEntity store){this.store = store;}
 
 }
