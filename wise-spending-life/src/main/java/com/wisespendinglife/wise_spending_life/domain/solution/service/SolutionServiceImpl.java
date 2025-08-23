@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 @Slf4j
 public class SolutionServiceImpl implements SolutionService{
 
@@ -33,7 +33,14 @@ public class SolutionServiceImpl implements SolutionService{
     private final AiChatGateway aiChatGateway;
 
     @Override
-    @Transactional
+    public SimpleSolutionResponseDTO getMonthlyComparisonSolution(Long userId) {
+
+
+
+        return null;
+    }
+
+    @Override
     public SimpleSolutionResponseDTO getSimpleSolutionMonthly(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND)); // 네 에러 체계에 맞춰 변경
