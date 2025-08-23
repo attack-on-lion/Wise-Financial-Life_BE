@@ -67,18 +67,23 @@ public class GifticonServiceImpl implements GifticonService {
             entities = entities.subList(0, size);
         }
 
+//        var items = entities.stream()
+//                .map(GifticonConverter::togifticonResponseDTO)
+//                .toList();
+
+        GifticonListResponseDTO.Cursor cursor = null;
+        if (!entities.isEmpty()) {
+            GifticonEntity lastEntity = entities.get(entities.size() - 1);
+            cursor = GifticonListResponseDTO.Cursor.builder()
+                    .lastId(lastEntity.getId())
+                    .lastStoreName(lastEntity.getStore().getStoreName()) //브랜드명
+                    .lastGifticonName(lastEntity.getName()) //기프티콘 이름
+                    .build();
+        }
+
         var items = entities.stream()
                 .map(GifticonConverter::togifticonResponseDTO)
                 .toList();
-
-        GifticonListResponseDTO.Cursor cursor = null;
-        if (!items.isEmpty()) {
-            var last = items.get(items.size() - 1);
-            cursor = GifticonListResponseDTO.Cursor.builder()
-                    .lastId(last.getId())
-                    .lastCreatedAt(last.getCreatedAt()) // 필요시 storeName, gifticonName도 포함 가능
-                    .build();
-        }
 
         return GifticonListResponseDTO.builder()
                 .gifticonlist(items)
@@ -158,18 +163,19 @@ public class GifticonServiceImpl implements GifticonService {
             entities = entities.subList(0, size); // 마지막 1개 제거
         }
 
+        GifticonListResponseDTO.Cursor cursor = null;
+        if (!entities.isEmpty()) {
+            GifticonEntity lastItem = entities.get(entities.size() - 1);
+            cursor = GifticonListResponseDTO.Cursor.builder()
+                    .lastId(lastItem.getId())
+                    .lastStoreName(lastItem.getStore().getStoreName()) //브랜드명
+                    .lastGifticonName(lastItem.getName()) //기프티콘 이름
+                    .build();
+        }
+
         var items = entities.stream()
                 .map(GifticonConverter::togifticonResponseDTO)
                 .toList();
-
-        GifticonListResponseDTO.Cursor cursor = null;
-        if (!items.isEmpty()) {
-            var lastItem = items.get(items.size() - 1);
-            cursor = GifticonListResponseDTO.Cursor.builder()
-                    .lastId(lastItem.getId())
-                    .lastCreatedAt(lastItem.getCreatedAt())
-                    .build();
-        }
 
         return GifticonListResponseDTO.builder()
                 .gifticonlist(items)

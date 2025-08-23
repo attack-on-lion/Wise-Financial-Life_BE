@@ -16,8 +16,9 @@ public class GifticonListResponseDTO {
     @AllArgsConstructor
     @Builder
     public static class Cursor {
+        private String lastStoreName; //마지막 상품 브랜드명
+        private String lastGifticonName; //마지막 상품 기프티콘명
         private Long lastId;
-        private LocalDateTime lastCreatedAt;
     }
 
     private List<GifticonResponseDTO> gifticonlist; // 실제 데이터
