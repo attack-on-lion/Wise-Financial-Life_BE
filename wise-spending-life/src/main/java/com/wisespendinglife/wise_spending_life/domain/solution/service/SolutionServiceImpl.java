@@ -1,8 +1,5 @@
 package com.wisespendinglife.wise_spending_life.domain.solution.service;
 
-import com.openai.client.OpenAIClient;
-import com.openai.models.chat.completions.ChatCompletion;
-import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentService;
 import com.wisespendinglife.wise_spending_life.domain.solution.converter.SolutionConverter;
@@ -70,8 +67,9 @@ public class SolutionServiceImpl implements SolutionService{
         String userPrompt = buildPrompt(payments, catAgg);
 
         String systemPrompt = """
-        너는 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 밝고 명쾌하게 한국어(존댓말)로 제안한다.
-        말 끝 마다 ! 를 붙여야해.
+        너는 금융상담사야. 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 밝고 명쾌하게 한국어(존댓말)로 제안한다.
+        분석은 숫자/금액을 나열하지 말고, 자연스러운 한국어 문장으로 설명해줘.
+        그리고 말 끝 마다 ! 를 붙여야해. 그리고 말투는 친근하고 걱정스러운 말투로 해줘.
         출력은 반드시 다음 JSON 형식으로만 응답해. 
         {
           "message": "한 줄 요약 메시지",
