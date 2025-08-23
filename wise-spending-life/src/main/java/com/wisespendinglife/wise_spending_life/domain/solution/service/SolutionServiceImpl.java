@@ -7,6 +7,7 @@ import com.wisespendinglife.wise_spending_life.domain.solution.dto.SimpleSolutio
 import com.wisespendinglife.wise_spending_life.domain.solution.repository.SolutionRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
+import com.wisespendinglife.wise_spending_life.domain.user.service.UserReadService;
 import com.wisespendinglife.wise_spending_life.global.ai.AiChatGateway;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 public class SolutionServiceImpl implements SolutionService{
 
     private final PaymentService paymentService;
-    private final UserRepository userRepository;
+    private final UserReadService userReadService;
     private final SolutionRepository solutionRepository;
     private final SolutionConverter solutionConverter;
     private final AiChatGateway aiChatGateway;
@@ -42,8 +43,7 @@ public class SolutionServiceImpl implements SolutionService{
 
     @Override
     public SimpleSolutionResponseDTO getSimpleSolutionMonthly(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND)); // 네 에러 체계에 맞춰 변경
+        User user = userReadService.getEntity(userId);
 
         // 이번 달 기간
         LocalDate today = LocalDate.now();
