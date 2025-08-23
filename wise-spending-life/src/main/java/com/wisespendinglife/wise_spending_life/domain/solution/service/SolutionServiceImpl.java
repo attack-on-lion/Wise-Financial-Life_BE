@@ -10,6 +10,7 @@ import com.wisespendinglife.wise_spending_life.domain.solution.dto.SimpleSolutio
 import com.wisespendinglife.wise_spending_life.domain.solution.repository.SolutionRepository;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import com.wisespendinglife.wise_spending_life.domain.user.repository.UserRepository;
+import com.wisespendinglife.wise_spending_life.global.ai.AiChatGateway;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import com.wisespendinglife.wise_spending_life.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class SolutionServiceImpl implements SolutionService{
     private final UserRepository userRepository;
     private final SolutionRepository solutionRepository;
     private final SolutionConverter solutionConverter;
-    private final OpenAIClient openAI;
+    private final AiChatGateway aiChatGateway;
 
     @Override
     @Transactional
@@ -66,10 +67,21 @@ public class SolutionServiceImpl implements SolutionService{
         log.info(">>> [GPT] 유저 심플 AI 솔루션 - User: {}, catAgg: {}", user.getId(), catAggLog);
 
         // 프롬프트 생성
-        String prompt = buildPrompt(payments, catAgg);
+        String userPrompt = buildPrompt(payments, catAgg);
+
+        String systemPrompt = """
+        너는 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 밝고 명쾌하게 한국어(존댓말)로 제안한다.
+        말 끝 마다 ! 를 붙여야해.
+        출력은 반드시 다음 JSON 형식으로만 응답해. 
+        {
+          "message": "한 줄 요약 메시지",
+          "solution": ["솔루션 1", "솔루션 2"]
+        }
+        """;
+
 
         // Ai 호출
-        String aiJson = callAiAndGetJson(prompt);
+        String aiJson = aiChatGateway.ai(systemPrompt, userPrompt);
 
         // 파싱 → DTO
         SimpleSolutionResponseDTO dto = solutionConverter.toResponseDto(aiJson);
@@ -116,32 +128,6 @@ public class SolutionServiceImpl implements SolutionService{
                 payments.getSummary().getCount(),
                 topCats.isEmpty() ? "없음" : topCats
         );
-    }
-
-    private String callAiAndGetJson(String userPrompt) {
-        String systemPrompt = """
-        너는 사용자의 소비를 간단히 분석해 한 줄 메시지와 두 개의 절약 솔루션을 밝고 명쾌하게 한국어(존댓말)로 제안한다.
-        말 끝 마다 ! 를 붙여야해.
-        출력은 반드시 다음 JSON 형식으로만 응답해. 
-        {
-          "message": "한 줄 요약 메시지",
-          "solution": ["솔루션 1", "솔루션 2"]
-        }
-        """;
-        ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
-                .model("gpt-5-nano")
-                .addSystemMessage(systemPrompt)
-                .addUserMessage(userPrompt)
-                .temperature(1)
-                .build();
-
-        ChatCompletion completion = openAI.chat().completions().create(params);
-
-        return completion.choices().stream()
-                .findFirst()
-                .flatMap(choice -> choice.message().content()) // Optional<String>
-                .orElseThrow(() ->
-                        new BusinessException(ErrorCode.GPT_EMPTY_RESPONSE));
     }
 
     private String catLogString(Map<String, long[]> catAgg) {
