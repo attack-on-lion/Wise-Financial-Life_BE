@@ -117,13 +117,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 1) 카테고리 찾기 (대소문자 무시)
         Category category = categoryRepository.findByNameIgnoreCase(dto.getCategory())
-                .orElseGet(() -> {
-                    Category newCategory = Category.builder()
-                            .name(dto.getCategory())
-                            .type(CategoryType.PAYMENT)
-                            .build();
-                    return categoryRepository.save(newCategory);
-                });
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
