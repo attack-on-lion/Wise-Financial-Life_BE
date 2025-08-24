@@ -1,5 +1,6 @@
 package com.wisespendinglife.wise_spending_life.domain.solution.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentService;
 import com.wisespendinglife.wise_spending_life.domain.solution.converter.SolutionConverter;
@@ -33,6 +34,52 @@ public class SolutionServiceImpl implements SolutionService{
     private final SolutionRepository solutionRepository;
     private final SolutionConverter solutionConverter;
     private final AiChatGateway aiChatGateway;
+    private final ObjectMapper objectMapper;
+
+    @Override
+    public SimpleSolutionResponseDTO getWeeklySolution(Long userId) {
+
+        User user = userReadService.getEntity(userId);
+
+        log.info(">>> [SERVICE] 유저 심플 AI 솔루션(주간) - User: {}", user.getId());
+
+        String systemPrompt =
+                """
+                - 너는 소비 습관 코치 AI다. 입력은 일주일간 '일 별 총 지출액과 거래 건수'뿐이야.
+                - 요일 운세식 문구를 금지하고, 사용자가 바로 실행할 수 있는 행동 2가지만 한국어로 제안한다.
+                - '요일' 자체 평 대신 '행동'으로 귀결되게 해라.
+                - 비난/부정 금지. 짧고 명확할 것.
+                그리고 말 끝 마다 ! 를 붙여야해. 그리고 말투는 친근한 말투로 해줘.
+                출력은 반드시 다음 JSON 형식으로만 응답해.
+                {
+                    "message": "한 줄 요약 메시지",
+                    "solution": ["솔루션 1", "솔루션 2"]
+                }
+                solution은 정확히 2개. 각 솔루션은 1문장, 100자 이내. 불필요한 수사는 제거.
+                """;
+
+        PaymentResponseDto.WeeklyDailyTotals weeklyDailyTotals = paymentService.getWeeklyDailyTotals(userId);
+
+        try {
+            // DTO → JSON 문자열 변환
+            String weeklyJson = objectMapper.writeValueAsString(weeklyDailyTotals);
+
+            String userPrompt = "다음은 일주일간 소비 요약 데이터입니다. 위 지침에 따라 응답하세요.\n"
+                    + weeklyJson;
+
+            // AI 호출
+            String aiRawResponse = aiChatGateway.ai(systemPrompt, userPrompt);
+
+            // AI 응답 → SimpleSolutionResponseDTO 변환
+            SimpleSolutionResponseDTO dto = objectMapper.readValue(aiRawResponse, SimpleSolutionResponseDTO.class);
+
+            return dto;
+
+        } catch (Exception e) {
+            throw new RuntimeException("AI 분석 실패", e);
+        }
+
+    }
 
     @Override
     public SimpleSolutionResponseDTO getMonthlyComparisonSolution(Long userId) {
@@ -70,9 +117,9 @@ public class SolutionServiceImpl implements SolutionService{
         );
 
         String systemPrompt = """
-        너는 금융상담사야. 사용자의 전월과 현월 소비를 비교해 한 줄 메시지와 두 개의 절약 솔루션을 한국어(존댓말)로 제안한다.
-        분석은 숫자/금액을 나열하지 말고 변화 포인트 중심으로, 행동 가능한 팁 2가지를 제안해줘.
-        출력은 반드시 다음 JSON 형식으로만 응답해.
+        너는 금융상담사야. 사용자의 지난달과 이번 달의 소비를 비교해 한 줄 메시지와 두 개의 절약 솔루션을 한국어(존댓말)로 제안한다.
+        분석은 숫자/금액을 나열하지 말고 변화 포인트 중심으로, 행동 가능한 팁 2가지를 제안해줘. 그리고 말 끝 마다 ! 를 붙여야해. 그리고 말투는 친근한 말투로 해줘.
+        출력은 반드시 다음 JSON 형식으로만 응답해. 그리고 각 솔루션은 100자 이내. 
         {
           "message": "한 줄 요약 메시지",
           "solution": ["솔루션 1", "솔루션 2"]
@@ -138,16 +185,16 @@ public class SolutionServiceImpl implements SolutionService{
 
         StringBuilder sb = new StringBuilder();
         sb.append("입력 요약:\n");
-        sb.append("- 전월 기간: ").append(prevStart).append(" ~ ").append(prevEnd).append("\n");
-        sb.append("- 현월 기간: ").append(currStart).append(" ~ ").append(currEnd).append("\n");
-        sb.append("- 전월 지출합: ").append(prevTotal).append("원, 거래수: ").append(prevCount).append("건\n");
-        sb.append("- 현월 지출합: ").append(currTotal).append("원, 거래수: ").append(currCount).append("건\n");
+        sb.append("- 지난달 기간: ").append(prevStart).append(" ~ ").append(prevEnd).append("\n");
+        sb.append("- 이번 달 기간: ").append(currStart).append(" ~ ").append(currEnd).append("\n");
+        sb.append("- 지난달 지출합: ").append(prevTotal).append("원, 거래수: ").append(prevCount).append("건\n");
+        sb.append("- 이번 달 지출합: ").append(currTotal).append("원, 거래수: ").append(currCount).append("건\n");
 
         sb.append("\n증가 카테고리(최대 4개):\n");
         for (CategoryDiff d : topIncreased) {
             sb.append("- 카테고리: ").append(d.category()).append("\n")
-                    .append("  · 전월: ").append(d.prevSum()).append("원(").append(d.prevCnt()).append("건)\n")
-                    .append("  · 현월: ").append(d.currSum()).append("원(").append(d.currCnt()).append("건)\n")
+                    .append("  · 지난달: ").append(d.prevSum()).append("원(").append(d.prevCnt()).append("건)\n")
+                    .append("  · 이번 달: ").append(d.currSum()).append("원(").append(d.currCnt()).append("건)\n")
                     .append("  · 증감: +").append(d.delta()).append("원")
                     .append(d.prevSum() == 0 ? " (신규)" : " (+" + Math.round(d.pct()) + "%)").append("\n");
         }

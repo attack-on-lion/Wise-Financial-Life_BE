@@ -15,6 +15,8 @@ import java.util.Optional;
  */
 public interface PaymentService {
 
+    PaymentResponseDto.WeeklyDailyTotals getWeeklyDailyTotals(Long userId);
+
     PaymentResponseDto.Payments getMonthly(LocalDate from,
                                            LocalDate to,
                                            int currentPage,

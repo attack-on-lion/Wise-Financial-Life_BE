@@ -23,4 +23,9 @@ public class SolutionController {
         return ResponseEntity.ok(solutionService.getMonthlyComparisonSolution(userId));
     }
 
+    @PostMapping("/weekly-solution")
+    public ResponseEntity<SimpleSolutionResponseDTO> aiWeeklySolution(@PathVariable Long userId) {
+        return ResponseEntity.ok(solutionService.getWeeklySolution(userId));
+    }
+
 }
