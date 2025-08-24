@@ -8,10 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 /*
@@ -21,6 +19,33 @@ import java.util.List;
  * @since 2025-08-05
  */
 public class PaymentResponseDto {
+
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryRiseItemListDto {
+        private List<CategoryRiseItem> items;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryRiseItem {
+
+        private Long categoryId;
+        private String categoryName;
+
+        private Long totalPrevious;
+        private Long totalCurrent;
+
+        /** 순위 */
+        private Integer rank;
+    }
+
+
 
     /**
      * 주간(월→오늘) 일자별 총 지출 응답

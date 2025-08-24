@@ -32,4 +32,6 @@ public interface PaymentService {
     ScoreResponseDto calculateMonthlyScore(Long userId);
 
     List<PaymentMiniDto> getPaymentMiniList(Long userId, LocalDateTime from, LocalDateTime to);
+
+    PaymentResponseDto.CategoryRiseItemListDto getCategoryRiseItemList(Long userId);
 }

@@ -5,6 +5,7 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRespons
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
 import com.wisespendinglife.wise_spending_life.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
 @Validated   // 파라미터 검증 애노테이션 사용 가능
+@Slf4j
 public class PaymentController {
 
     private final PaymentServiceImpl paymentService;
@@ -33,6 +35,8 @@ public class PaymentController {
             @RequestParam(required = false) String category
             ) {
 
+        log.info(">>> [CTRL] /api/users/{}/payments?from={}, to={}, page={}, size={}, category={}", userId, from, to, page, size, category);
+
         PaymentResponseDto.Payments dto = paymentService.getMonthly(from, to, page, size, userId,Optional.ofNullable(category));
 
         return ResponseEntity.ok(dto);
@@ -44,6 +48,8 @@ public class PaymentController {
     public ResponseEntity<PaymentResponseDto.PaymentCreateResponseDto> createPayment(
             @PathVariable("user_id") Long userId,
             @Validated @RequestBody PaymentRequestDto.CreateDto dto) {
+
+        log.info(">>> [CTRL] /api/users/{}/payments POST -> {}", userId, dto.toString());
 
         PaymentResponseDto.PaymentCreateResponseDto result = paymentService.create(dto, userId);
         return ResponseEntity.ok(result);
@@ -57,6 +63,9 @@ public class PaymentController {
     public ResponseEntity<PaymentResponseDto.WeeklyDailyTotals> getWeeklyDailyTotals(
             @PathVariable("user_id") Long userId
     ) {
+
+        log.info(">>> [CTRL] /api/users/{}/weekly GET", userId);
+
         PaymentResponseDto.WeeklyDailyTotals body = paymentService.getWeeklyDailyTotals(userId);
         return ResponseEntity.ok(body);
     }
@@ -64,7 +73,21 @@ public class PaymentController {
     @GetMapping("/{user_id}/monthly-top3")
     public ResponseEntity<PaymentResponseDto.MonthlyTopCategories> getMonthlyTop3(
             @PathVariable("user_id") Long userId) {
+
+        log.info(">>> [CTRL] /api/users/{}/monthly-top3 GET", userId);
+
         PaymentResponseDto.MonthlyTopCategories body = paymentService.getMonthlyTop3Categories(userId);
+        return ResponseEntity.ok(body);
+    }
+
+    @GetMapping("/{user_id}/insights/rise")
+    public ResponseEntity<PaymentResponseDto.CategoryRiseItemListDto> getCategoryRise(
+            @PathVariable("user_id") Long userId
+            ){
+
+        log.info(">>> [CTRL] /api/users/{}/insights/rise GET", userId);
+
+        PaymentResponseDto.CategoryRiseItemListDto body = paymentService.getCategoryRiseItemList(userId);
         return ResponseEntity.ok(body);
     }
 
