@@ -43,16 +43,19 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     public ScoreResponseDto getMonthlyScore(Long userId) {
-        YearMonth ym = YearMonth.now(ZoneId.of("Asia/Seoul"));
 
-        LocalDateTime start = ym.atDay(1).atStartOfDay();
-        LocalDateTime end = ym.atEndOfMonth().atTime(LocalTime.MAX);
+        /** 나름 최적화 코드인데, 이러면 Ai 를 한 번 밖에 시연 못 함 */
 
-        // 1) 이번 달 스코어 있으면 반환
-        Optional<Score> existing = scoreRepository.findMonthlyByUserId(userId, start, end);
-        if (existing.isPresent()) {
-            return scoreConverter.toResponseDto(existing.get());
-        }
+//        YearMonth ym = YearMonth.now(ZoneId.of("Asia/Seoul"));
+//
+//        LocalDateTime start = ym.atDay(1).atStartOfDay();
+//        LocalDateTime end = ym.atEndOfMonth().atTime(LocalTime.MAX);
+//
+//        // 1) 이번 달 스코어 있으면 반환
+//        Optional<Score> existing = scoreRepository.findMonthlyByUserId(userId, start, end);
+//        if (existing.isPresent()) {
+//            return scoreConverter.toResponseDto(existing.get());
+//        }
 
         // 2) 없으면 계산 → 저장 → 반환
         ScoreResponseDto calculated = paymentService.calculateMonthlyScore(userId);
