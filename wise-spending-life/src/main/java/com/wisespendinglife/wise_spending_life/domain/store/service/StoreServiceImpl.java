@@ -78,6 +78,72 @@ public class StoreServiceImpl implements StoreService {
                 .build();
     }
 
+    /**
+     * 카테고리로 필터된 브랜드 조회 (커서 기반)
+     * 첫 호출은 lastStoreName/lastId 없이 호출하면 되고,
+     * 내부에서 ("", 0L)로 초기화해서 가나다(ASC) + id(ASC) 기준으로 첫 페이지를 반환합니다.
+     */
+    @Transactional(readOnly = true)
+    public StoreListResponseDTO getStoresByCategory(String categoryName, String lastStoreName, Long lastId, int size) {
+        // size 검증
+        if (size <= 0 || size > MAX_SIZE) {
+            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
+        }
+
+        // 커서는 둘 다 null 이거나 둘 다 값이 있어야 함
+        if ((lastStoreName == null) != (lastId == null)) {
+            throw new BusinessException(ErrorCode.INVALID_CURSOR);
+        }
+
+        // 카테고리 존재 여부 확인 (없으면 예외)
+        String normalizedCategory = categoryName == null ? null : categoryName.trim();
+        categoryRepository.findByNameIgnoreCase(normalizedCategory)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        final boolean firstPage = (lastStoreName == null && lastId == null);
+        if (firstPage) {
+            // 가나다순 ASC의 시작 커서
+            lastStoreName = "";
+            lastId = 0L;
+        }
+
+        Pageable pageable = PageRequest.of(0, size + 1);
+        List<StoreEntity> entities = storeRepository.findAfterCursorByCategory(
+                normalizedCategory, lastStoreName, lastId, pageable
+        );
+
+        if (entities.isEmpty() && firstPage) {
+            // 해당 카테고리에 등록된 브랜드가 하나도 없을 때
+            throw new BusinessException(ErrorCode.STORE_NOT_FOUND);
+        }
+
+        boolean hasNext = entities.size() > size;
+        if (hasNext) {
+            entities = entities.subList(0, size);
+        }
+
+        var items = entities.stream()
+                .map(StoreConverter::toStoreResponseDTO)
+                .toList();
+
+        StoreListResponseDTO.Cursor cursor = null;
+        if (!items.isEmpty()) {
+            var last = items.get(items.size() - 1);
+            cursor = StoreListResponseDTO.Cursor.builder()
+                    .lastStoreName(last.getStoreName())
+                    .lastId(last.getStoreId())
+                    .build();
+        }
+
+        return StoreListResponseDTO.builder()
+                .stores(items)
+                .nextCursor(cursor)
+                .hasNext(hasNext)
+                .size(size)
+                .build();
+    }
+
+
     //신규 브랜드 등록
     @Override
     @Transactional

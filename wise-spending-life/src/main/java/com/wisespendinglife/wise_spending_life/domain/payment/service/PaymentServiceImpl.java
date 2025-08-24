@@ -71,7 +71,8 @@ public class PaymentServiceImpl implements PaymentService {
                                                   int currentPage,
                                                   int size,
                                                   Long userId,
-                                                  Optional<String> categoryOpt) {
+                                                  Optional<String> categoryOpt
+                                                  ) {
 
         if(from.isAfter(to)) throw new BusinessException(ErrorCode.INVALID_DATE_REQUEST);
 

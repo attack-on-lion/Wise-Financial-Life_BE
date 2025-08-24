@@ -8,6 +8,9 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import java.util.List;
 
 public interface StoreService {
+
+    StoreListResponseDTO getStoresByCategory(String categoryName, String lastStoreName, Long lastId, int size);
+
     //브랜드 전체 조회
     //List<StoreResponseDTO> getAllStores();
     StoreListResponseDTO getAllStores(String lastStoreName, Long lastId, int size);

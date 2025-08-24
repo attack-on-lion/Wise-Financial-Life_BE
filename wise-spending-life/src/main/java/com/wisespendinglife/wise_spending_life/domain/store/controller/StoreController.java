@@ -75,5 +75,22 @@ public class StoreController {
             return ResponseEntity.ok(body);
         }
 
+    /**
+     * 카테고리로 필터된 브랜드 조회 (커서 기반)
+     * 예: /api/stores/brand/by-category?categoryName=CAFE&size=10
+     * 첫 호출은 lastStoreName/lastId 없이 호출 → 내부에서 ("", 0L)로 초기화되어 첫 페이지 반환
+     */
+    @GetMapping("/brand/by-category")
+    public ResponseEntity<StoreListResponseDTO> getBrandsByCategory(
+            @RequestParam String categoryName,
+            @RequestParam(required = false) String lastStoreName,
+            @RequestParam(required = false) Long lastId,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        var body = storeService.getStoresByCategory(categoryName, lastStoreName, lastId, size);
+        return ResponseEntity.ok(body);
     }
+
+
+}
 

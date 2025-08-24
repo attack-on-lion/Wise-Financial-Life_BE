@@ -44,4 +44,27 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Long>{
     );
     boolean existsByIdAndIsDeletedFalse(Long id);
 
+    /**
+     * 카테고리로 필터한 전체 조회 (삭제 제외, 가나다순 정렬, 커서 기반)
+     * - 정렬: storeName ASC, id ASC
+     * - 커서: (lastStoreName, lastId) 둘 다 필요. 첫 페이지는 ("", 0L)로 호출.
+     */
+    @Query("""
+        SELECT s
+        FROM StoreEntity s
+        WHERE s.isDeleted = false
+          AND s.category.name = :categoryName
+          AND (
+                s.storeName > :lastStoreName
+                OR (s.storeName = :lastStoreName AND s.id > :lastId)
+              )
+        ORDER BY s.storeName ASC, s.id ASC
+    """)
+    List<StoreEntity> findAfterCursorByCategory(
+            String categoryName,
+            String lastStoreName,
+            Long lastId,
+            Pageable pageable
+    );
+
 }

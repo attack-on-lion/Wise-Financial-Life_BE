@@ -81,6 +81,11 @@ public class SolutionServiceImpl implements SolutionService{
 
     }
 
+    /**
+     * GPT 코드
+     * @param userId
+     * @return
+     */
     @Override
     public SimpleSolutionResponseDTO getMonthlyComparisonSolution(Long userId) {
 
@@ -101,8 +106,15 @@ public class SolutionServiceImpl implements SolutionService{
                 thisMonthStart, thisMonthEnd, 0, 10_000, userId, Optional.empty()
         );
 
-        Map<String, long[]> prevCatAgg = getByCategoryAvg(prevPayments);
-        Map<String, long[]> thisCatAgg = getByCategoryAvg(thisPayments);
+        // 카테고리별 지출/수입 분리 집계
+        java.util.Map<String, CategorySplit> prevSplit = getByCategorySplit(prevPayments);
+        java.util.Map<String, CategorySplit> thisSplit = getByCategorySplit(thisPayments);
+
+
+        // 기존 증감 계산 로직은 지출 기준으로 수행 (필요 시 INFLOW 기준도 확장 가능)
+        java.util.Map<String, long[]> prevCatAgg = toOutflowAgg(prevSplit);
+        java.util.Map<String, long[]> thisCatAgg = toOutflowAgg(thisSplit);
+
 
         // 증가한 카테고리 TOP 4 (전월 대비 현월)
         var topIncreased = topIncreasedCategories(prevCatAgg, thisCatAgg, 4);
@@ -139,6 +151,47 @@ public class SolutionServiceImpl implements SolutionService{
         return dto;
 
     }
+
+    /**
+     * GPT 코드
+     */
+    /** 카테고리별 지출/수입 합계 및 건수 집계용 */
+    private static class CategorySplit {
+        long outSum; long outCnt; long inSum; long inCnt;
+    }
+
+    // 카테고리별로 지출/수입을 분리 집계
+    private static java.util.Map<String, CategorySplit> getByCategorySplit(PaymentResponseDto.Payments payments) {
+        java.util.Map<String, CategorySplit> map = new java.util.HashMap<>();
+        payments.getItems().stream()
+                .filter(i -> i.getCategory() != null)
+                .forEach(i -> {
+                    String name = i.getCategory().getName();
+                    CategorySplit s = map.computeIfAbsent(name, k -> new CategorySplit());
+                    // Direction 이 enum이든 문자열이든 호환되게 처리
+                    String dir = String.valueOf(i.getDirection());
+                    long amt = i.getAmount();
+                    if ("OUTFLOW".equals(dir)) {
+                        s.outSum += amt;
+                        s.outCnt += 1;
+                    } else if ("INFLOW".equals(dir)) {
+                        s.inSum += amt;
+                        s.inCnt += 1;
+                    }
+                });
+        return map;
+    }
+
+    // 분리 집계에서 지출(OUTFLOW)만 뽑아 기존 집계 형태(long[]{sum,cnt})로 변환
+    private static java.util.Map<String, long[]> toOutflowAgg(java.util.Map<String, CategorySplit> split) {
+        return split.entrySet().stream()
+                .collect(java.util.stream.Collectors.toMap(
+                        java.util.Map.Entry::getKey,
+                        e -> new long[]{e.getValue().outSum, e.getValue().outCnt}
+                ));
+    }
+
+
 
 
     /** 전월 대비 현월 증가 카테고리 TOP K 계산 */
