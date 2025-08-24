@@ -1,5 +1,7 @@
 package com.wisespendinglife.wise_spending_life.domain.payment.repository;
 
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentDirection;
+import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
@@ -17,6 +19,44 @@ import java.util.List;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
+
+
+    /**
+     * 전월 구간 [prevStart, prevEnd), 현월 구간 [currStart, currEnd)
+     * 한 번에 집계하고 (현월-전월) 내림차순으로 정렬.
+     * Pageable로 상위 N개 (예: 4개)만 조회.
+     */
+    @Query("""
+select
+    c.id   as categoryId,
+    c.name as categoryName,
+    coalesce(sum(case when p.transactionAt >= :prevStart and p.transactionAt < :prevEnd then p.amount else 0L end), 0L) as prevTotal,
+    coalesce(sum(case when p.transactionAt >= :currStart and p.transactionAt < :currEnd then p.amount else 0L end), 0L) as currTotal
+from Payment p
+join p.category c
+where p.user.id = :userId
+  and p.direction = :direction
+  and p.transactionAt >= :prevStart
+  and p.transactionAt < :currEnd
+group by c.id, c.name
+having coalesce(sum(case when p.transactionAt >= :currStart and p.transactionAt < :currEnd then p.amount else 0L end), 0L)
+     - coalesce(sum(case when p.transactionAt >= :prevStart and p.transactionAt < :prevEnd then p.amount else 0L end), 0L) > 0
+order by 
+    ( coalesce(sum(case when p.transactionAt >= :currStart and p.transactionAt < :currEnd then p.amount else 0L end), 0L)
+    - coalesce(sum(case when p.transactionAt >= :prevStart and p.transactionAt < :prevEnd then p.amount else 0L end), 0L)
+    ) desc,
+    coalesce(sum(case when p.transactionAt >= :currStart and p.transactionAt < :currEnd then p.amount else 0L end), 0L) desc
+""")
+    List<CategoryRiseRow> findTopCategoryRises(
+            @Param("userId") Long userId,
+            @Param("direction") PaymentDirection direction,
+            @Param("prevStart") LocalDateTime prevStart,
+            @Param("prevEnd") LocalDateTime prevEnd,
+            @Param("currStart") LocalDateTime currStart,
+            @Param("currEnd") LocalDateTime currEnd,
+            Pageable pageable
+    );
+
     /**
      * Payment Date Range 조회.
      *

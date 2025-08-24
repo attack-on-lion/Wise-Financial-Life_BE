@@ -4,6 +4,7 @@ import com.wisespendinglife.wise_spending_life.domain.category.entity.Category;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
+import com.wisespendinglife.wise_spending_life.domain.payment.repository.CategoryRiseRow;
 import com.wisespendinglife.wise_spending_life.domain.payment.service.PaymentServiceImpl;
 import com.wisespendinglife.wise_spending_life.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,6 +28,23 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 public class PaymentConverter {
+
+    public PaymentResponseDto.CategoryRiseItem toCategoryRiseItem(CategoryRiseRow row, Integer rank) {
+        return PaymentResponseDto.CategoryRiseItem.builder()
+                .categoryId(row.getCategoryId())
+                .categoryName(row.getCategoryName())
+                .totalCurrent(row.getCurrTotal())
+                .totalPrevious(row.getPrevTotal())
+                .rank(rank)
+                .build();
+    }
+
+    public PaymentResponseDto.CategoryRiseItemListDto toCategoryRiseItemListDto(List<PaymentResponseDto.CategoryRiseItem> items) {
+        return PaymentResponseDto.CategoryRiseItemListDto
+                .builder()
+                .items(items)
+                .build();
+    }
 
     // Entity -> DTO(Item)
     public PaymentResponseDto.Item toItemDto(Payment e) {

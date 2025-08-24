@@ -10,6 +10,7 @@ import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentMiniDto
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentRequestDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.dto.PaymentResponseDto;
 import com.wisespendinglife.wise_spending_life.domain.payment.entity.Payment;
+import com.wisespendinglife.wise_spending_life.domain.payment.repository.CategoryRiseRow;
 import com.wisespendinglife.wise_spending_life.domain.payment.repository.PaymentRepository;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
@@ -31,11 +32,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.time.temporal.TemporalAdjusters;
-import java.util.Map;
 import java.util.Optional;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Service
@@ -266,5 +265,36 @@ public class PaymentServiceImpl implements PaymentService {
                 .transactionAt(payment.getTransactionAt())
                 .category(payment.getCategory().getName())
                 .build();
+    }
+
+    @Override
+    public PaymentResponseDto.CategoryRiseItemListDto getCategoryRiseItemList(Long userId) {
+
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+
+        // 현월
+        LocalDate today = LocalDate.now(zone);
+        LocalDate firstDay = today.withDayOfMonth(1);
+        LocalDateTime currStart = firstDay.atStartOfDay();
+        LocalDateTime currEnd = today.atTime(LocalTime.MAX);
+
+        // 전월
+        LocalDate prevMonthFirst = firstDay.minusMonths(1);
+        LocalDateTime prevStart = prevMonthFirst.atStartOfDay();
+        LocalDateTime prevEnd = firstDay.atStartOfDay();
+
+
+        List<CategoryRiseRow> repoResult = paymentRepository.findTopCategoryRises(
+                userId, PaymentDirection.OUTFLOW,
+                prevStart, prevEnd, currStart, currEnd,
+                PageRequest.of(0, 4) // 상위 4개
+        );
+
+        AtomicInteger ranker = new AtomicInteger(1);
+        List<PaymentResponseDto.CategoryRiseItem> list = repoResult.stream()
+                .map(r -> paymentConverter.toCategoryRiseItem(r, ranker.getAndIncrement()))
+                .toList();
+
+        return paymentConverter.toCategoryRiseItemListDto(list);
     }
 }
