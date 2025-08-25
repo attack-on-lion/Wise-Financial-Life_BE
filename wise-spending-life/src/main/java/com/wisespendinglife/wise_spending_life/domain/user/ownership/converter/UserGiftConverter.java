@@ -36,6 +36,7 @@ public class UserGiftConverter {
     public UserGiftResponseDto.OwnedGifticonDto toDto(UserGifticon entity) {
         return UserGiftResponseDto.OwnedGifticonDto.builder()
                 .id(entity.getId())
+                .user_id(entity.getUser().getId())
                 .gifticon_id(entity.getId())
                 .gifticonName(entity.getGifticon().getName())
                 .gifticonPrice(entity.getGifticon().getPrice())

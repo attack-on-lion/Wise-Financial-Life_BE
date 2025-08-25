@@ -38,11 +38,11 @@ public class UserGiftController {
         return ResponseEntity.ok(userGiftCommandService.purchaseGifticon(gifticonId, userId));
     }
 
-    @PatchMapping("/api/users/{user_id}/gifticons/{gifticon_id}/use")
+    @PatchMapping("/users/{user_id}/gifticons/{gifticon_id}/use")
     public ResponseEntity<UserGiftResponseDto.UseResponseDto> useGifticon(
-            @RequestParam("user_id") Long userId,
-            @RequestParam("gifticon_id") Long gifticonId
-    ){
+            @PathVariable("user_id") Long userId,
+            @PathVariable("gifticon_id") Long gifticonId
+    ) {
         log.info(">>> [CTRL] /api/user/{}/gifticons/{}/use POST", userId, gifticonId);
 
         return ResponseEntity.ok(userGiftCommandService.useGifticon(userId, gifticonId));

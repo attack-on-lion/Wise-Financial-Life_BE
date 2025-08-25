@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
                 @Index(name = "idx_user_gifticon__gifticon", columnList = "gifticon_id"),
                 @Index(name = "idx_user_gifticon__created_at", columnList = "created_at")
         }
-
-        , uniqueConstraints = @UniqueConstraint(name = "uk_user_gifticon__user_gifticon", columnNames = {"user_id", "gifticon_id"})
 )
 public class UserGifticon {
 
