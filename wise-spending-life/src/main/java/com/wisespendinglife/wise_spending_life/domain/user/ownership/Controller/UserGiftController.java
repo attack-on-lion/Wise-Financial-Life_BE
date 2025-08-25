@@ -35,7 +35,7 @@ public class UserGiftController {
     ){
         log.info(">>> [CTRL] /api/user/{}/gifticons/{}/purchase POST", userId, gifticonId);
 
-        return ResponseEntity.ok(userGiftCommandService.purchaseGifticon(userId, gifticonId));
+        return ResponseEntity.ok(userGiftCommandService.purchaseGifticon(gifticonId, userId));
     }
 
     @PatchMapping("/api/users/{user_id}/gifticons/{gifticon_id}/use")

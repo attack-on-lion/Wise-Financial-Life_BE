@@ -33,7 +33,7 @@ public class GifticonEntity {
     private Long price; //가격
 
     @Column(nullable = false, length = 500)
-    private String imageUrl; //이미지 URL
+    private String imageUrl; //이미지 URL이
 
     @Column(nullable = false)
     private Boolean isDeleted; //삭제 여부

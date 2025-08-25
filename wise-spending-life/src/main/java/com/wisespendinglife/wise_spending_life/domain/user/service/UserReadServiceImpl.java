@@ -19,7 +19,10 @@ public class UserReadServiceImpl implements UserReadService {
 
     @Override
     public User getEntity(Long userId) {
-        return userRepository.findByIdAndIsDeletedFalse(userId)
+        log.info(">>>[READ SERVICE] Get User Entity: {}", userId);
+        User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        return user;
     }
 }

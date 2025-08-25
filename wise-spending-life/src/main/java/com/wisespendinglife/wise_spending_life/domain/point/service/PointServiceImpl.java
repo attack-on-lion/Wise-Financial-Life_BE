@@ -64,6 +64,9 @@ public class PointServiceImpl implements PointService {
 
         /** 포인트가 부족 예외처리 */
         if(user.getPoint() + dto.getDelta() < 0){
+
+            log.info(">>> [SERVICE] 포인트가 부족합니다. 부족: {}", user.getPoint() + dto.getDelta());
+
             throw new BusinessException(ErrorCode.POINT_INSUFFICIENT);
         }
 
