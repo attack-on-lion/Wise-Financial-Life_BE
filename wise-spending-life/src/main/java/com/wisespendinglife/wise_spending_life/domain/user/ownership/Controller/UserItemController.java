@@ -45,7 +45,7 @@ public class UserItemController {
             @RequestBody @Validated UserItemRequestDto.PurchaseItemDto requestDto
             ){
 
-        log.info(">>> [CTRL] /api/user/{}/items/{}/purchase POST -> requestDto: {}", userId, itemId,  requestDto);
+        log.info(">>> [CTRL] /api/users/{}/items/{}/purchase POST -> requestDto: {}", userId, itemId,  requestDto);
 
         return ResponseEntity.ok(userItemService.addUserItem(requestDto, userId, itemId));
     }

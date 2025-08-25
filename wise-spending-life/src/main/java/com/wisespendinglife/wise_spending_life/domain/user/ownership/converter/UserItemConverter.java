@@ -15,7 +15,7 @@ import java.util.List;
 public class UserItemConverter {
     public UserItemResponseDto.OwnedItemDto toOwnedCharDto(UserItem entity) {
         return UserItemResponseDto.OwnedItemDto.builder()
-                .itemId(entity.getId())
+                .itemId(entity.getItem().getId())
                 .build();
     }
 
