@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -61,9 +62,10 @@ public class UserGiftCommandServiceImpl implements UserGiftCommandService {
     public UserGiftResponseDto.UseResponseDto useGifticon(Long gifticonId, Long userId) {
 
         userReadService.getEntity(userId);
-        gifticonService.getEntity(gifticonId);
 
-        UserGifticon userGifticon = userGifticonRepository.findByUser_IdAndGifticon_Id(userId, gifticonId)
+        log.info(">>> [SERVICE] 기프티콘 사용 userId: {}, gifticonId: {}", userId, gifticonId);
+
+        UserGifticon userGifticon = userGifticonRepository.findByIdAndUser_Id(gifticonId, userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GIFTICON_NOT_FOUND));
 
         userGifticon.updateUsedAt(LocalDateTime.now());

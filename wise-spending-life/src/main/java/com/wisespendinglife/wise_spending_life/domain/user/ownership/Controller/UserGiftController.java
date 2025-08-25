@@ -43,9 +43,9 @@ public class UserGiftController {
             @PathVariable("user_id") Long userId,
             @PathVariable("gifticon_id") Long gifticonId
     ) {
-        log.info(">>> [CTRL] /api/user/{}/gifticons/{}/use POST", userId, gifticonId);
+        log.info(">>> [CTRL] /api/user/{}/gifticons/{}/use PATCH", userId, gifticonId);
 
-        return ResponseEntity.ok(userGiftCommandService.useGifticon(userId, gifticonId));
+        return ResponseEntity.ok(userGiftCommandService.useGifticon(gifticonId, userId));
     }
 
 }
