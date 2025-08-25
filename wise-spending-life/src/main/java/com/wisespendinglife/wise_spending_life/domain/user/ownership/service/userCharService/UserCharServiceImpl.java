@@ -40,7 +40,6 @@ public class UserCharServiceImpl {
      * @param userId - 유저 아이디
      * @return - 보유 캐릭터 리스 반환
      */
-    @Transactional(readOnly = true)
     public UserCharResponseDto.OwnedCharacterListDto getOwnedCharacters(Long userId) {
 
         List<UserCharacter> ownedCharacters = userCharRepository.findByUser_IdOrderByIdDesc(userId);

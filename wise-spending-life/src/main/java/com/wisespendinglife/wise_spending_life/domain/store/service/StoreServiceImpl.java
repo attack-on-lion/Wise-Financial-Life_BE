@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StoreServiceImpl implements StoreService {
     final int MAX_SIZE = 10;
 
@@ -27,7 +28,6 @@ public class StoreServiceImpl implements StoreService {
 
     //브랜드 전체 조회
     @Override
-    @Transactional(readOnly = true)
     public StoreListResponseDTO getAllStores(String lastStoreName, Long lastId, int size) {
         if (size <= 0 || size > MAX_SIZE) {
             throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
@@ -83,7 +83,6 @@ public class StoreServiceImpl implements StoreService {
      * 첫 호출은 lastStoreName/lastId 없이 호출하면 되고,
      * 내부에서 ("", 0L)로 초기화해서 가나다(ASC) + id(ASC) 기준으로 첫 페이지를 반환합니다.
      */
-    @Transactional(readOnly = true)
     public StoreListResponseDTO getStoresByCategory(String categoryName, String lastStoreName, Long lastId, int size) {
         // size 검증
         if (size <= 0 || size > MAX_SIZE) {
@@ -146,7 +145,6 @@ public class StoreServiceImpl implements StoreService {
 
     //신규 브랜드 등록
     @Override
-    @Transactional
     public Long createStore(StoreRequestDTO request) {
         String storeName = request.getStoreName() != null ? request.getStoreName().trim() : null;
         String logoUrl = request.getLogoUrl()   != null ? request.getLogoUrl().trim()   : null;
@@ -175,7 +173,6 @@ public class StoreServiceImpl implements StoreService {
 
     //브랜드 삭제 (소프트 삭제)
     @Override
-    @Transactional
     public void deleteStore(Long storeId) {
         StoreEntity entity = storeRepository.findByIdAndIsDeletedFalse(storeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORE_NOT_FOUND));

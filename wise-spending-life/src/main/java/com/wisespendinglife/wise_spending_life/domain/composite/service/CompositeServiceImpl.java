@@ -35,7 +35,6 @@ public class CompositeServiceImpl implements CompositeService {
     private final ItemService itemService;
 
     @Override
-    @Transactional(readOnly = true)
     public CompositeResponseDto.Composites getComposites(int currenPage, int size) {
 
         Pageable pageable = PageRequest.of(currenPage, size, Sort.by("id").descending());

@@ -27,7 +27,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional
 public class GifticonServiceImpl implements GifticonService {
     private static final int DEFAULT_SIZE = 9;
     private static final int MAX_SIZE = 10;
@@ -36,7 +36,6 @@ public class GifticonServiceImpl implements GifticonService {
     private final StoreRepository storeRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public GifticonListResponseDTO getAllGifticon(String lastStoreName, String lastGifticonName, Long lastId, int size) {
         if (size <= 0 || size > MAX_SIZE) {
             throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
@@ -95,7 +94,6 @@ public class GifticonServiceImpl implements GifticonService {
 
     //기프티콘 등록(Post)
     @Override
-    @Transactional
     public Long createGifticon(String storeName, GifticonRequestDTO requestDTO) {
         if (storeName == null || storeName.trim().isEmpty()) {
             throw new BusinessException(ErrorCode.INVALID_STORE_NAME);
@@ -119,7 +117,6 @@ public class GifticonServiceImpl implements GifticonService {
 
     //기프티콘 삭제
     @Override
-    @Transactional
     public void deleteGifticon(Long gifticonId) {
         GifticonEntity gifticon = gifticonRepository.findByIdAndIsDeletedFalse(gifticonId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GIFTICON_NOT_FOUND));
@@ -130,7 +127,6 @@ public class GifticonServiceImpl implements GifticonService {
 
     //브랜드별 기프티콘 조회
     @Override
-    @Transactional(readOnly = true)
     public GifticonListResponseDTO getGifticonsByStore(
             Long storeId,
             LocalDateTime lastCreatedAt,

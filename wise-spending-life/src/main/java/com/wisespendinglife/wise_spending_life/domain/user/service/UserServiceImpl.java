@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserResponseDTO getUserInfo(Long userId){
         User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -69,7 +68,6 @@ public class UserServiceImpl implements UserService {
 
     //유저 정보 수정
     @Override
-    @Transactional
     public void updateUserInfo(Long userId, UserRequestDTO dto){
         User user = userRepository.findByIdAndIsDeletedFalse(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
@@ -93,7 +91,6 @@ public class UserServiceImpl implements UserService {
 
     // 유저 정보 저장
     @Override
-    @Transactional
     public Long createUser(UserRequestDTO dto){
 
         Category category = null;

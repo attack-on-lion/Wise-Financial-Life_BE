@@ -31,14 +31,7 @@ public class Recommendation {
     private Long challengeDays;
     private LocalDateTime createdAt;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "recommendation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecommendationCategory> recommendationCategories = new ArrayList<>();
 
-    public void addRecommendationCategory(RecommendationCategory recommendationCategory) {
-        this.recommendationCategories.add(recommendationCategory);
-        recommendationCategory.setRecommendation(this);
-    }
     @Builder
     public Recommendation(User user, String challengeName, ChallengeType challengeType, Long challengeDays, LocalDateTime createdAt, List<RecommendationCategory> recommendationCategories) {
         this.user = user;
@@ -46,8 +39,5 @@ public class Recommendation {
         this.challengeType = challengeType;
         this.challengeDays = challengeDays;
         this.createdAt = createdAt;
-        if (recommendationCategories != null) {
-            recommendationCategories.forEach(this::addRecommendationCategory);
-        }
     }
 }

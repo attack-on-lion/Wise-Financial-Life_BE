@@ -113,7 +113,6 @@ public class PaymentServiceImpl implements PaymentService {
      * @param userId - 사용자 ID
      * @return - 생성 결과 DTO
      */
-    @Transactional
     public PaymentResponseDto.PaymentCreateResponseDto create(PaymentRequestDto.CreateDto dto, Long userId) {
 
         // 1) 카테고리 찾기 (대소문자 무시)
@@ -137,7 +136,6 @@ public class PaymentServiceImpl implements PaymentService {
      * @param userId 사용자 ID
      * @return
      */
-    @Transactional
     public ScoreResponseDto calculateMonthlyScore(Long userId) {
 
         // 1) 전월 구간(KST)

@@ -88,7 +88,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 RecommendationCategory link = RecommendationCategory.builder()
                         .category(c)
                         .build();
-                rec.addRecommendationCategory(link);
+                recommendationCategoryRepository.save(link);
             }
 
             recommendationRepository.save(rec);

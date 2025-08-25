@@ -37,7 +37,6 @@ public class UserItemServiceImpl implements UserItemService {
     private final UserReadServiceImpl userReadService;
 
     @Override
-    @Transactional(readOnly = true)
     public UserItemResponseDto.OwnedItemListDto getOwnedItems(Long userId) {
 
         List<UserItem> ownedUserItemList = userItemRepository.findByUser_IdOrderByIdDesc(userId);
