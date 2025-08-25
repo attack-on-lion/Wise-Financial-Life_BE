@@ -39,8 +39,6 @@ public class ChallengeServiceImpl implements ChallengeService {
                 .startAt(dto.getStartAt())
                 .endAt(dto.getEndAt())
                 .createdAt(dto.getCreatedAt())
-                // <TODO: 사용자가 설정한 캐릭터를 토대로 url을 받아와야 하는데, 상황에 맞는 캐릭터 이미지를 어떻게 받아올 지 설정 필요>
-                .characterImageUrl("url")
                 .isCompleted(false) // 미완료로 자동 세팅
                 .isDeleted(false) // 미삭제로 자동 세팅
                 .build();
