@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class SolutionServiceImpl implements SolutionService{
 
@@ -144,9 +143,6 @@ public class SolutionServiceImpl implements SolutionService{
         SimpleSolutionResponseDTO dto = solutionConverter.toResponseDto(aiSolution);
 
         log.info(">>> [GPT] 유저 심플 AI 솔루션(전월&현월) - result: {}", dto);
-
-        // 저장
-        solutionRepository.save(solutionConverter.toEntity(user, dto));
 
         return dto;
 

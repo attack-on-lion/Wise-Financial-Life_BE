@@ -8,6 +8,7 @@ import com.wisespendinglife.wise_spending_life.domain.score.dto.CategoryState;
 import com.wisespendinglife.wise_spending_life.domain.score.dto.MonthlyState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -65,12 +66,14 @@ order by
      * @param pageable 페이징 정보
      * @return
      */
+    @EntityGraph(attributePaths = "category")
     Page<Payment> findByUserIdAndTransactionAtBetween(
             Long userId,
             LocalDateTime from,
             LocalDateTime to,
             Pageable pageable);
 
+    @EntityGraph(attributePaths = "category")
     Page<Payment> findByUser_IdAndCategory_NameIgnoreCaseAndTransactionAtBetween(
             Long userId,
             String category,

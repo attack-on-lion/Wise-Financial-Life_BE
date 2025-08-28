@@ -40,7 +40,6 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationConverter recommendationConverter;
 
     @Override
-    @Transactional
     public RecommendationCreateResponseDto generateRecommendation(RecommendationCreateRequestDto recommendationCreateRequestDto) {
         Long userId = recommendationCreateRequestDto.getUser_id();
         User user = userRepository.findById(userId)
