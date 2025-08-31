@@ -64,7 +64,8 @@
   - [Spring CQRS 패턴](https://rebugs.tistory.com/895)
 - 글로벌 예외 처리
   - [Spring Java 예외(Exception) 처리 전략](https://turtledev.tistory.com/67)
-  - [서버 배포하기-2](https://velog.io/@yewo2nn16/SpringBoot-서버-배포-인텔리제이에서-jar-파일-빌드해서-배포하기)
+- 트랜잭션에서 외부 API 호출(ai) 
+  - [트랜잭션 내에서 외부 API 호출을 하겠다고요?!!! ](https://engineerinsight.tistory.com/412)
 
 
 <br />
