@@ -89,7 +89,7 @@
 ### ✍️ My Contribution 
 
 <details>
-<summary><b>조성찬 (Backend)</b></summary>
+<summary><b>조성찬 (DevOps)</b></summary>
 <br />
 <br />
   
