@@ -19,6 +19,7 @@
 - 프로젝트 아키텍쳐
 - 기술적 이슈와 해결 과정
 - 프로젝트 팀원
+- 개인별 기여 및 트러블슈팅
 
 
 
@@ -66,7 +67,8 @@
   - [Spring Java 예외(Exception) 처리 전략](https://turtledev.tistory.com/67)
 - 트랜잭션에서 외부 API 호출(ai) 
   - [트랜잭션 내에서 외부 API 호출을 하겠다고요?!!! ](https://engineerinsight.tistory.com/412)
-
+- Service 코드 역할 분배
+  - [SAGA 패턴이란?](https://azderica.github.io/01-architecture-msa/)
 
 <br />
 
